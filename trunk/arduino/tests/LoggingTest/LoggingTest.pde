@@ -1,12 +1,24 @@
+/**
+ * DAS Auto
+ * 
+ * Bret Kuhns, Chip Fursdon, Piper Wakefield
+ * 
+ * == LoggingTest ==
+ *
+ * This is a basic test of logging the 3-axis accelerometer analog values to the microSD
+ * "OpenLog" microcontroller from Sparkfun Electronics. Data is output in a basic Comma-
+ * separated values (CSV) format in standard ASCII on a FAT16-formatted microSD card.
+ */
+ 
 #include <WString.h>
 
-int xAxis = 0;
-int yAxis = 1;
-int zAxis = 2;
-int statusLED = 13;
 
-int button = 8;
-int lastButton = HIGH;
+// Globals (eww)
+#define  xAxis  0;
+#define  yAxis  1;
+#define  zAxis  2;
+#define  statusLED  13;
+
 String buffer = "";
 
 
@@ -15,50 +27,48 @@ void setup() {
   
   pinMode(statusLED, OUTPUT);
   
+  // Generic blink pattern to indicate the board is pausing for a few seconds.
   for(int i = 0; i < 5; i++) {
-    digitalWrite(13, HIGH);
+    digitalWrite(statusLED, HIGH);
     delay(100);
-    digitalWrite(13, LOW);
+    digitalWrite(statusLED, LOW);
     delay(900); 
   }
   
+  // Now start reading from OpenLog over serial. We want to verify we recieved
+  // the "12<" prompt before continuing.
   int prevMessage = (int)Serial.read();
-  while(prevMessage != 49) {
+  while(prevMessage != 49) { // Busy wait until we recieve a '1'.
     prevMessage = (int)Serial.read();
   }
-  if((int)Serial.read() == 50) { // Received '2'
-    if((int)Serial.read() == 60) { // Received '<'
+  if((int)Serial.read() == 50) { // Received '2'.
+    if((int)Serial.read() == 60) { // Received '<'.
       for(int i = 0; i < 5; i++) {
+        // Perform a new blink pattern to indicate we're ready to start logging.
         digitalWrite(statusLED, HIGH);
         delay(25);
         digitalWrite(statusLED, LOW);
-        delay(500);
+        delay(475);
       }
     }
   }
   
-  delay(2000);
+  delay(2000); // Pause again for good measure before logging.
 }
 
 
 void loop() {
-  digitalWrite(statusLED, LOW);
-  /*if(digitalRead(button) != lastButton) {
-    Serial.println("Done logging.");
-    while(true); 
-  }*/
-  /*if(Serial.available() > 0) {
-    BYTE received = Serial.read();
-    Serial.print(received);
-    ser.print(received);
-  }*/
-  int timestamp = millis();
+  digitalWrite(statusLED, LOW); // Turn off the activity LED.
+  
+  // Get the current milliseconds timestamp and all 3-axis of acceleration data.
+  unsigned long timestamp = millis();
   int xAxisVal = analogRead(xAxis);
   int yAxisVal = analogRead(yAxis);
   int zAxisVal = analogRead(zAxis);
   
+  // Construct a String buffer in CSV format to print to the card.
   buffer = "";
-  buffer.append(timestamp);
+  buffer.append((long)timestamp);
   buffer.append(',');
   buffer.append(xAxisVal);
   buffer.append(',');
@@ -66,11 +76,9 @@ void loop() {
   buffer.append(',');
   buffer.append(zAxisVal);  
   
-  digitalWrite(statusLED, HIGH);
-  Serial.println(buffer);
-  Serial.flush();
-  delay(10);
+  digitalWrite(statusLED, HIGH); // Indicate we are writing data.
+  Serial.println(buffer); // Print the buffer to the card.
   
-  lastButton = digitalRead(button);
+  delay(1); // Let the microSD card catch it's breath for a moment.
 }
 
