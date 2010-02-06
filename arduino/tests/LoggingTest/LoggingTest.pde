@@ -20,7 +20,6 @@
 
 #define BUFFER_SIZE  64
 static char buffer[BUFFER_SIZE];
-//static char timeBuf[16]; // Probably only need 11 here, but just for giggles.
 
 
 void setup() {
@@ -70,8 +69,6 @@ void setup() {
 
 
 void loop() {
-  char *pBuffer = &buffer[0];
-  
   digitalWrite(statusLED, LOW); // Turn off the activity LED.
   
   // Get the current milliseconds timestamp and all 3-axis of acceleration data.
@@ -80,39 +77,8 @@ void loop() {
   int yAxisVal = analogRead(yAxis);
   int zAxisVal = analogRead(zAxis);
   
-  // Construct a String buffer in CSV format to print to the card.
-  // We're working under the assumption that the ltoa and itoa calls don't add \0 at the end each time.
-  // If we only end up with the timestamp value, then we were wrong.
-  /*buffer[0] = '\0'; // Start the string off as a null-terminated string.
-  ltoa(timestamp, pBuffer, 10);
-  buffer[10] = ',';
-  pBuffer += 11;
-  itoa(xAxisVal, pBuffer, 10);
-  buffer[15] = ',';
-  pBuffer += 5;
-  itoa(yAxisVal, pBuffer, 10);
-  buffer[20] = ',';
-  pBuffer += 5;
-  itoa(zAxisVal, pBuffer, 10);
-  for(int i = 0; i < 25; i++) {
-    if(buffer[i] == '\0') {
-      buffer[i] = ' ';
-    }
-  }
-  buffer[25] = '\0';*/
-    
-  // sprintf() alternative.
+  // Combine all the values into the string buffer.
   sprintf(buffer, "%u,%d,%d,%d", timestamp, xAxisVal, yAxisVal, zAxisVal);
-  
-  /*buffer = "";
-  buffer.append((long)timestamp);
-  buffer.append(',');
-  buffer.append(xAxisVal);
-  buffer.append(',');
-  buffer.append(yAxisVal);
-  buffer.append(',');
-  buffer.append(zAxisVal);  
-  */
   
   digitalWrite(statusLED, HIGH); // Indicate we are writing data.
   Serial.println(buffer); // Print the buffer to the card.
