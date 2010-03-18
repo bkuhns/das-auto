@@ -31,11 +31,16 @@ import org.jfree.layout.*;
 
 import javax.swing.Timer;
 import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JDesktopPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameListener;
@@ -127,6 +132,16 @@ public class DAS_GUIView extends FrameView {
 
         mainPanel = new javax.swing.JPanel();
         jDesktopPane1 = new javax.swing.JDesktopPane();
+        jInternalFrame1 = new javax.swing.JInternalFrame();
+        jDesktopPane2 = new javax.swing.JDesktopPane();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jCheckBox3 = new javax.swing.JCheckBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -149,6 +164,77 @@ public class DAS_GUIView extends FrameView {
         jDesktopPane1.setBackground(resourceMap.getColor("jDesktopPane1.background")); // NOI18N
         jDesktopPane1.setName("jDesktopPane1"); // NOI18N
 
+        jInternalFrame1.setName("jInternalFrame1"); // NOI18N
+        jInternalFrame1.setVisible(true);
+
+        jDesktopPane2.setBackground(resourceMap.getColor("jDesktopPane2.background")); // NOI18N
+        jDesktopPane2.setName("jDesktopPane2"); // NOI18N
+
+        jCheckBox1.setBackground(resourceMap.getColor("jCheckBox1.background")); // NOI18N
+        jCheckBox1.setText(resourceMap.getString("jCheckBox1.text")); // NOI18N
+        jCheckBox1.setName("jCheckBox1"); // NOI18N
+        jCheckBox1.setBounds(0, 20, 180, 30);
+        jDesktopPane2.add(jCheckBox1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jCheckBox2.setBackground(resourceMap.getColor("jCheckBox2.background")); // NOI18N
+        jCheckBox2.setText(resourceMap.getString("jCheckBox2.text")); // NOI18N
+        jCheckBox2.setName("jCheckBox2"); // NOI18N
+        jCheckBox2.setBounds(180, 20, 200, 30);
+        jDesktopPane2.add(jCheckBox2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jCheckBox3.setBackground(resourceMap.getColor("jCheckBox3.background")); // NOI18N
+        jCheckBox3.setText(resourceMap.getString("jCheckBox3.text")); // NOI18N
+        jCheckBox3.setName("jCheckBox3"); // NOI18N
+        jCheckBox3.setBounds(0, 50, 180, 30);
+        jDesktopPane2.add(jCheckBox3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jCheckBox4.setBackground(resourceMap.getColor("jCheckBox4.background")); // NOI18N
+        jCheckBox4.setText(resourceMap.getString("jCheckBox4.text")); // NOI18N
+        jCheckBox4.setName("jCheckBox4"); // NOI18N
+        jCheckBox4.setBounds(180, 50, 200, 30);
+        jDesktopPane2.add(jCheckBox4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        jTextArea1.setBackground(resourceMap.getColor("jTextArea1.background")); // NOI18N
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(resourceMap.getFont("jTextArea1.font")); // NOI18N
+        jTextArea1.setRows(5);
+        jTextArea1.setText(resourceMap.getString("jTextArea1.text")); // NOI18N
+        jTextArea1.setBorder(null);
+        jTextArea1.setName("jTextArea1"); // NOI18N
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jScrollPane1.setBounds(0, 0, 380, 20);
+        jDesktopPane2.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.setBounds(200, 100, 45, 23);
+        jDesktopPane2.add(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
+        jButton2.setName("jButton2"); // NOI18N
+        jButton2.setBounds(280, 100, 65, 23);
+        jDesktopPane2.add(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
+        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
+        jInternalFrame1Layout.setHorizontalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jDesktopPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+        );
+        jInternalFrame1Layout.setVerticalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jDesktopPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+        );
+
+        jInternalFrame1.setBounds(60, 90, 390, 160);
+        jDesktopPane1.add(jInternalFrame1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -167,7 +253,6 @@ public class DAS_GUIView extends FrameView {
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(das_gui.DAS_GUIApp.class).getContext().getActionMap(DAS_GUIView.class, this);
         jMenuItem1.setAction(actionMap.get("jMenuItem1ActionPerformed")); // NOI18N
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
         jMenuItem1.setName("jMenuItem1"); // NOI18N
         fileMenu.add(jMenuItem1);
@@ -267,83 +352,165 @@ public JInternalFrame createJInternalFrame(int x, int y, int w, int h, String fr
         return newInternalFrame;
 }
 
-    @Action
-    @SuppressWarnings({"static-access", "static-access"})
-    public void jMenuItem1ActionPerformed() {
-        JFileChooser dataFileChooser = new JFileChooser();
-        dataFileChooser.setName("jFileChooser1"); // NOI18N
-        dataFileChooser.setBounds(0, 0, 582, 397);
-        String fileName = "";
+public File raceDataFileSelection()
+{
+    JFileChooser dataFileChooser = new JFileChooser();
+    dataFileChooser.setName("jFileChooser1"); // NOI18N
+    dataFileChooser.setBounds(0, 0, 582, 397);
+    File dataFile = null;
 
-        XYSeries xAxisData = new XYSeries("X direction"), yAxisData = new XYSeries("Y direction"), zAxisData = new XYSeries("Z direction");
+   //Attempt to Close the frame if the Usner Closes the File Browser
+   int fileBrowserResult = dataFileChooser.showOpenDialog(null);
+   if(fileBrowserResult == dataFileChooser.APPROVE_OPTION){
+        dataFile = dataFileChooser.getSelectedFile();
+   }
+   else if(fileBrowserResult == dataFileChooser.CANCEL_OPTION){
+       System.out.println("Dialog was Canceled.");
+   }
+   return dataFile;
+}
 
-        //Attempt to Close the frame if the Usner Closes the File Browser
-       int fileBrowserResult = dataFileChooser.showOpenDialog(null);
-       if(fileBrowserResult == dataFileChooser.APPROVE_OPTION)
-       {
+public boolean[] raceDataTypeSelection()
+{
+    boolean xyDataSelect = false, gpsDataSelect = false, tractDataSelect = false, racyDataSelect = false;
+    boolean[] raceDataTypesSelected =  new boolean[boolSelectArraySize];
 
-           try{
-                File dataFile = dataFileChooser.getSelectedFile();
-                System.out.println("File was Choosen: " + dataFile.getName());
-                fileName = dataFile.getName();
-                Scanner csvScanner = new Scanner(dataFile);
-                //csvScanner.nextLine();
-                Double timeInput = 0.0, lateralInput = 0.0, accelInput = 0.0;
+    JInternalFrame typeSelectionjIntFrame = new JInternalFrame();
+    typeSelectionjIntFrame.setVisible(true);
+    typeSelectionjIntFrame.setBounds(60, 90, 390, 160);
 
-                while(csvScanner.hasNextLine())
-                {
-                        StringTokenizer csvLine = new StringTokenizer(csvScanner.nextLine());
-                        timeInput = Double.valueOf(csvLine.nextToken(",").toString());
-                        lateralInput = Double.valueOf(csvLine.nextToken(",").toString());
-                        accelInput = Double.valueOf(csvLine.nextToken().toString());
-                        xAxisData.add(timeInput, lateralInput);
-                        yAxisData.add(timeInput, accelInput);
-                }
-                csvScanner.close();
+    JDesktopPane typeSelectionjDesktopPane = new JDesktopPane();
+    JCheckBox xyCheckBox = new JCheckBox();
+    JCheckBox gpsCheckBox = new JCheckBox();
+    JCheckBox tractCheckBox = new JCheckBox();
+    JCheckBox racyCheckBox = new JCheckBox();   //...shocking!
+    JScrollPane selectScrollPane = new JScrollPane();
+    JTextArea selectTextArea = new JTextArea();
+    JButton selectionOKButton = new JButton();
+    JButton selectionNoBuenoButton = new JButton();
+
+
+    
+
+
+    //After everything has been added to the jInternalFrame, place it inside the permanent jDesktopPanel
+    jDesktopPane1.add(typeSelectionjIntFrame, javax.swing.JLayeredPane.DEFAULT_LAYER);
+    
+    raceDataTypesSelected[0] = xyDataSelect;
+    raceDataTypesSelected[1] = gpsDataSelect;
+    raceDataTypesSelected[2] = tractDataSelect;
+    raceDataTypesSelected[3] = racyDataSelect;
+
+    return raceDataTypesSelected;
+}
+
+public void raceDataFramesAddToDesktopPane()
+{
+    
+}
+
+@Action
+@SuppressWarnings({"static-access", "static-access"})
+//method for adding new data windows to users to view. TODO: break into bite-sized chunks, instead of 1 huge mess.
+public void jMenuItem1ActionPerformed() {
+     XYSeries xAxisData = new XYSeries("X direction"), yAxisData = new XYSeries("Y direction"), timeAxisData = new XYSeries("Time");
+     File raceDataFile;
+
+    //link to new method for selection the race data file
+    raceDataFile = raceDataFileSelection();
+    System.out.println("File was Choosen: " + raceDataFile.getName());
+    raceDataTypeSelection();
+    /*
+    JFileChooser dataFileChooser = new JFileChooser();
+    dataFileChooser.setName("jFileChooser1"); // NOI18N
+    dataFileChooser.setBounds(0, 0, 582, 397);
+    String fileName = "";
+
+   //Attempt to Close the frame if the Usner Closes the File Browser
+   int fileBrowserResult = dataFileChooser.showOpenDialog(null);
+   if(fileBrowserResult == dataFileChooser.APPROVE_OPTION)
+   {
+       
+
+       //Old method of parsing CSV files
+       try{
+            File dataFile = dataFileChooser.getSelectedFile();
+            System.out.println("File was Choosen: " + dataFile.getName());
+            fileName = dataFile.getName();
+            Scanner csvScanner = new Scanner(dataFile);
+            //csvScanner.nextLine();
+            Double timeInput = 0.0, lateralInput = 0.0, accelInput = 0.0;
+
+            while(csvScanner.hasNextLine())
+            {
+                    StringTokenizer csvLine = new StringTokenizer(csvScanner.nextLine());
+                    timeInput = Double.valueOf(csvLine.nextToken(",").toString());
+                    lateralInput = Double.valueOf(csvLine.nextToken(",").toString());
+                    accelInput = Double.valueOf(csvLine.nextToken().toString());
+                    xAxisData.add(timeInput, lateralInput);
+                    yAxisData.add(timeInput, accelInput);
             }
-            catch(FileNotFoundException e){
-                    System.out.println(e.toString());
-            }
+            csvScanner.close();
+        }
+        catch(FileNotFoundException e){
+                System.out.println(e.toString());
+        }
+       */
 
-            JInternalFrame graphNormAccelFrame = createJInternalFrame(200, 100, 700, 450, fileName);
 
-            XYSeriesCollection accelSeries = new XYSeriesCollection();
-            XYSeriesCollection lateralSeries = new XYSeriesCollection();
-            accelSeries.addSeries(yAxisData);
-            lateralSeries.addSeries(xAxisData);
-            XYDataset accelData = (XYDataset)accelSeries;
-            XYDataset lateralData = (XYDataset)lateralSeries;
-            JFreeChart accelChart = ChartFactory.createXYLineChart("DAS Auto Chart: Accel/Time", "Time(ms)", "AccelerationG(unk-nown)",
-                                                                     accelData, PlotOrientation.VERTICAL, false, false, false);
-            JFreeChart lateralChart = ChartFactory.createXYLineChart("DAS Auto Chart: Accel/Time", "Time(ms)", "LateralG(unk-nown)",
-                               lateralData, PlotOrientation.VERTICAL, false, false, false);
-            ChartPanel accelPanel = new ChartPanel(accelChart);
-            ChartPanel lateralPanel = new ChartPanel(lateralChart);
+        //Old method of testing adding only some test data to a panel for sample output
+        /*
+        JInternalFrame graphNormAccelFrame = createJInternalFrame(200, 100, 700, 450, fileName);
 
-            JPanel jPanel1 = new JPanel();
-            JPanel jPanel2 = new JPanel();
-            jPanel1.add(accelPanel);
-            jPanel2.add(lateralPanel);
+        XYSeriesCollection accelSeries = new XYSeriesCollection();
+        XYSeriesCollection lateralSeries = new XYSeriesCollection();
+        accelSeries.addSeries(yAxisData);
+        lateralSeries.addSeries(xAxisData);
+        XYDataset accelData = (XYDataset)accelSeries;
+        XYDataset lateralData = (XYDataset)lateralSeries;
+        JFreeChart accelChart = ChartFactory.createXYLineChart("DAS Auto Chart: Accel/Time", "Time(ms)", "AccelerationG(unk-nown)",
+                           accelData, PlotOrientation.VERTICAL, false, false, false);
+        JFreeChart lateralChart = ChartFactory.createXYLineChart("DAS Auto Chart: Accel/Time", "Time(ms)", "LateralG(unk-nown)",
+                           lateralData, PlotOrientation.VERTICAL, false, false, false);
+        ChartPanel accelPanel = new ChartPanel(accelChart);
+        ChartPanel lateralPanel = new ChartPanel(lateralChart);
 
-            graphNormAccelFrame.add(jPanel1);
-            graphNormAccelFrame.getContentPane();
+        JPanel jPanel1 = new JPanel();
+        JPanel jPanel2 = new JPanel();
+        jPanel1.add(accelPanel);
+        jPanel2.add(lateralPanel);
 
-            jDesktopPane1.add(graphNormAccelFrame, javax.swing.JLayeredPane.DEFAULT_LAYER);
-            graphNormAccelFrame.moveToFront();
-       }
-       else if(fileBrowserResult == dataFileChooser.CANCEL_OPTION)
-       {
-           System.out.println("Dialog was Canceled.");
-       }
- }
+        graphNormAccelFrame.add(jPanel1);
+        graphNormAccelFrame.getContentPane();
+
+        jDesktopPane1.add(graphNormAccelFrame, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        graphNormAccelFrame.moveToFront();
+        
+   }
+   else if(fileBrowserResult == dataFileChooser.CANCEL_OPTION)
+   {
+       System.out.println("Dialog was Canceled.");
+   }
+   */
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JDesktopPane jDesktopPane2;
+    private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JProgressBar progressBar;
@@ -356,9 +523,8 @@ public JInternalFrame createJInternalFrame(int x, int y, int w, int h, String fr
     private final Timer busyIconTimer;
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
-    private int busyIconIndex = 0;
-    private int internalFrameNumber = 1;
-
+    private int busyIconIndex = 0, internalFrameNumber = 1;
+    private final int boolSelectArraySize = 4;
     private JDialog aboutBox;
 }
 
