@@ -56,7 +56,7 @@ public class GPS_XY_PLOT_TEST {
 				 timeAndVelocityData = new XYSeries("Time and Speed");
 		
 		try{
-			File gpsFile = new File("gps_lccc_without_accel_test.txt");
+			File gpsFile = new File("gps_lccc2_without_accel.txt");
 			Scanner gpsScanner = new Scanner(gpsFile);
 			Double latitudeInput = 0.0, longitudeInput = 0.0, timeInput = 0.0, velocityInput = 0.0;
 			
