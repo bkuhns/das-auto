@@ -5,22 +5,14 @@ int xAxis = 0;
 int yAxis = 1;
 int zAxis = 2;
 
-#define BUFFER_SIZE  64
-static char buffer[BUFFER_SIZE];
+#define SENSOR_ID_GPS    "01"
+#define SENSOR_ID_ACCEL  "02"
 
-#define LINE_LENGTH 256
-char currentLine[LINE_LENGTH];
-int currentLineIndex = 0;
+#define GPS_LINE_LENGTH 256
+char gpsCurrentLine[GPS_LINE_LENGTH];
+int gpsCurrentLineIndex = 0;
 
-
-int strpos(char* haystack, char* needle) {
-  char *p = strstr(haystack, needle);
-  if(p) {
-    return p - haystack;
-  }
-  
-  return -1; // Not found
-}
+unsigned long lastMillis = 0;
 
 
 void setup() {
@@ -29,45 +21,64 @@ void setup() {
 }
 
 
-void loop() {
+void printGpsLine(unsigned long *lastMillis) {
   while(gps.available()) {
     char currentChar = gps.read();
     if(currentChar != '\n') {
-      currentLine[currentLineIndex] = currentChar;
-      currentLineIndex++;
+      gpsCurrentLine[gpsCurrentLineIndex] = currentChar;
+      gpsCurrentLineIndex++;
     } else {
-      if(currentLine[0] == '$' && currentLine[1] == 'G' && currentLine[2] == 'P' && currentLine[3] == 'R' && currentLine[4] == 'M' && currentLine[5] == 'C') {
-        int index = 1;
-        for(int i = 7; i < LINE_LENGTH; i++) {
-          if(currentLine[i] != ',') {
-            if(index == 1 || (index >= 3 && index <= 9)) {
-              Serial.print(currentLine[i]);
+      if(strncmp(gpsCurrentLine, "$GPRMC", 6) == 0) {  // Make sure we're only printing the RMC line.
+        Serial.print(SENSOR_ID_GPS);
+        Serial.print(':');
+
+        // Tokenize the current line using comma as a delimiter and extract only the values we want.
+        int index = 0;
+        char *dummy;
+        char *currentChunk = strtok_r(gpsCurrentLine, ",", &dummy);
+        while(currentChunk != NULL) {
+          if(index == 1 || (index >= 3 && index <= 9)) {
+            Serial.print(currentChunk);
+            if(index < 9) {
+              Serial.print(','); 
             }
-          } else {
-            if(index == 1 || (index >= 3 && index < 9)) {
-              Serial.print(",");
-            }
-            index++;
           }
+          currentChunk = strtok_r(NULL, ",", &dummy);
+          index++;
         }
+
         Serial.print('\n');
+
+        *lastMillis = millis();
       }
-      for(int i = 0; i <= currentLineIndex; i++) {
-        currentLine[i] = '\0';
+      
+      // Clear the line so it's ready to use again.
+      for(int i = 0; i <= gpsCurrentLineIndex; i++) {
+        gpsCurrentLine[i] = '\0';
       }
-      currentLineIndex = 0;
+      gpsCurrentLineIndex = 0;
     }
   }
-  
-  // Get the current milliseconds timestamp and all 3-axis of acceleration data.
+}
+
+
+void printAccelerometerLine(unsigned long lastMillis) {
   unsigned long timestamp = millis();
   int xAxisVal = analogRead(xAxis);
   int yAxisVal = analogRead(yAxis);
   int zAxisVal = analogRead(zAxis);
-  
-  // Combine all the values into the string buffer.
-  sprintf(buffer, "#%lu,%d,%d,%d#", timestamp, xAxisVal, yAxisVal, zAxisVal);
-  Serial.println(buffer); // Print the buffer to the card.
+
+  char buffer[64];
+  sprintf(buffer, "%s:%lu,%d,%d,%d", SENSOR_ID_ACCEL, timestamp-lastMillis, xAxisVal, yAxisVal, zAxisVal);
+
+  Serial.println(buffer);
 }
+
+
+void loop() {
+  printGpsLine(&lastMillis);
+  printAccelerometerLine(lastMillis);
+}
+
 
 
