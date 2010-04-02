@@ -15,8 +15,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -102,8 +100,6 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 			currentX = (int)Math.round(((maxLon - currentLon)  * (double)w)/  (maxLon - minLon));
 			currentY = (int)Math.round(((maxLat - currentLat)  * (double)h)/  (maxLat - minLat));
 			
-			System.out.println("currentX: " + currentX + " , currentY: " + currentY);
-			
 			bufferedCourseGraphic.setStroke(new BasicStroke(2.0f));
 			bufferedCourseGraphic.drawOval(currentX, currentY, 1, 1);
 			
@@ -137,7 +133,7 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 	}
 	
 	public static void raceDataFill(){
-		DasFileReader raceData = new DasFileReader("gps_lccc2_log_snippet.txt");
+		DasFileReader raceData = new DasFileReader("log_100401_lccc.txt");
 		accelData = raceData.getAccelData();
 		gpsData = raceData.getGPSData();
 	}
@@ -147,6 +143,7 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 		String currentGPSLine[];
 		for(int gpsVectorPosition = 0; gpsVectorPosition < gpsData.size(); gpsVectorPosition++){
 			currentGPSLine = gpsData.elementAt(gpsVectorPosition).split(",");
+			
 			if(gpsVectorPosition == 0){
 				minLat = Double.valueOf(currentGPSLine[1]);
 				maxLat = Double.valueOf(currentGPSLine[1]);
