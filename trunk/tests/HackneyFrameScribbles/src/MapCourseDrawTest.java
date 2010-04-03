@@ -31,10 +31,14 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 	
 	boolean firstTime = true;
 	
-	public static Vector<String> accelData = new Vector<String>(), gpsData = new Vector<String>();
+	public static Vector<AccelSample> accelData = new Vector<AccelSample>();
+	public static Vector<GpsSample> gpsData = new Vector<GpsSample>();
 	public static double maxLat = 0, maxLon = 0, minLat = 0, minLon = 0;
 
-	public MapCourseDrawTest(Dimension dim){
+	public MapCourseDrawTest(Dimension dim, DasFileReader raceData){
+		raceDataFill(raceData);
+		parseMinsAndMaxs();
+		
 		setBackground(Color.WHITE);
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -97,8 +101,8 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 			currentLat = Double.parseDouble(gpsData.elementAt(gpsNum).substring(11, gpsData.elementAt(gpsNum).indexOf(',', 11)));
 			currentLon = Double.parseDouble(gpsData.elementAt(gpsNum).substring(23, gpsData.elementAt(gpsNum).indexOf(',', 23)));
 			
-			currentX = (int)Math.round(((maxLon - currentLon)  * (double)w)/  (maxLon - minLon));
-			currentY = (int)Math.round(((maxLat - currentLat)  * (double)h)/  (maxLat - minLat));
+			currentX = (int)Math.round((((maxLon - currentLon)  * (double)(w * 0.9))/  (maxLon - minLon)) + w * 0.05) ;
+			currentY = (int)Math.round((((maxLat - currentLat)  * (double)(h * 0.9))/  (maxLat - minLat)) + h * 0.05);
 			
 			bufferedCourseGraphic.setStroke(new BasicStroke(2.0f));
 			bufferedCourseGraphic.drawOval(currentX, currentY, 1, 1);
@@ -115,7 +119,7 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 		}
 	}
 	
-	public static void drawFrame(){
+	public static void drawFrame(DasFileReader raceData){
 	    JFrame f = new JFrame("Map Course Draw Test");
 	    f.addWindowListener(new WindowAdapter() {
 	      public void windowClosing(WindowEvent e) {
@@ -127,13 +131,12 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 	    f.setExtendedState(f.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 	    
 	    f.getContentPane().setLayout(new BorderLayout());
-	    f.getContentPane().add(new MapCourseDrawTest(f.getSize()), "Center");
+	    f.getContentPane().add(new MapCourseDrawTest(f.getSize(), raceData ), "Center");
 	    
 	    f.setVisible(true);
 	}
 	
-	public static void raceDataFill(){
-		DasFileReader raceData = new DasFileReader("log_100401_lccc.txt");
+	public static void raceDataFill( DasFileReader raceData){
 		accelData = raceData.getAccelData();
 		gpsData = raceData.getGPSData();
 	}
@@ -157,7 +160,7 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 					maxLat = Double.valueOf(currentGPSLine[1]);
 				if(Double.valueOf(currentGPSLine[3]) < minLon)
 					minLon = Double.valueOf(currentGPSLine[3]);
-				if(Double.valueOf(currentGPSLine[1]) > maxLon)
+				if(Double.valueOf(currentGPSLine[3]) > maxLon)
 					maxLon = Double.valueOf(currentGPSLine[3]);
 			}
 		}
@@ -165,8 +168,9 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 	
 	//Main for testing MapCourseDrawTest JPanel type
 	public static void main(String[] args) {
-		raceDataFill();
+		DasFileReader raceData = new DasFileReader("log_100401_lccc.txt");
+		raceDataFill(raceData);
 		parseMinsAndMaxs();
-		drawFrame();
+		drawFrame(raceData);
 	}
 }

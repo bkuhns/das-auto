@@ -22,6 +22,10 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class GuiTableLayoutTest  extends JFrame {
 	private static final long serialVersionUID = 1L;
+	
+	//Hard coded log file, change later.
+	DasFileReader raceData = new DasFileReader("log_100401_lccc.txt");
+	
 	XYSeries latAndLongData = new XYSeries("Latitude and Longitude"), 
 	 timeAndVelocityData = new XYSeries("Velocity over Time"),
 	 laterAccelData = new XYSeries("Lateral Acceleration over Time"),
@@ -55,11 +59,13 @@ public class GuiTableLayoutTest  extends JFrame {
 		Button button[] = new Button[buttonLabels.length];
 		for(int i=0;i < buttonLabels.length;i++)
 			button[i] = new Button(buttonLabels[i]);
-		ChartPanel testGPSChart = getGPSChartPanel();
+		//ChartPanel testGPSChart = getGPSChartPanel();
 		ChartPanel testAccelChart = getLatAccelChartPanel();
+		JPanel courseChart = new MapCourseDrawTest(this.getSize(), raceData);
 		
-		this.add(testGPSChart, "0,0,2,0");
+		//this.add(testGPSChart, "0,0,2,0");
 		//this.add(button[0], "0,0,2,0");
+		this.add(courseChart, "0,0,2,0" );
 		this.add(button[1], "3,0,3,1");
 		this.add(button[2], "0,1,2,1");
 		//this.add(button[3], "0,2,0,2");
@@ -69,7 +75,25 @@ public class GuiTableLayoutTest  extends JFrame {
 	}
 	
 	private void readInputFile() {
-		try {
+		
+		//Need to fill the lateral and straight-line acceleration series, and time and velocity data
+		
+		Double 	velocityInput = 0.0,
+				accelTimeInput = 0.0,
+				lateralAccelInput = 0.0,
+				straightLineAccelInput = 0.0;
+		
+		for(int gpsCounter = 0; gpsCounter < raceData.gpsRaceData.size(); gpsCounter++)
+		{
+			
+		}
+		
+		for(int accelCounter = 0; accelCounter < raceData.accelRaceData.size(); accelCounter++)
+		{
+
+		}
+		
+		/*try {
 			Scanner dataFileScanner = new Scanner(new File("gps_midview_log.txt"));
 			Double	latitudeInput = 0.0, 
 					longitudeInput = 0.0,
@@ -101,11 +125,11 @@ public class GuiTableLayoutTest  extends JFrame {
 			dataFileScanner.close();
 		} catch(Exception ex) {
 			System.out.println("Oh noes, an error has occured: " + ex.getMessage());
-		}
+		}*/
 	}
 	
 	
-	private ChartPanel getGPSChartPanel() {
+/*	private ChartPanel getGPSChartPanel() {
 		XYSeriesCollection latAndLongCollection = new XYSeriesCollection(latAndLongData);
 		XYDataset latLongDataset = (XYDataset)latAndLongCollection;
 		JFreeChart gpsChart = ChartFactory.createScatterPlot(null,  null, null, latLongDataset, PlotOrientation.VERTICAL, false, false, false);
@@ -116,7 +140,7 @@ public class GuiTableLayoutTest  extends JFrame {
 		gpsXYPlot.getDomainAxis().setInverted(true);
 		
 		return new ChartPanel(gpsChart);
-	}
+	}*/
 	
 	private ChartPanel getLatAccelChartPanel()
 	{
