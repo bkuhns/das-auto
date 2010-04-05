@@ -57,7 +57,7 @@ public class MainFrame extends JFrame {
 	}
 	
 	
-	private void addCourseMapPanel() {	
+	private void addCourseMapPanel() {
 		CourseMapPanel courseMapPanel = new CourseMapPanel();
 		courseMapPanel.setPreferredSize(new Dimension((int)getSize().getWidth(), (int)getSize().getHeight()));
 	    

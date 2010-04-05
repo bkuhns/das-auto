@@ -14,15 +14,15 @@ import dasAuto.logData.samples.GpsSample;
 
 
 public class LogFileReader {
-	private final String filename = "log_100401_lccc.txt"; //TODO: make this a parameter of some sort.
+	private final String filename = Messages.getString("LogFileReader.filename"); //TODO: make this a parameter of some sort.
 	
 	private AccelFeed accelFeed = new AccelFeed();
 	private GpsFeed gpsFeed = new GpsFeed();
 	
 	private long lastTimestamp = 0;
 	
-	public final String SENSOR_GPS_ID = "01";
-	public final String SENSOR_ACCEL_ID = "02";
+	public final String SENSOR_GPS_ID = Messages.getString("LogFileReader.sensorGpsId");
+	public final String SENSOR_ACCEL_ID = Messages.getString("LogFileReader.sensorAccelId");
 	
 	
 	public LogFileReader() {
@@ -39,8 +39,8 @@ public class LogFileReader {
 				String currentLine = inputLog.readLine();
 				
 				if(isValidLine(currentLine)) {
-					String[] currentLineParts = currentLine.split(":");
-					String[] sensorData = currentLineParts[1].split(",");
+					String[] currentLineParts = currentLine.split(Messages.getString("LogFileReader.sensorSeparator"));
+					String[] sensorData = currentLineParts[1].split(Messages.getString("LogFileReader.dataSeparator"));
 					
 					if(currentLineParts[0].equals(SENSOR_GPS_ID)) {
 						addGpsLine(sensorData);
@@ -52,7 +52,7 @@ public class LogFileReader {
 			
 			inputLog.close();
 		} catch(Exception e) {
-			System.out.println("Oh noes!");
+			System.out.println(Messages.getString("LogFileReader.errorLoadData"));
 			System.out.println(e.toString());
 		}
 	}
@@ -100,10 +100,10 @@ public class LogFileReader {
 		
 		try {
 			if(lineSplit.length == 4) { // Accel data will have 4 parts
-				String currentAccel = "";
+				String currentAccel;
 				for(int parseAccel = 0; parseAccel < 4; parseAccel++) {
 					if (parseAccel == 0) {
-						if(!lineSplit[parseAccel].contains("02:")) {
+						if(!lineSplit[parseAccel].contains(SENSOR_ACCEL_ID)) {
 							isGoodLine = false;
 						} else {
 							currentAccel = lineSplit[parseAccel].substring(3, lineSplit[parseAccel].length());
@@ -115,11 +115,11 @@ public class LogFileReader {
 					}
 				}
 			} else if(lineSplit.length == 8) { // GPS data will have 8 parts
-				String currentGps = "";
+				String currentGps;
 				for(int parseGps = 0; parseGps < 8; parseGps++) {
 					if(parseGps == 0) {
 						currentGps = lineSplit[parseGps].substring(3, lineSplit[parseGps].length());
-						if(!lineSplit[parseGps].contains("01:")) {
+						if(!lineSplit[parseGps].contains(SENSOR_GPS_ID)) {
 							return false;
 						} else {
 							Double.parseDouble(currentGps);							
