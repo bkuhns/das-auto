@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import dasAuto.logData.feeds.AccelFeed;
 import dasAuto.logData.feeds.GpsFeed;
@@ -95,48 +97,24 @@ public class LogFileReader {
 	
 	
 	private boolean isValidLine(String currentLine) {
-		boolean isGoodLine = true;
-		String lineSplit[] = currentLine.split(",");
+		Pattern accelPattern = Pattern.compile("^\\d{2,2}?:\\d{1,},\\d{1,},\\d{1,},\\d{1,}$");
+		Pattern gpsPattern = Pattern.compile
+		("^\\d{2,2}?:\\d{6,6}?\\.\\d{3,3}?,\\d{4,4}?\\.\\d{4,4}?,[NS],\\d{5,5}?\\.\\d{4,4}?,[EW],\\d{3,3}?\\.\\d,\\d{3,3}?\\.\\d,\\d{6,6}?$");
+		Matcher gpsMatcher = gpsPattern.matcher(currentLine);
+		Matcher accelMatcher = accelPattern.matcher(currentLine);
 		
 		try {
-			if(lineSplit.length == 4) { // Accel data will have 4 parts
-				String currentAccel;
-				for(int parseAccel = 0; parseAccel < 4; parseAccel++) {
-					if (parseAccel == 0) {
-						if(!lineSplit[parseAccel].contains(SENSOR_ACCEL_ID)) {
-							isGoodLine = false;
-						} else {
-							currentAccel = lineSplit[parseAccel].substring(3, lineSplit[parseAccel].length());
-							Integer.parseInt(currentAccel);
-						}
-					} else {
-						currentAccel = lineSplit[parseAccel];
-						Integer.parseInt(currentAccel);
-					}
-				}
-			} else if(lineSplit.length == 8) { // GPS data will have 8 parts
-				String currentGps;
-				for(int parseGps = 0; parseGps < 8; parseGps++) {
-					if(parseGps == 0) {
-						currentGps = lineSplit[parseGps].substring(3, lineSplit[parseGps].length());
-						if(!lineSplit[parseGps].contains(SENSOR_GPS_ID)) {
-							return false;
-						} else {
-							Double.parseDouble(currentGps);							
-						}
-					} else if(parseGps == 1 || parseGps == 3 || parseGps == 5 || parseGps == 6 || parseGps == 7) {
-						currentGps = lineSplit[parseGps];
-						Double.parseDouble(currentGps);
-					}
-				}
+			if(gpsMatcher.find()) { // Accel data will have 4 parts
+				return true;
+			} else if(accelMatcher.find()) { // GPS data will have 8 parts
+				return true;
 			} else {
-				isGoodLine = false;
+				return false;
 			}
 		} catch(NumberFormatException e) {
-			isGoodLine = false;
+			return false;
 		}
 		
-		return isGoodLine;
 	}
 	
 	
