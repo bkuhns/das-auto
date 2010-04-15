@@ -28,8 +28,8 @@ public class PolygonTesting extends JPanel {
 	    Line2D testLine;
 	    
 	    //Color(int r, int g, int b) range: 0-255
-	    Color testRed = new Color(255,0,0);
-	    Color testGreen = new Color(0,200,0);
+	    Color testRed = new Color(0,0,255);
+	    Color testGreen = new Color(250,250,0);
 	    test2D.drawPolygon(trape);
 	    GradientPaint gradient = new GradientPaint(100,150,testRed,300,150,testGreen,true);
 	    test2D.setPaint(gradient);

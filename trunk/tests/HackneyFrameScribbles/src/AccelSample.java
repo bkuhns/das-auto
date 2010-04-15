@@ -3,6 +3,11 @@ public class AccelSample extends LogSample{
 	
 	private int xValue, yValue, zValue;
 
+	public AccelSample()
+	{
+		
+	}
+	
 	public int getxValue() {
 		return xValue;
 	}

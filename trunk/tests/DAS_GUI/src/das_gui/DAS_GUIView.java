@@ -142,6 +142,7 @@ public class DAS_GUIView extends FrameView {
         jTextArea1 = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jFileChooser1 = new javax.swing.JFileChooser();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -213,12 +214,12 @@ public class DAS_GUIView extends FrameView {
 
         jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
-        jButton1.setBounds(200, 100, 45, 23);
+        jButton1.setBounds(200, 100, -1, -1);
         jDesktopPane2.add(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
         jButton2.setName("jButton2"); // NOI18N
-        jButton2.setBounds(280, 100, 65, 23);
+        jButton2.setBounds(280, 100, -1, -1);
         jDesktopPane2.add(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
@@ -234,6 +235,10 @@ public class DAS_GUIView extends FrameView {
 
         jInternalFrame1.setBounds(60, 90, 390, 160);
         jDesktopPane1.add(jInternalFrame1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jFileChooser1.setName("jFileChooser1"); // NOI18N
+        jFileChooser1.setBounds(240, 140, 582, 397);
+        jDesktopPane1.add(jFileChooser1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -503,6 +508,7 @@ public void jMenuItem1ActionPerformed() {
     private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JDesktopPane jDesktopPane2;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
