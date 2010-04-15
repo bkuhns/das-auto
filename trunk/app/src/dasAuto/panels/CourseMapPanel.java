@@ -37,6 +37,7 @@ public class CourseMapPanel extends DataPanel {
 
 		int panelWidth = getSize().width;
 		int panelHeight = getSize().height;
+		//TODO: Need to compute course polygon min/max widths as a percentage of the panel height and width.
 		courseMapImage = (BufferedImage)createImage(panelWidth, panelHeight);
 
 		Graphics2D courseMapG = courseMapImage.createGraphics();
@@ -55,6 +56,7 @@ public class CourseMapPanel extends DataPanel {
 			double currentLat = gpsFeed.get(i).getLatitude();
 			double currentLon = gpsFeed.get(i).getLongitude();
 
+			//TODO: Instead of 10% fixed padding, adjust padding to maintain a square set of GPS coordinates. 
 			int currentX = (int)Math.round((((maxLon - currentLon) * (double) (panelWidth * 0.9)) / (maxLon - minLon)) + panelWidth * 0.05);
 			int currentY = (int)Math.round((((maxLat - currentLat) * (double) (panelHeight * 0.9)) / (maxLat - minLat)) + panelHeight * 0.05);
 

@@ -39,9 +39,8 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setPreferredSize(new Dimension(800, 600));
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH); // TODO: Why the hell doesn't this work in Linux? Does it work in Windows? 
-		getContentPane().setLayout(new BorderLayout()); // TODO: We need to use GridBagLayout to set up all the panels, but I'm too tired for that tonight.
+		getContentPane().setLayout(new BorderLayout());
 	}
-	
 	
 	private void addPanels(Container contentPane) {
 		CourseMapPanel courseMapPanel = new CourseMapPanel();
