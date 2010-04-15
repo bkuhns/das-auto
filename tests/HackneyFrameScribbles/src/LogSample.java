@@ -1,5 +1,5 @@
 
-abstract public class LogSample {
+public abstract class LogSample {
 	private long timestamp;
 
 	public long getTimestamp() {

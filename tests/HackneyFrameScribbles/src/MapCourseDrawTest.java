@@ -98,8 +98,8 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 		
 		for(int gpsNum = 0; gpsNum < gpsData.size(); gpsNum++)
 		{
-			currentLat = Double.parseDouble(gpsData.elementAt(gpsNum).substring(11, gpsData.elementAt(gpsNum).indexOf(',', 11)));
-			currentLon = Double.parseDouble(gpsData.elementAt(gpsNum).substring(23, gpsData.elementAt(gpsNum).indexOf(',', 23)));
+			currentLat = gpsData.elementAt(gpsNum).getLatitude();
+			currentLon = gpsData.elementAt(gpsNum).getLongitude();
 			
 			currentX = (int)Math.round((((maxLon - currentLon)  * (double)(w * 0.9))/  (maxLon - minLon)) + w * 0.05) ;
 			currentY = (int)Math.round((((maxLat - currentLat)  * (double)(h * 0.9))/  (maxLat - minLat)) + h * 0.05);
@@ -143,25 +143,23 @@ public class MapCourseDrawTest extends JPanel implements MouseListener, MouseMot
 	
 	//Latitude(N/S): 1nd index; Longitude(E/W): 3th index
 	public static void parseMinsAndMaxs(){
-		String currentGPSLine[];
 		for(int gpsVectorPosition = 0; gpsVectorPosition < gpsData.size(); gpsVectorPosition++){
-			currentGPSLine = gpsData.elementAt(gpsVectorPosition).split(",");
 			
 			if(gpsVectorPosition == 0){
-				minLat = Double.valueOf(currentGPSLine[1]);
-				maxLat = Double.valueOf(currentGPSLine[1]);
-				minLon = Double.valueOf(currentGPSLine[3]);
-				maxLon = Double.valueOf(currentGPSLine[3]);
+				minLat = gpsData.elementAt(gpsVectorPosition).getLatitude();
+				maxLat = gpsData.elementAt(gpsVectorPosition).getLatitude();
+				minLon = gpsData.elementAt(gpsVectorPosition).getLongitude();
+				maxLon = gpsData.elementAt(gpsVectorPosition).getLongitude();
 			}
 			else{
-				if(Double.valueOf(currentGPSLine[1]) < minLat)
-					minLat = Double.valueOf(currentGPSLine[1]);
-				if(Double.valueOf(currentGPSLine[1]) > maxLat)
-					maxLat = Double.valueOf(currentGPSLine[1]);
-				if(Double.valueOf(currentGPSLine[3]) < minLon)
-					minLon = Double.valueOf(currentGPSLine[3]);
-				if(Double.valueOf(currentGPSLine[3]) > maxLon)
-					maxLon = Double.valueOf(currentGPSLine[3]);
+				if(gpsData.elementAt(gpsVectorPosition).getLatitude() < minLat)
+					minLat = gpsData.elementAt(gpsVectorPosition).getLatitude();
+				if(gpsData.elementAt(gpsVectorPosition).getLatitude() > maxLat)
+					maxLat = gpsData.elementAt(gpsVectorPosition).getLatitude();
+				if(gpsData.elementAt(gpsVectorPosition).getLongitude() < minLon)
+					minLon =  gpsData.elementAt(gpsVectorPosition).getLongitude();
+				if( gpsData.elementAt(gpsVectorPosition).getLongitude() > maxLon)
+					maxLon =  gpsData.elementAt(gpsVectorPosition).getLongitude();
 			}
 		}
 	}

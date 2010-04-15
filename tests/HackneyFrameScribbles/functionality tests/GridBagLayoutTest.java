@@ -23,10 +23,6 @@ public class GridBagLayoutTest {
 		for(int i=0;i < buttonLabels.length;i++)
 			button[i] = new JButton(buttonLabels[i]);
 		
-		//JScrolBar parameters:	Horizontal or Vertical orientation, starting value, 
-		//					 	'extent' or scroll unit size (I imagine this relates to the amount scrolled, also), minimum, maximum)
-		//JScrollBar testScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 0, 1, 0, 1000);
-		
 		JSlider testSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 0);
 		testSlider.setPaintTicks(true);
 		testSlider.setPaintLabels(true);
@@ -42,7 +38,6 @@ public class GridBagLayoutTest {
 		griddyCon.gridy = 0;
 		contentPane.add(button[0], griddyCon);
 		
-		griddyCon.fill = GridBagConstraints.BOTH;
 		griddyCon.weightx = 0.25;
 		griddyCon.gridwidth = 1;
 		griddyCon.gridheight = 2;
@@ -50,11 +45,10 @@ public class GridBagLayoutTest {
 		griddyCon.gridy = 0;
 		contentPane.add(button[1], griddyCon);
 		
-		griddyCon.fill = GridBagConstraints.HORIZONTAL;
-		griddyCon.ipady = 0;
+		griddyCon.ipady = 25;
 		griddyCon.weighty = 0.1;
-		griddyCon.gridheight = 1;
 		griddyCon.gridwidth = 2;
+		griddyCon.gridheight = 1;
 		griddyCon.gridx = 0;
 		griddyCon.gridy = 1;
 		contentPane.add(testSlider, griddyCon);
@@ -67,12 +61,10 @@ public class GridBagLayoutTest {
 		griddyCon.gridy = 2;
 		contentPane.add(button[3], griddyCon);
 		
-		griddyCon.weightx = 1.0/3.0;
 		griddyCon.gridx = 1;
 		griddyCon.gridy = 2;
 		contentPane.add(button[4], griddyCon);
 		
-		griddyCon.weightx = 1.0/3.0;
 		griddyCon.gridx = 2;
 		griddyCon.gridy = 2;
 		contentPane.add(button[5], griddyCon);

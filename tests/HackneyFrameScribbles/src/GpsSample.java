@@ -4,6 +4,11 @@ public class GpsSample extends LogSample {
 	private double  latitude, longitude, velocity, course;
 	private char directionNS, directionEW;
 	
+	public GpsSample()
+	{
+		
+	}
+	
 	public double getLatitude() {
 		return latitude;
 	}
