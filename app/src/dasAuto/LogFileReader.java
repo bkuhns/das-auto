@@ -1,6 +1,7 @@
 package dasAuto;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Calendar;
@@ -13,7 +14,7 @@ import dasAuto.logData.samples.AccelSample;
 import dasAuto.logData.samples.GpsSample;
 
 public class LogFileReader {
-	private final String filename = Messages.getString("LogFileReader.filename"); //TODO: make this a parameter of some sort.
+	private File inputLogFile;
 	
 	private AccelFeed accelFeed = new AccelFeed();
 	private GpsFeed gpsFeed = new GpsFeed();
@@ -24,13 +25,15 @@ public class LogFileReader {
 	public final String SENSOR_ACCEL_ID = Messages.getString("LogFileReader.sensorAccelId");
 	
 	
-	public LogFileReader() {
+	public LogFileReader(File inFilename) {
+		inputLogFile = inFilename;
 		loadLogData();
 	}
 	
+	
 	private void loadLogData() {
 		try {
-			FileInputStream fstream = new FileInputStream(filename);
+			FileInputStream fstream = new FileInputStream(inputLogFile);
 			BufferedReader inputLog = new BufferedReader(new InputStreamReader(fstream));
 			
 			while(inputLog.ready()) {

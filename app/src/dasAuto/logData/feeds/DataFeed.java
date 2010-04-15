@@ -1,5 +1,9 @@
 package dasAuto.logData.feeds;
 
+import java.io.File;
+
+import javax.swing.JFileChooser;
+
 import dasAuto.LogFileReader;
 
 
@@ -16,9 +20,28 @@ public class DataFeed {
 	
 	
 	public void loadData() {
-		LogFileReader log = new LogFileReader();
+		
+		LogFileReader log = new LogFileReader(getFileFromUser());
 		accelFeed = log.getAccelFeed();
 		gpsFeed = log.getGpsFeed();
+	}
+	
+	
+	private File getFileFromUser() {
+		JFileChooser dataFileChooser = new JFileChooser();
+	    dataFileChooser.setName("jFileChooser1"); // NOI18N
+	    dataFileChooser.setBounds(0, 0, 582, 397);
+	    File dataFile = null;
+	
+	   //Attempt to Close the frame if the Usner Closes the File Browser
+	   int fileBrowserResult = dataFileChooser.showOpenDialog(null);
+	   if(fileBrowserResult == dataFileChooser.APPROVE_OPTION){
+	        dataFile = dataFileChooser.getSelectedFile();
+	   }
+	   else if(fileBrowserResult == dataFileChooser.CANCEL_OPTION){
+	       System.out.println("Dialog was Canceled.");
+	   }
+	   return dataFile;
 	}
 	
 	
