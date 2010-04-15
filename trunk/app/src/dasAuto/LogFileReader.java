@@ -12,9 +12,6 @@ import dasAuto.logData.feeds.GpsFeed;
 import dasAuto.logData.samples.AccelSample;
 import dasAuto.logData.samples.GpsSample;
 
-
-
-
 public class LogFileReader {
 	private final String filename = Messages.getString("LogFileReader.filename"); //TODO: make this a parameter of some sort.
 	
@@ -30,7 +27,6 @@ public class LogFileReader {
 	public LogFileReader() {
 		loadLogData();
 	}
-	
 	
 	private void loadLogData() {
 		try {
@@ -59,7 +55,6 @@ public class LogFileReader {
 		}
 	}
 	
-	
 	private void addGpsLine(String[] sensorData) {
 		Calendar calendar = Calendar.getInstance();
 		String utcTime = sensorData[0];
@@ -84,7 +79,6 @@ public class LogFileReader {
 		gpsFeed.add(gpsSample);
 	}
 	
-	
 	private void addAccelLine(String[] sensorData) {
 		AccelSample loadingAccel = new AccelSample();
 		loadingAccel.setTimestamp(lastTimestamp + Long.parseLong(sensorData[0]));
@@ -95,7 +89,6 @@ public class LogFileReader {
 		accelFeed.add(loadingAccel);
 	}
 	
-	
 	private boolean isValidLine(String currentLine) {
 		Pattern accelPattern = Pattern.compile("^\\d{2,2}?:\\d{1,},\\d{1,},\\d{1,},\\d{1,}$");
 		Pattern gpsPattern = Pattern.compile
@@ -103,10 +96,12 @@ public class LogFileReader {
 		Matcher gpsMatcher = gpsPattern.matcher(currentLine);
 		Matcher accelMatcher = accelPattern.matcher(currentLine);
 		
+		//System.out.println(currentLine);
+		
 		try {
-			if(gpsMatcher.find()) { // Accel data will have 4 parts
+			if(accelMatcher.find()) {
 				return true;
-			} else if(accelMatcher.find()) { // GPS data will have 8 parts
+			} else if(gpsMatcher.find()) {
 				return true;
 			} else {
 				return false;
@@ -114,18 +109,13 @@ public class LogFileReader {
 		} catch(NumberFormatException e) {
 			return false;
 		}
-		
 	}
-	
 	
 	public AccelFeed getAccelFeed() {
 		return accelFeed;
 	}
 	
-	
 	public GpsFeed getGpsFeed() {
 		return gpsFeed;
 	}
-	
-	
 }
