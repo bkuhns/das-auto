@@ -93,7 +93,7 @@ public class LogFileReader {
 	}
 	
 	private boolean isValidLine(String currentLine) {
-		Pattern accelPattern = Pattern.compile("^\\d{2,2}?:\\d{1,},\\d{1,},\\d{1,},\\d{1,}$");
+		Pattern accelPattern = Pattern.compile("^\\d{2,2}?:\\d{1,},\\d{1,3},\\d{1,3},\\d{1,3}$");
 		Pattern gpsPattern = Pattern.compile
 		("^\\d{2,2}?:\\d{6,6}?\\.\\d{3,3}?,\\d{4,4}?\\.\\d{4,4}?,[NS],\\d{5,5}?\\.\\d{4,4}?,[EW],\\d{3,3}?\\.\\d,\\d{3,3}?\\.\\d,\\d{6,6}?$");
 		Matcher gpsMatcher = gpsPattern.matcher(currentLine);

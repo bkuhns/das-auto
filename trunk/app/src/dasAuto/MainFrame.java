@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import dasAuto.panels.AccelPanel;
 import dasAuto.panels.CourseMapPanel;
 
 
@@ -44,7 +45,7 @@ public class MainFrame extends JFrame {
 	
 	private void addPanels(Container contentPane) {
 		CourseMapPanel courseMapPanel = new CourseMapPanel();
-		//courseMapPanel.setPreferredSize(new Dimension((int)getSize().getWidth(), (int)getSize().getHeight()));
+		AccelPanel xAccelPanel = new AccelPanel(0), yAccelPanel = new AccelPanel(1);
 		contentPane.setLayout(new GridBagLayout());
 		GridBagConstraints griddyCon = new GridBagConstraints();
 		
@@ -89,11 +90,11 @@ public class MainFrame extends JFrame {
 		griddyCon.gridwidth = 1;
 		griddyCon.gridx = 0;
 		griddyCon.gridy = 2;
-		contentPane.add(button[3], griddyCon);
+		contentPane.add(xAccelPanel, griddyCon);
 		
 		griddyCon.gridx = 1;
 		griddyCon.gridy = 2;
-		contentPane.add(button[4], griddyCon);
+		contentPane.add(yAccelPanel, griddyCon);
 		
 		griddyCon.gridx = 2;
 		griddyCon.gridy = 2;
