@@ -17,7 +17,7 @@ public class PolygonTesting extends JPanel {
 	 public void paintComponent(Graphics g) {
 	    Graphics2D test2D = (Graphics2D)g;
 
-	    DasTrapezoid trape = new DasTrapezoid();
+	    Polygon trape = new Polygon();
 	    trape.addPoint(100, 100);
 	    trape.addPoint(100, 150);
 	    trape.addPoint(100, 200);
