@@ -1,5 +1,7 @@
 package dasAuto.panels;
 
+import java.awt.BorderLayout;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -48,6 +50,7 @@ public class AccelPanel extends DataPanel {
 				accelDataset, PlotOrientation.VERTICAL, false, false, false);
 		
 		ChartPanel accelChartPanel = new ChartPanel(accelFreeChart);
-		this.add(accelChartPanel);
+		this.setLayout(new BorderLayout());
+		this.add(accelChartPanel, BorderLayout.CENTER);
 	}
 }

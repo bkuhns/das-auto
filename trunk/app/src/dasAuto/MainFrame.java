@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -38,15 +39,15 @@ public class MainFrame extends JFrame {
 		setTitle("DAS Auto");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setPreferredSize(new Dimension(800, 600));
+		setPreferredSize(new Dimension(1000, 800));
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH); // TODO: Why the hell doesn't this work in Linux? Does it work in Windows? 
-		getContentPane().setLayout(new BorderLayout());
+		//getContentPane().setLayout(new BorderLayout());
 	}
 	
 	private void addPanels(Container contentPane) {
 		CourseMapPanel courseMapPanel = new CourseMapPanel();
 		AccelPanel xAccelPanel = new AccelPanel(0), yAccelPanel = new AccelPanel(1);
-		contentPane.setLayout(new GridBagLayout());
+		getContentPane().setLayout(new GridBagLayout());
 		GridBagConstraints griddyCon = new GridBagConstraints();
 		
 		String buttonLabels[] = {"Main Panel","Hard Data Panel","Scroll Bar Panel","Accel Panel 1"," Accel Panel 2","Trac Panel"};
