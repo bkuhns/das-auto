@@ -18,12 +18,10 @@ public class PolygonTesting extends JPanel {
 	    Graphics2D test2D = (Graphics2D)g;
 
 	    Polygon trape = new Polygon();
-	    trape.addPoint(100, 100);
-	    trape.addPoint(100, 150);
-	    trape.addPoint(100, 200);
-	    trape.addPoint(300, 300);
-	    trape.addPoint(300, 150);
-	    trape.addPoint(300, 0);
+	    trape.addPoint(221, 221);
+	    trape.addPoint(121, 121);
+	    trape.addPoint(170, 170);
+	    trape.addPoint(79, 79);
 	    
 	    Line2D testLine;
 	    
@@ -33,12 +31,12 @@ public class PolygonTesting extends JPanel {
 	    test2D.drawPolygon(trape);
 	    GradientPaint gradient = new GradientPaint(100,150,testRed,300,150,testGreen,true);
 	    test2D.setPaint(gradient);
-	    test2D.fillPolygon(trape);
+	    //test2D.fillPolygon(trape);
 	}
 	 
 	public static void main(String[] args) {
 	    JFrame frame = new JFrame();
-	    frame.setTitle("DrawPoly");
+	    frame.setTitle("PolygonTesting");
 	    frame.setSize(500, 500);
 	    frame.addWindowListener( new WindowAdapter(){ 
 	    							public void windowClosing(WindowEvent e) {

@@ -1,10 +1,13 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,13 +15,16 @@ import javax.swing.JPanel;
 
 public class MultiPolyTesting extends JPanel {
 	
+	BufferedImage bi = new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB);
+	Graphics2D biCourse;
+	
 	public static Point[] arrayPoint = new Point[4];
 	private static final long serialVersionUID = 5369072467124325227L;
 	int minPolyWidth;
 	int maxPolyWidth;
 	int minAccel = 0;
 	int maxAccel = 0;
-	int accel[] = {375, 350, 995, 1000};
+	int accel[] = {800, 350, 995, 1000};
 	boolean calcMinMaxes = false; 
 	boolean firstTrapeDrawn =  false;
 	Point oldTrapePointHigh = null;
@@ -26,9 +32,22 @@ public class MultiPolyTesting extends JPanel {
 	Color maxxedYellow;
 	Color minnedBlue;
 	
-	 
-	 public void paintComponent(Graphics g) {
+	
+	public void paint(Graphics g) {
+		update(g);
+	}
+	
+	
+	public void update(Graphics g) {
 		 Graphics2D graphic = (Graphics2D)g;
+		 
+		 Dimension dim = getSize();
+		 int w = dim.width;
+	     int h = dim.height;
+	     bi = (BufferedImage) createImage(w, h);
+	     biCourse = bi.createGraphics();
+	     biCourse.setStroke(new BasicStroke(2.0f));
+		 
 		 Point previousPoint = null, currentPoint = null;
 		 
 		 if(!calcMinMaxes) {
@@ -71,6 +90,10 @@ public class MultiPolyTesting extends JPanel {
 					drawingTrap.setMaxPolyWidth(maxPolyWidth);
 					drawingTrap.setMinPolyWidth(minPolyWidth);
 					
+					drawingTrap.assembleInitialTrape();
+					
+					biCourse.drawPolygon(drawingTrap);
+					biCourse.fillPolygon(drawingTrap);
 					
 					firstTrapeDrawn = true;
 				 }
@@ -99,14 +122,16 @@ public class MultiPolyTesting extends JPanel {
 				 oldTrapePointLow = drawingTrap.getTrapPointLow();
 			 }
 		 }
-	 }
+	firstTrapeDrawn = false;	 
+	graphic.drawImage(bi, 0, 0, this);
+	}
 	 
 	 
 	 public void calculateMinMaxPolyWidthAndMinMaxAccelValues() {
 		 //For testing purposes, create a minimum width of 1% of the screen height (from pixels)
 		 //and a maximum width of 3% of the same.
 		 minPolyWidth = (int) Math.round(this.getHeight() * 0.01);
-		 maxPolyWidth = (int) Math.round(this.getHeight() * 0.03);
+		 maxPolyWidth = (int) Math.round(this.getHeight() * 0.10);
 		 
 		 for(int a=0; a<4; a++)
 		 {
