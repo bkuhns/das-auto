@@ -4,40 +4,93 @@ import java.lang.Double;
 
 public class DasTrapezoid extends Polygon {
 	
-	private Point	oldPoint1, oldPoint2, newPoint1, newPoint2,
-		 	oldPointYint, newPointYint;
-	private double  oldSlope, newSlope;
+	private Point oldGPSPoint;
+	private Point newGPSPoint;
+	private Point oldTrapePointHigh;
+	private Point oldTrapePointLow;
+	private Point newTrapePointHigh;
+	private Point newTrapePointLow;
+	private Point oldPointYint;
+	private Point newPointYint;
+	private double oldSlope;
+	private double newSlope;
+	private int minAccel = 0;
+	private int maxAccel = 1024;
+	private int minPolyWidth = 2;
+	private int maxPolyWidth = 100;
 	
 
-	public DasTrapezoid(Point oldGPSPoint,   Point newGPSPoint, 
-						Point oldPointTrap1, Point oldPointTrap2,
-						int currentWidth, 	 int previousWidth,
-						int previousAccel, 	 int currentAccel, 
-						double oldTrapSlope)
+	//Normal constructor 
+	public DasTrapezoid(Point currentGPSPoint,	Point pastTrapePointHigh, 
+						Point pastTrapePointLow, int currentAccel)
 	{
-		
+		//TODO: Build out generic constructor
 	}
 	
 	
 	// Specialized constructor for very first Trapezoid, requires more calculation
 	// Need to calculate: oldSlope, newSlope, oldPoint1, oldPoint2, newPoint1, newPoint2
-	public DasTrapezoid(Point oldGPSPoint,  Point newGPSPoint, 
-						int currentWidth, 	int previousWidth,
-						int previousAccel,	int currentAccel)
+	public DasTrapezoid(Point pastGPSPoint,  Point currentGPSPoint, 
+						int previousAccel,  int currentAccel)
 	{
+		//TODO: Build out initial trapezoid constructor
+	}
+	
+	
+	public Point getTrapPointHigh() {
+		return this.newTrapePointHigh;
+	}
+	
+	
+	public Point getTrapPointLow() {
+		return this.newTrapePointLow;
+	}
+	
+	
+	public void setMaxAccel(int dataMaxAccel) {
+		this.maxAccel = dataMaxAccel;
+		
+	}
+
+
+	public void setMinAccel(int dataMinAccel) {
+		this.minAccel = dataMinAccel;
 		
 	}
 	
 	
-	//Get the slope of line between gps points
-	public double getTrapeSlope()
-	{
-		return newSlope;
+	public void setMinPolyWidth(int dataMinPolyWidth) {
+		this.minPolyWidth = dataMinPolyWidth;
+	}
+
+
+	public void setMaxPolyWidth(int dataMaxPolyWidth) {
+		this.maxPolyWidth = dataMaxPolyWidth;
 	}
 	
 	
-	private Double calculateSlope(Point gpsPoint1, Point gpsPoint2)
-	{
+	public int getCurrentWidth(int accel ) {
+		 int curWidth = 0;
+		 double currentWidthProportion = 
+				( (double)(accel - minAccel) / (double)(maxAccel - minAccel) );
+		 
+		 if(currentWidthProportion == 0.0)
+			 curWidth = minPolyWidth;
+		 else if (currentWidthProportion == 1.0)
+			 curWidth = maxPolyWidth;
+		 else
+		 {
+			 curWidth = minPolyWidth + 
+			 			    (int)Math.round(currentWidthProportion * (maxPolyWidth - minPolyWidth));
+		 }
+		 
+		 System.out.println("Current width Proportion: " + currentWidthProportion);
+		 System.out.println("Current width: " + curWidth);
+		 
+		 return curWidth;
+	 }
+	
+	private Double calculateSlope(Point gpsPoint1, Point gpsPoint2) {
 		double slope = 0.0;
 		
 		//Need to include special conditions here for slope cases
@@ -95,4 +148,6 @@ public class DasTrapezoid extends Polygon {
 		
 		return trapePoint;
 	}
+
+	
 }
