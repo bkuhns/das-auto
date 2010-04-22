@@ -14,18 +14,22 @@ public class MultiPolyTesting extends JPanel {
 	
 	public static Point[] arrayPoint = new Point[4];
 	private static final long serialVersionUID = 5369072467124325227L;
-	int minPolyWidth, maxPolyWidth, minAccel = 0, maxAccel = 0;
+	int minPolyWidth;
+	int maxPolyWidth;
+	int minAccel = 0;
+	int maxAccel = 0;
 	int accel[] = {375, 350, 995, 1000};
-	boolean calcMinMaxes = false, firstTrapeDrawn =  false;
-	Point oldTrapePoint1 = null, oldTrapePoint2 = null;
-	double oldTrapeSlope = 0;
-	Color maxxedYellow, minnedBlue;
+	boolean calcMinMaxes = false; 
+	boolean firstTrapeDrawn =  false;
+	Point oldTrapePointHigh = null;
+	Point oldTrapePointLow = null;
+	Color maxxedYellow;
+	Color minnedBlue;
 	
 	 
 	 public void paintComponent(Graphics g) {
 		 Graphics2D graphic = (Graphics2D)g;
 		 Point previousPoint = null, currentPoint = null;
-		 int currentWidth = 0, previousWidth = 0;
 		 
 		 if(!calcMinMaxes) {
 			 calculateMinMaxPolyWidthAndMinMaxAccelValues();
@@ -43,7 +47,6 @@ public class MultiPolyTesting extends JPanel {
 		 for(int p=0; p<4; p++)
 		 { 
 			 currentPoint = arrayPoint[p];
-			 currentWidth = getCurrentWidth(p);
 			 
 			 /*  Check to see if we're on the first point to create a line for. If so...find the
 			  *  slope based upon the lateral acceleration.
@@ -52,34 +55,48 @@ public class MultiPolyTesting extends JPanel {
 			  */
 			 if(previousPoint == null) {
 				 
-				 previousWidth = currentWidth;
 				 previousPoint = currentPoint;
 				 
 			 } else {
 				 //Create a new trapezoid
 				 DasTrapezoid drawingTrap;
 				 
-				//After the first trapezoid is drawn, keep the oldSlope, and oldTrapPoints, which
+				 //After the first trapezoid is drawn, keep the oldSlope, and oldTrapPoints, which
 				 //will be passed from the current drawn trapezoids newTrapPoints, and newSlope.
-				 if(!firstTrapeDrawn)
-				 {
+				 if(!firstTrapeDrawn) {
 					 drawingTrap = new DasTrapezoid(previousPoint, currentPoint, 
-							 						currentWidth, previousWidth,
-							 						accel[p-1], accel[p]);
+								 					accel[p-1], accel[p]); 
+					drawingTrap.setMaxAccel(maxAccel);
+					drawingTrap.setMinAccel(minAccel);
+					drawingTrap.setMaxPolyWidth(maxPolyWidth);
+					drawingTrap.setMinPolyWidth(minPolyWidth);
+					
+					
+					firstTrapeDrawn = true;
+				 }
+				 else {
+					 drawingTrap = new DasTrapezoid(currentPoint, oldTrapePointHigh,  
+							 						oldTrapePointLow, accel[p]);
+					 drawingTrap.setMaxAccel(maxAccel);
+					 drawingTrap.setMinAccel(minAccel);
+					 drawingTrap.setMaxPolyWidth(maxPolyWidth);
+					 drawingTrap.setMinPolyWidth(minPolyWidth);
 					 
-					 oldTrapeSlope = drawingTrap.getTrapeSlope();
-					 firstTrapeDrawn = true;
+					 /*TODO: Add lines here (and methods in DasTrapezoid) for
+					  * 	 determining the 4 points, once the mins/maxs are set.
+					  *
+					  */
 				 }
 				 
-				 //Draw the trapezoid in.
+				 //TODO:Draw the trapezoid in.
 				 
-				 //Color in the trapezoid, using gradient, based upon the 2 points it is along.
-				 //At some point here, based upon the maximum & minimum speeds, need to find a
-				 //way of setting a currentColor for the color gradient.
+				 /*TODO: Color in the trapezoid, using gradient, based upon the 2 points it is along.
+				  *      At some point here, based upon the maximum & minimum speeds, need to find a
+				  *      way of setting a currentColor for the color gradient.
+				  */
 				 
-				 
-				 previousWidth = currentWidth;
-				 previousPoint = currentPoint;
+				 oldTrapePointHigh = drawingTrap.getTrapPointHigh();
+				 oldTrapePointLow = drawingTrap.getTrapPointLow();
 			 }
 		 }
 	 }
@@ -106,28 +123,6 @@ public class MultiPolyTesting extends JPanel {
 		 }
 		 System.out.println("Min width: " + minPolyWidth + " , Max width: " + maxPolyWidth);
 		 System.out.println("Min accel: " + minAccel + " , Max accel: " + maxAccel);
-	 }
-	 
-	 
-	 public int getCurrentWidth(int currentNum) {
-		 int curWidth = 0;
-		 double currentWidthProportion = 
-				( (double)(accel[currentNum] - minAccel) / (double)(maxAccel - minAccel) );
-		 
-		 if(currentWidthProportion == 0.0)
-			 curWidth = minPolyWidth;
-		 else if (currentWidthProportion == 1.0)
-			 curWidth = maxPolyWidth;
-		 else
-		 {
-			 curWidth = minPolyWidth + 
-			 			    (int)Math.round(currentWidthProportion * (maxPolyWidth - minPolyWidth));
-		 }
-		 
-		 System.out.println("Current width Proportion: " + currentWidthProportion);
-		 System.out.println("Current width: " + curWidth);
-		 
-		 return curWidth;
 	 }
 	 
 	 
