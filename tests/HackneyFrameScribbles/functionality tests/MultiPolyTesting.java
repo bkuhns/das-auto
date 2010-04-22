@@ -1,10 +1,10 @@
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.geom.Line2D;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,7 +16,10 @@ public class MultiPolyTesting extends JPanel {
 	private static final long serialVersionUID = 5369072467124325227L;
 	int minPolyWidth, maxPolyWidth, minAccel = 0, maxAccel = 0;
 	int accel[] = {375, 350, 995, 1000};
-	boolean firstTime = true;
+	boolean calcMinMaxes = false, firstTrapeDrawn =  false;
+	Point oldTrapePoint1 = null, oldTrapePoint2 = null;
+	double oldTrapeSlope = 0;
+	Color maxxedYellow, minnedBlue;
 	
 	 
 	 public void paintComponent(Graphics g) {
@@ -24,9 +27,9 @@ public class MultiPolyTesting extends JPanel {
 		 Point previousPoint = null, currentPoint = null;
 		 int currentWidth = 0, previousWidth = 0;
 		 
-		 if(firstTime) {
+		 if(!calcMinMaxes) {
 			 calculateMinMaxPolyWidthAndMinMaxAccelValues();
-			 firstTime = false;		 
+			 calcMinMaxes = true;		 
 		 }
 		 
 		//For the very first point(x,y), determine your line size.
@@ -44,13 +47,38 @@ public class MultiPolyTesting extends JPanel {
 			 
 			 /*  Check to see if we're on the first point to create a line for. If so...find the
 			  *  slope based upon the lateral acceleration.
+			  *  if: handles first point
+			  *  else: handles all other points, including final point
 			  */
 			 if(previousPoint == null) {
+				 
 				 previousWidth = currentWidth;
 				 previousPoint = currentPoint;
+				 
 			 } else {
+				 //Create a new trapezoid
+				 DasTrapezoid drawingTrap;
+				 
+				//After the first trapezoid is drawn, keep the oldSlope, and oldTrapPoints, which
+				 //will be passed from the current drawn trapezoids newTrapPoints, and newSlope.
+				 if(!firstTrapeDrawn)
+				 {
+					 drawingTrap = new DasTrapezoid(previousPoint, currentPoint, 
+							 						currentWidth, previousWidth,
+							 						accel[p-1], accel[p]);
+					 
+					 oldTrapeSlope = drawingTrap.getTrapeSlope();
+					 firstTrapeDrawn = true;
+				 }
+				 
+				 //Draw the trapezoid in.
+				 
+				 //Color in the trapezoid, using gradient, based upon the 2 points it is along.
+				 //At some point here, based upon the maximum & minimum speeds, need to find a
+				 //way of setting a currentColor for the color gradient.
 				 
 				 
+				 previousWidth = currentWidth;
 				 previousPoint = currentPoint;
 			 }
 		 }
