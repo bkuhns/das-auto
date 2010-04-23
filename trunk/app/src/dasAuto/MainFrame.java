@@ -29,6 +29,7 @@ public class MainFrame extends JFrame {
 		pack();
 	}	
 	
+	
 	private void initializeFrame() {
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -37,12 +38,12 @@ public class MainFrame extends JFrame {
 		});
 		
 		setTitle("DAS Auto");
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setMinimumSize(new Dimension(900,700));
 		setPreferredSize(new Dimension(1000, 800));
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH); // TODO: Why the hell doesn't this work in Linux? Does it work in Windows? 
-		//getContentPane().setLayout(new BorderLayout());
 	}
+	
 	
 	private void addPanels(Container contentPane) {
 		CourseMapPanel courseMapPanel = new CourseMapPanel();
@@ -66,13 +67,23 @@ public class MainFrame extends JFrame {
 		griddyCon.weightx = 0.75;
 		griddyCon.weighty = 0.70;
 		griddyCon.gridwidth = 2;
+		griddyCon.gridheight = 2;
 		griddyCon.gridx = 0;
 		griddyCon.gridy = 0;
 		contentPane.add(courseMapPanel, griddyCon);
 		
+		griddyCon.ipady = 0;
 		griddyCon.weightx = 0.25;
+		griddyCon.weighty = 0.50;
+		griddyCon.gridheight = 3;
+		griddyCon.gridx = 2;
+		griddyCon.gridy = 2;
+		contentPane.add(button[5], griddyCon);
+		
+		griddyCon.weightx = 0.25;
+		griddyCon.weighty = 0.50;
 		griddyCon.gridwidth = 1;
-		griddyCon.gridheight = 2;
+		griddyCon.gridheight = 1;
 		griddyCon.gridx = 2;
 		griddyCon.gridy = 0;
 		contentPane.add(button[1], griddyCon);
@@ -82,7 +93,7 @@ public class MainFrame extends JFrame {
 		griddyCon.gridwidth = 2;
 		griddyCon.gridheight = 1;
 		griddyCon.gridx = 0;
-		griddyCon.gridy = 1;
+		griddyCon.gridy = 3;
 		contentPane.add(testSlider, griddyCon);
 	    
 		griddyCon.ipady = 200;
@@ -90,16 +101,12 @@ public class MainFrame extends JFrame {
 		griddyCon.weightx = 1.0/3.0;
 		griddyCon.gridwidth = 1;
 		griddyCon.gridx = 0;
-		griddyCon.gridy = 2;
+		griddyCon.gridy = 4;
 		contentPane.add(xAccelPanel, griddyCon);
 		
 		griddyCon.gridx = 1;
-		griddyCon.gridy = 2;
+		griddyCon.gridy = 4;
 		contentPane.add(yAccelPanel, griddyCon);
-		
-		griddyCon.gridx = 2;
-		griddyCon.gridy = 2;
-		contentPane.add(button[5], griddyCon);
 	}
 	
 	

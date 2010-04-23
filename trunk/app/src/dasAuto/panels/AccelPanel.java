@@ -20,6 +20,7 @@ public class AccelPanel extends DataPanel {
 		
 		AccelSample currentSample;
 		int currentAccel;
+		long initialTimestamp = 0;
 		
 		for(int accelParser=0; accelParser<accelFeed.size(); accelParser++)
 		{
@@ -36,18 +37,23 @@ public class AccelPanel extends DataPanel {
 				currentAccel = 0;
 			}
 			
-			if(currentAccel > 1000)
-				System.out.println("Time: " + currentSample.getTimestamp() + " , currentAccel: " + currentAccel);
-			
-			
-			accelSeries.add(currentSample.getTimestamp(),currentAccel);
+			//pulls the initial Timestamp from the first sample, normalizes time to '0' at start
+			if(accelParser == 0) {
+				initialTimestamp = currentSample.getTimestamp();
+			}
+			accelSeries.add(currentSample.getTimestamp() - initialTimestamp, currentAccel);
 		}
-		
+
 		accelSeriesCollection.addSeries(accelSeries);
 		accelDataset = (XYDataset) accelSeriesCollection;
 		
-		JFreeChart accelFreeChart = ChartFactory.createXYLineChart("DAS Auto Chart: Accel/Time", "Time(ms)", "AccelerationG(unk-nown)", 
+		JFreeChart accelFreeChart = ChartFactory.createXYLineChart(null, "Time(ms)", "Accel", 
 				accelDataset, PlotOrientation.VERTICAL, false, false, false);
+		
+		//Chart cropping: Will try to fit the data into the chart with less empty chart values, and minor padding.
+		accelFreeChart.getXYPlot().getRangeAxis().setLowerBound(accelSeries.getMinY() / 1.005);
+		accelFreeChart.getXYPlot().getRangeAxis().setUpperBound(accelSeries.getMaxY() * 1.005);
+		accelFreeChart.getXYPlot().getDomainAxis().setUpperBound(accelSeries.getMaxX() * 1.005);
 		
 		ChartPanel accelChartPanel = new ChartPanel(accelFreeChart);
 		this.setLayout(new BorderLayout());

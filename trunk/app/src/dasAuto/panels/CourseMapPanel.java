@@ -20,7 +20,6 @@ public class CourseMapPanel extends DataPanel {
 	
 	public CourseMapPanel() {
 		super();
-		
 		setBackground(Color.WHITE);
 	}
 	
