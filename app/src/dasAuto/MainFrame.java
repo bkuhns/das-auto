@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import dasAuto.logData.feeds.AccelFeed;
 import dasAuto.panels.AccelPanel;
 import dasAuto.panels.CourseMapPanel;
+import dasAuto.panels.PolygonCourseMapPanel;
 import dasAuto.panels.TractionCirclePanel;
 
 import javax.swing.JButton;
@@ -68,7 +69,7 @@ public class MainFrame extends JFrame {
 		gridCon.gridwidth = 2;
 		gridCon.gridx = 0;
 		gridCon.gridy = 0;
-		getContentPane().add(new CourseMapPanel(), gridCon);
+		getContentPane().add(new PolygonCourseMapPanel(), gridCon);
 	}
 	
 	
