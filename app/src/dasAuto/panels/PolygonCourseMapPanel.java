@@ -67,16 +67,14 @@ public class PolygonCourseMapPanel extends DataPanel {
 		double maxLat = gpsFeed.getMaxLatitude();
 		double minLon = gpsFeed.getMinLongitude();
 		double maxLon = gpsFeed.getMaxLongitude();
-		int maxAccel = accelFeed.getMaxYAccel();
-		int minAccel = accelFeed.getMinYAccel();
+		int maxAccel = accelFeed.getMaxYValue();
+		int minAccel = accelFeed.getMinYValue();
 		int previousAccel = 0;
 		int currentAccel = 0;
 		
 		//iterate through our GPS data to draw polygons.
 		//Need to include some method for finding the acceleration data previous to the GPS point.
 		for(int i = 0; i < gpsFeed.size(); i++) {
-			
-			//Instantiate the GPS object.
 			currentGpsSample = gpsFeed.get(i);
 			
 			//TODO: Create method for finding closest acceleration value

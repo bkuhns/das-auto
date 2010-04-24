@@ -3,20 +3,26 @@ package dasAuto.logData.feeds;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import org.jfree.data.xy.*;
+
 import dasAuto.logData.samples.AccelSample;
 
 
 public class AccelFeed extends ArrayList<AccelSample> {
 	private static final long serialVersionUID = -3210947898740405829L;
 	
-	int minXAccel;
-	int maxXAccel;
+	public static final int X_AXIS = 0;
+	public static final int Y_AXIS = 1;
+	public static final int Z_AXIS = 2;
 	
-	int minYAccel;
-	int maxYAccel;
+	private int minXValue;
+	private int maxXValue;
 	
-	int minZAccel;
-	int maxZAccel;
+	private int minYValue;
+	private int maxYValue;
+	
+	private int minZValue;
+	private int maxZValue;
 	
 	
 	public AccelFeed() {
@@ -24,73 +30,75 @@ public class AccelFeed extends ArrayList<AccelSample> {
 		
 		resetMinMaxValues();
 	}
-
-
+	
+	
 	private void resetMinMaxValues() {
-		minXAccel = Integer.MIN_VALUE;
-		maxXAccel = Integer.MAX_VALUE;
+		minXValue = Integer.MAX_VALUE;
+		maxXValue = Integer.MIN_VALUE;
 		
-		minYAccel = Integer.MIN_VALUE;
-		maxYAccel = Integer.MAX_VALUE;
+		minYValue = Integer.MAX_VALUE;
+		maxYValue = Integer.MIN_VALUE;
 		
-		minZAccel = Integer.MIN_VALUE;
-		maxZAccel = Integer.MAX_VALUE;
+		minZValue = Integer.MAX_VALUE;
+		maxZValue = Integer.MIN_VALUE;
 	}
+	
 	
 	/**
 	 * Compute the min/max values for all GPS coordinates.
 	 */
-	//TODO: Ask Bret about this function, I'm not sure it written the way it should be.
-	private void computeMinMaxCoordinates() {
+	private void computeMinMaxValues() {
+		resetMinMaxValues();
+		
 		ListIterator<AccelSample> it = listIterator();
 		while(it.hasNext()) {
-			computeMinMaxCoordinates();
+			checkMinMaxValues(it.next());
 		}
 	}
 	
 	
 	/**
-	 * Check if the provided sample contains a min/max value of the feed.
+	 * Check if the provided sample contains a min/max coordinate of the feed.
 	 * 
-	 * @param accelSample
+	 * @param sample
 	 */
-	private void checkMinMaxCoordinates(AccelSample accelSample) {
-		if(accelSample.getxValue() < minXAccel) {
-			minXAccel = accelSample.getxValue();
+	private void checkMinMaxValues(AccelSample sample) {
+		if(sample.getXValue() < minXValue) {
+			minXValue = sample.getXValue();
 		}
-		if(accelSample.getxValue() > maxXAccel) {
-			maxXAccel = accelSample.getxValue();
-		}
-		
-		if(accelSample.getyValue() < minYAccel) {
-			minYAccel = accelSample.getyValue();
-		}
-		if(accelSample.getyValue() > maxYAccel) {
-			maxYAccel = accelSample.getyValue();
+		if(sample.getXValue() > maxXValue) {
+			maxXValue = sample.getXValue();
 		}
 		
-		if(accelSample.getzValue() < minZAccel) {
-			minZAccel = accelSample.getzValue();
+		if(sample.getYValue() < minYValue) {
+			minYValue = sample.getYValue();
 		}
-		if(accelSample.getzValue() > maxZAccel) {
-			maxZAccel = accelSample.getzValue();
+		if(sample.getYValue() > maxYValue) {
+			maxYValue = sample.getYValue();
+		}
+		
+		if(sample.getZValue() < minZValue) {
+			minZValue = sample.getZValue();
+		}
+		if(sample.getZValue() > maxZValue) {
+			maxZValue = sample.getZValue();
 		}
 	}
 	
 	
 	@Override
-	public boolean add(AccelSample accelSample) {
-		checkMinMaxCoordinates(accelSample);
+	public boolean add(AccelSample sample) {
+		checkMinMaxValues(sample);
 		
-		return super.add(accelSample);
+		return super.add(sample);
 	}
 	
 	
 	@Override
-	public void add(int index, AccelSample accelSample) {
-		checkMinMaxCoordinates(accelSample);
+	public void add(int index, AccelSample sample) {
+		checkMinMaxValues(sample);
 		
-		super.add(index, accelSample);
+		super.add(index, sample);
 	}
 	
 	
@@ -99,40 +107,80 @@ public class AccelFeed extends ArrayList<AccelSample> {
 		boolean result = super.remove(o);
 		
 		resetMinMaxValues();
-		computeMinMaxCoordinates();
+		computeMinMaxValues();
 		
 		return result;
 	}
-	
-	
-	public int getMinXAccel() {
-		return minXAccel;
-	}
 
 
-	public int getMaxXAccel() {
-		return maxXAccel;
-	}
-
-
-	public int getMinYAccel() {
-		return minYAccel;
-	}
-
-
-	public int getMaxYAccel() {
-		return maxYAccel;
-	}
-
-
-	public int getMinZAccel() {
-		return minZAccel;
-	}
-
-
-	public int getMaxZAccel() {
-		return maxZAccel;
+	@Override
+	protected void removeRange(int fromIndex, int toIndex) {
+		super.removeRange(fromIndex, toIndex);
+		
+		resetMinMaxValues();
+		computeMinMaxValues();
 	}
 	
 	
+	/**
+	 * @param	axis	Determines if the returned XYSeries represents the x,y, or z axis.
+	 */
+	public XYSeries getXySeries(int axis) throws IllegalArgumentException {
+		XYSeries xySeries = new XYSeries("accel series");
+		long initialTimestamp = 0;
+		
+		for(int i = 0; i < size(); i++) {
+			AccelSample currentSample = get(i);
+			int currentValue;
+			
+			switch(axis) {
+				case X_AXIS:
+					currentValue = currentSample.getXValue();
+					break;
+				case Y_AXIS:
+					currentValue = currentSample.getYValue();
+					break;
+				case Z_AXIS:
+					currentValue = currentSample.getZValue();
+					break;
+				default:
+					throw new IllegalArgumentException("AccelPanel must be of type X,Y, or Z");
+			}
+			
+			// Pull the initial Timestamp from the first sample. Normalizes times to '0' at start.
+			if(i == 0) {
+				initialTimestamp = currentSample.getTimestamp();
+			}
+			xySeries.add(currentSample.getTimestamp() - initialTimestamp, currentValue);
+		}
+		
+		return xySeries;
+	}
+	
+	
+	public int getMinXValue() {
+		return minXValue;
+	}
+
+	public int getMaxXValue() {
+		return maxXValue;
+	}
+
+	public int getMinYValue() {
+		return minYValue;
+	}
+
+	public int getMaxYValue() {
+		return maxYValue;
+	}
+
+	public int getMinZValue() {
+		return minZValue;
+	}
+
+	public int getMaxZValue() {
+		return maxZValue;
+	}
+	
+
 }

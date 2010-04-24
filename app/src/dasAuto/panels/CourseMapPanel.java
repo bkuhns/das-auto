@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 
 import java.awt.image.BufferedImage;
@@ -13,10 +12,7 @@ import java.awt.image.BufferedImage;
 
 public class CourseMapPanel extends DataPanel {
 	private static final long serialVersionUID = 3413521493798935318L;
-
-	BufferedImage courseMapImage = new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB);
-	Rectangle area;
-
+	
 	
 	public CourseMapPanel() {
 		super();
@@ -25,19 +21,15 @@ public class CourseMapPanel extends DataPanel {
 	
 	
 	public void paint(Graphics g) {
-		paint((Graphics2D)g);
-	}
-
-	
-	public void paint(Graphics2D g) {
 		super.paint(g);
 		
+		Graphics2D g2d = (Graphics2D)g;
 		Point previousPoint = null;
 
 		int panelWidth = getSize().width;
 		int panelHeight = getSize().height;
 		//TODO: Need to compute course polygon min/max widths as a percentage of the panel height and width.
-		courseMapImage = (BufferedImage)createImage(panelWidth, panelHeight);
+		BufferedImage courseMapImage = (BufferedImage)createImage(panelWidth, panelHeight);
 
 		Graphics2D courseMapG = courseMapImage.createGraphics();
 		
@@ -72,7 +64,7 @@ public class CourseMapPanel extends DataPanel {
 			previousPoint.setLocation(currentX, currentY);
 		}
 		
-		g.drawImage(courseMapImage, 0, 0, this);
+		g2d.drawImage(courseMapImage, 0, 0, this);
 	}
 	
 	

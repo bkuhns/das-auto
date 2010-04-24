@@ -9,11 +9,11 @@ import dasAuto.logData.samples.GpsSample;
 public class GpsFeed extends ArrayList<GpsSample> {
 	private static final long serialVersionUID = 5579977194924931720L;
 	
-	double minLatitude;
-	double maxLatitude;
+	private double minLatitude;
+	private double maxLatitude;
 	
-	double minLongitude;
-	double maxLongitude;
+	private double minLongitude;
+	private double maxLongitude;
 	
 	
 	public GpsFeed() {
@@ -37,9 +37,11 @@ public class GpsFeed extends ArrayList<GpsSample> {
 	 */
 	//TODO: Ask Bret about this function, I'm not sure it written the way it should be.
 	private void computeMinMaxCoordinates() {
+		resetMinMaxValues();
+		
 		ListIterator<GpsSample> it = listIterator();
 		while(it.hasNext()) {
-			computeMinMaxCoordinates();
+			checkMinMaxCoordinates(it.next());
 		}
 	}
 	
