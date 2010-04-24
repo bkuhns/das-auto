@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
@@ -53,6 +54,11 @@ public class PolygonCourseMapPanel extends DataPanel {
 		int panelWidth = getSize().width;
 		int panelHeight = getSize().height;
 		
+		double minLat = gpsFeed.getMinLatitude();
+		double maxLat = gpsFeed.getMaxLatitude();
+		double minLon = gpsFeed.getMinLongitude();
+		double maxLon = gpsFeed.getMaxLongitude();
+		
 		//Sets up a buffered image to draw the graphics into
 		courseMapImage = (BufferedImage)createImage(panelWidth, panelHeight);
 		courseMapGraphic = courseMapImage.createGraphics();
@@ -61,7 +67,52 @@ public class PolygonCourseMapPanel extends DataPanel {
 		courseMapGraphic.setColor(Color.WHITE);
 		courseMapGraphic.fill(getVisibleRect());
 		
+		courseMapGraphic.setColor(Color.BLACK);
+		courseMapGraphic.setStroke(new BasicStroke(1.0f));
+		
+		
 		for(int k=0; k < coursePolygonList.size(); k++ ) {
+			
+			CourseMapPolygon currentPolygon = coursePolygonList.get(k);
+			
+			double point1Lat = currentPolygon.getNewLocationHigh().getY();
+			double point1Lon = currentPolygon.getNewLocationHigh().getX();
+			double point2Lat = currentPolygon.getNewLocationLow().getY();
+			double point2Lon = currentPolygon.getNewLocationLow().getX();
+			double point3Lat = currentPolygon.getOldLocationHigh().getY();
+			double point3Lon = currentPolygon.getOldLocationHigh().getX();
+			double point4Lat = currentPolygon.getOldLocationLow().getY();
+			double point4Lon = currentPolygon.getOldLocationLow().getX();
+			
+			
+			int point1Y = (int)Math.round(  (((maxLat - point1Lat) *(double)(panelHeight) * 0.9) / (maxLat - minLat)) + (double)(panelHeight) * 0.05  );
+			int point1X = (int)Math.round( (((maxLon - point1Lon) *(double)(panelWidth) * 0.9) / (maxLon - minLon)) + (double)(panelWidth) * 0.05  );
+			int point2Y = (int)Math.round(  (((maxLat - point2Lat) *(double)(panelHeight) * 0.9) / (maxLat - minLat)) + (double)(panelHeight) * 0.05  );
+			int point2X = (int)Math.round( (((maxLon - point2Lon) *(double)(panelWidth) * 0.9) / (maxLon - minLon)) + (double)(panelWidth) * 0.05  );
+			int point3Y = (int)Math.round(  (((maxLat - point3Lat) *(double)(panelHeight) * 0.9) / (maxLat - minLat)) + (double)(panelHeight) * 0.05  );
+			int point3X = (int)Math.round( (((maxLon - point3Lon) *(double)(panelWidth) * 0.9) / (maxLon - minLon)) + (double)(panelWidth) * 0.05  );
+			int point4Y = (int)Math.round(  (((maxLat - point4Lat) *(double)(panelHeight) * 0.9) / (maxLat - minLat)) + (double)(panelHeight) * 0.05  );
+			int point4X = (int)Math.round( (((maxLon - point4Lon) *(double)(panelWidth) * 0.9) / (maxLon - minLon)) + (double)(panelWidth) * 0.05  );
+			
+          /*System.out.println();
+			System.out.println("Point1(x,y): (" + point1X + "," + point1Y + ")");
+			System.out.println("Point2(x,y): (" + point2X + "," + point2Y + ")");
+			System.out.println("Point3(x,y): (" + point3X + "," + point3Y + ")");
+			System.out.println("Point4(x,y): (" + point4X + "," + point4Y + ")");
+			System.out.println();
+			
+			Polygon testPolygon = new Polygon();
+			testPolygon.addPoint(point1X, point1Y);
+			testPolygon.addPoint(point4X, point4Y);
+			testPolygon.addPoint(point2X, point2Y);
+			testPolygon.addPoint(point3X, point3Y);
+			
+			courseMapGraphic.drawPolygon(testPolygon);
+			courseMapGraphic.drawOval( point1X, point1Y, 1, 1);
+			courseMapGraphic.drawOval( point2X, point2Y, 1, 1);
+			courseMapGraphic.drawOval( point3X, point3Y, 1, 1);
+			courseMapGraphic.drawOval( point4X, point4Y, 1, 1);
+           */
 			
 		}
 		
@@ -80,6 +131,7 @@ public class PolygonCourseMapPanel extends DataPanel {
 		double maxLat = gpsFeed.getMaxLatitude();
 		double minLon = gpsFeed.getMinLongitude();
 		double maxLon = gpsFeed.getMaxLongitude();
+		
 		int maxAccel = accelFeed.getMaxYValue();
 		int minAccel = accelFeed.getMinYValue();
 		int previousAccel = 0;
@@ -92,13 +144,13 @@ public class PolygonCourseMapPanel extends DataPanel {
 			currentGpsSample = gpsFeed.get(i);
 			
 			//TODO: Create method for finding closest acceleration value
-			currentAccel = 324;
+			currentAccel = 400;
 			//Need to find the acceleration immediately after the current gpsFeed value.
 			//For now, use a fixed length for the side width
 			
 			//For the first GPS sample of currentGpsSample, fill in to the previousGpsSample, and skip to the next loop
 			
-			if(previousGpsSample.equals(null)) {
+			if(previousGpsSample == null) {
 				previousGpsSample = currentGpsSample;
 				previousAccel = currentAccel;
 			} else {
@@ -108,15 +160,17 @@ public class PolygonCourseMapPanel extends DataPanel {
 				if(!firstPolygon) {
 					racePolygon = new CourseMapPolygon(currentGpsSample, previousGpsSample, previousAccel, currentAccel);
 					racePolygon.setMaxAndMins(minLat, maxLat, minLon, maxLon, maxAccel, minAccel);
+					racePolygon.instantiateFirstPolygon();
 					firstPolygon = true;
 				} else {
 					racePolygon = new CourseMapPolygon(currentGpsSample, previousGpsSample, oldPointHigh, oldPointLow, currentAccel);
 					racePolygon.setMaxAndMins(minLat, maxLat, minLon, maxLon, maxAccel, minAccel);
+					racePolygon.instantiatePolygon();
 				}
 				
 				coursePolygonList.add(racePolygon);
-				oldPointHigh = racePolygon.getNewPolyPointHigh();
-				oldPointLow = racePolygon.getNewPolyPointLow();
+				oldPointHigh = racePolygon.getNewLocationHigh();
+				oldPointLow = racePolygon.getNewLocationLow();
 				previousAccel = currentAccel;
 				previousGpsSample = currentGpsSample;
 			}

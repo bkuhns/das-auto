@@ -7,11 +7,7 @@ import java.awt.geom.Point2D;
 import dasAuto.logData.samples.GpsSample;
 
 public class CourseMapPolygon extends Polygon {
-	
-	private Point oldPolyPointHigh;
-	private Point oldPolyPointLow;
-	private Point newPolyPointHigh;
-	private Point newPolyPointLow;
+
 	private Point2D oldLocationHigh;
 	private Point2D oldLocationLow;
 	private Point2D newLocationHigh;
@@ -36,25 +32,28 @@ public class CourseMapPolygon extends Polygon {
 		
 		oldLocationLow = previousLocationLow;
 		oldLocationHigh = previousLocationHigh;
-		newLocationHigh = findPoint2D(newSample, oldSample, currentAccel, 1);
-		newLocationLow = findPoint2D(newSample, oldSample, currentAccel, -1);
 	}
 	
 	
 	//Specialized constructor for first Polygon with 2 GpsSamples
-	public CourseMapPolygon(GpsSample currentSample, GpsSample previousSample, int currentAccel,  int previousAccel)
-	{
+	public CourseMapPolygon(GpsSample currentSample, GpsSample previousSample, int currentAccel,  int previousAccel) {
 		newSample = currentSample;
 		oldSample = previousSample;
 		oldAccel = previousAccel;
-		newAccel = currentAccel;
-		
-		oldLocationHigh = findPoint2D(oldSample, newSample, previousAccel, 1);
-		oldLocationLow = findPoint2D(oldSample, newSample, previousAccel, -1);
-		newLocationHigh = findPoint2D(newSample, oldSample, currentAccel, 1);
-		newLocationLow = findPoint2D(newSample, oldSample, currentAccel, -1);
+		newAccel = currentAccel;				
 	}
 	
+	public void instantiatePolygon() {
+		newLocationHigh = findPoint2D(newSample, oldSample, newAccel, 1);
+		newLocationLow = findPoint2D(newSample, oldSample, newAccel, -1);
+	}
+	
+	public void instantiateFirstPolygon() {
+		oldLocationHigh = findPoint2D(oldSample, newSample, oldAccel, 1);
+		oldLocationLow = findPoint2D(oldSample, newSample, oldAccel, -1);
+		newLocationHigh = findPoint2D(newSample, oldSample, newAccel, 1);
+		newLocationLow = findPoint2D(newSample, oldSample, newAccel, -1);
+	}
 	
 	public Point2D findPoint2D(GpsSample toSample, GpsSample fromSample, int accelValue, int directionMultipler)
 	{
@@ -78,19 +77,18 @@ public class CourseMapPolygon extends Polygon {
 		double lonDelta = maxLon - minLon;
 		
 		if(latDelta > lonDelta) {
-			minAccelGpsWidth = 0.05 * lonDelta;
-			maxAccelGpsWidth = 0.10 * lonDelta;
+			minAccelGpsWidth = 0.01 * lonDelta;
+			maxAccelGpsWidth = 0.02 * lonDelta;
 		} 
 		else {
-			minAccelGpsWidth = 0.05 * latDelta;
-			maxAccelGpsWidth = 0.10 * latDelta;
+			minAccelGpsWidth = 0.01 * latDelta;
+			maxAccelGpsWidth = 0.02 * latDelta;
 		}
 		
 		if(currentWidthProportion == 0.0)
 			currentAccelWidth = minAccelGpsWidth;
 		else
 			currentAccelWidth = minAccelGpsWidth + (currentWidthProportion * (maxAccelGpsWidth - minAccelGpsWidth));
-		
 		
 		return currentAccelWidth;
 	}
@@ -104,6 +102,9 @@ public class CourseMapPolygon extends Polygon {
 		double angleBetweenGpsCoord = 0.0;
 		double perpendicularAngle = 0.0;
 		
+		double distanceToGpsPointLon = 0.0;
+		double distanceToGpsPointLat = 0.0;
+		
 		double gpsPointLat = 0.0;
 		double gpsPointLon = 0.0;
 		
@@ -111,15 +112,30 @@ public class CourseMapPolygon extends Polygon {
 			angleBetweenGpsCoord = 0.0;
 		}
 		else {
-			angleBetweenGpsCoord = Math.atan( changeInLatitude / changeInLongitude);
+			angleBetweenGpsCoord = (180/Math.PI) * Math.atan( changeInLatitude / changeInLongitude);
 		}
 		
 		perpendicularAngle = angleBetweenGpsCoord + 90.0;
 		
-		gpsPointLon = distanceToNewPoint * Math.cos(perpendicularAngle);
-		gpsPointLat = distanceToNewPoint * Math.sin(perpendicularAngle);
+		distanceToGpsPointLon = distanceToNewPoint * Math.cos(perpendicularAngle);
+		distanceToGpsPointLat = distanceToNewPoint * Math.sin(perpendicularAngle);
+		
+		gpsPointLat = fromSample.getLatitude() + distanceToGpsPointLat;
+		gpsPointLon = fromSample.getLongitude() + distanceToGpsPointLon;
 		
 		gpsPoint.setLocation(gpsPointLon, gpsPointLat);
+		
+/*		System.out.println();
+		System.out.println("Change in Lat: " + changeInLatitude);
+		System.out.println("Change in Long: "+ changeInLongitude);
+		System.out.println("Angle Bwtn points: " + angleBetweenGpsCoord );
+		System.out.println("Perp Angle: " + perpendicularAngle);
+		System.out.println("distance to point: " + distanceToNewPoint);
+		System.out.println("gpsPointLon: " + fromSample.getLongitude());
+		System.out.println("gpsPointLat: " + fromSample.getLatitude());
+		System.out.println("new gpsPointLon: " + gpsPointLon);
+		System.out.println("new gpsPointLat: " + gpsPointLat);
+		System.out.println();*/
 		
 		return gpsPoint;
 	}
@@ -130,14 +146,25 @@ public class CourseMapPolygon extends Polygon {
 	}
 	
 	
-	public Point getNewPolyPointHigh() {
-		return newPolyPointHigh;
+	public Point2D getOldLocationHigh() {
+		return oldLocationHigh;
 	}
 
-	public Point getNewPolyPointLow() {
-		return newPolyPointLow;
+
+	public Point2D getOldLocationLow() {
+		return oldLocationLow;
 	}
-	
+
+
+	public Point2D getNewLocationHigh() {
+		return newLocationHigh;
+	}
+
+
+	public Point2D getNewLocationLow() {
+		return newLocationLow;
+	}
+
 
 	public void setMaxAndMins(double minimumLat, double maximumLat, double minimumLon,
 			                  double maximumLon, int minimumAccel, int maximumAccel) 
