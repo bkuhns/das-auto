@@ -85,17 +85,16 @@ public class LogFileReader {
 	private void addAccelLine(String[] sensorData) {
 		AccelSample loadingAccel = new AccelSample();
 		loadingAccel.setTimestamp(lastTimestamp + Long.parseLong(sensorData[0]));
-		loadingAccel.setxValue(Integer.parseInt(sensorData[1]));
-		loadingAccel.setyValue(Integer.parseInt(sensorData[2]));
-		loadingAccel.setzValue(Integer.parseInt(sensorData[3]));
+		loadingAccel.setXValue(Integer.parseInt(sensorData[1]));
+		loadingAccel.setYValue(Integer.parseInt(sensorData[2]));
+		loadingAccel.setZValue(Integer.parseInt(sensorData[3]));
 		
 		accelFeed.add(loadingAccel);
 	}
 	
 	private boolean isValidLine(String currentLine) {
 		Pattern accelPattern = Pattern.compile("^\\d{2}?:\\d{1,},\\d{1,4},\\d{1,4},\\d{1,4}$");
-		Pattern gpsPattern = Pattern.compile
-		("^\\d{2}?:\\d{6}?\\.\\d{3}?,\\d{4}?\\.\\d{4}?,[NS],\\d{5}?\\.\\d{4}?,[EW],\\d{3}?\\.\\d,\\d{3}?\\.\\d,\\d{6}?$");
+		Pattern gpsPattern = Pattern.compile("^\\d{2}?:\\d{6}?\\.\\d{3}?,\\d{4}?\\.\\d{4}?,[NS],\\d{5}?\\.\\d{4}?,[EW],\\d{3}?\\.\\d,\\d{3}?\\.\\d,\\d{6}?$");
 		Matcher gpsMatcher = gpsPattern.matcher(currentLine);
 		Matcher accelMatcher = accelPattern.matcher(currentLine);
 

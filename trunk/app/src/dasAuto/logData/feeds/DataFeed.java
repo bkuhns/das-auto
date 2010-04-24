@@ -30,17 +30,17 @@ public class DataFeed {
 	private File getFileFromUser() {
 		JFileChooser dataFileChooser = new JFileChooser();
 	    dataFileChooser.setName("jFileChooser1"); // NOI18N
-	    dataFileChooser.setBounds(0, 0, 582, 397);
+	    //dataFileChooser.setBounds(0, 0, 582, 397);
 	    File dataFile = null;
 	
 	   //Attempt to Close the frame if the User Closes the File Browser
 	   //TODO:  Adding functionality to either close program or show blank frame if user does not select a file.
 	   //   	If no file is selected, dataFile will be null at upon return.
 	   int fileBrowserResult = dataFileChooser.showOpenDialog(null);
-	   if(fileBrowserResult == dataFileChooser.APPROVE_OPTION){
+	   if(fileBrowserResult == JFileChooser.APPROVE_OPTION){
 	        dataFile = dataFileChooser.getSelectedFile();
 	   }
-	   else if(fileBrowserResult == dataFileChooser.CANCEL_OPTION){
+	   else if(fileBrowserResult == JFileChooser.CANCEL_OPTION){
 	       System.out.println("Dialog was Canceled.");
 	   }
 	   return dataFile;

@@ -1,31 +1,31 @@
 package dasAuto;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import dasAuto.logData.feeds.AccelFeed;
 import dasAuto.panels.AccelPanel;
 import dasAuto.panels.CourseMapPanel;
-
+import dasAuto.panels.TractionCirclePanel;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 2269971701250845501L;
+	GridBagConstraints gridCon;
 	
 	
 	public MainFrame() {
 		initializeFrame();
-		addPanels(this.getContentPane());
+		addPanels();
 		pack();
 	}	
 	
@@ -38,75 +38,90 @@ public class MainFrame extends JFrame {
 		});
 		
 		setTitle("DAS Auto");
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setMinimumSize(new Dimension(900,700));
-		setPreferredSize(new Dimension(1000, 800));
+		setPreferredSize(new Dimension(800, 600));
+		setMinimumSize(new Dimension(800, 600));
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH); // TODO: Why the hell doesn't this work in Linux? Does it work in Windows? 
+		getContentPane().setLayout(new BorderLayout());
+		
+		getContentPane().setLayout(new GridBagLayout());
+		gridCon = new GridBagConstraints();
 	}
 	
 	
-	private void addPanels(Container contentPane) {
-		CourseMapPanel courseMapPanel = new CourseMapPanel();
-		AccelPanel xAccelPanel = new AccelPanel(0), yAccelPanel = new AccelPanel(1);
-		getContentPane().setLayout(new GridBagLayout());
-		GridBagConstraints griddyCon = new GridBagConstraints();
+	private void addPanels() {
+		addCourseMapPanel();
+		addDataTablePanel();
+		addSliderPanel();
+		addLatAccelPanel();
+		addLonAccelPanel();
+		addTractionCirclePanel();
+	}
+	
+	
+	private void addCourseMapPanel() {
+		gridCon.fill = GridBagConstraints.BOTH;
+		gridCon.ipady = 500;
+		gridCon.weightx = 0.75;
+		gridCon.weighty = 0.70;
+		gridCon.gridwidth = 2;
+		gridCon.gridx = 0;
+		gridCon.gridy = 0;
+		getContentPane().add(new CourseMapPanel(), gridCon);
+	}
+	
+	
+	private void addDataTablePanel() {
+		gridCon.weightx = 0.25;
+		gridCon.gridwidth = 1;
+		gridCon.gridheight = 2;
+		gridCon.gridx = 2;
+		gridCon.gridy = 0;
+		getContentPane().add(new JButton("Data Table"), gridCon);
+	}
+	
+	
+	private void addSliderPanel() {
+		gridCon.ipady = 25;
+		gridCon.weighty = 0.1;
+		gridCon.gridwidth = 2;
+		gridCon.gridheight = 1;
+		gridCon.gridx = 0;
+		gridCon.gridy = 1;
 		
-		String buttonLabels[] = {"Main Panel","Hard Data Panel","Scroll Bar Panel","Accel Panel 1"," Accel Panel 2","Trac Panel"};
-		JButton button[] = new JButton[buttonLabels.length];
-		for(int i=0;i < buttonLabels.length;i++)
-			button[i] = new JButton(buttonLabels[i]);
-		
-		JSlider testSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 0);
-		testSlider.setPaintTicks(true);
-		testSlider.setPaintLabels(true);
-		testSlider.setMinorTickSpacing(10);
-		testSlider.setMajorTickSpacing(100);
-		
-		griddyCon.fill = GridBagConstraints.BOTH;
-		griddyCon.ipady = 500;
-		griddyCon.weightx = 0.75;
-		griddyCon.weighty = 0.70;
-		griddyCon.gridwidth = 2;
-		griddyCon.gridheight = 2;
-		griddyCon.gridx = 0;
-		griddyCon.gridy = 0;
-		contentPane.add(courseMapPanel, griddyCon);
-		
-		griddyCon.ipady = 0;
-		griddyCon.weightx = 0.25;
-		griddyCon.weighty = 0.50;
-		griddyCon.gridheight = 3;
-		griddyCon.gridx = 2;
-		griddyCon.gridy = 2;
-		contentPane.add(button[5], griddyCon);
-		
-		griddyCon.weightx = 0.25;
-		griddyCon.weighty = 0.50;
-		griddyCon.gridwidth = 1;
-		griddyCon.gridheight = 1;
-		griddyCon.gridx = 2;
-		griddyCon.gridy = 0;
-		contentPane.add(button[1], griddyCon);
-		
-		griddyCon.ipady = 25;
-		griddyCon.weighty = 0.1;
-		griddyCon.gridwidth = 2;
-		griddyCon.gridheight = 1;
-		griddyCon.gridx = 0;
-		griddyCon.gridy = 3;
-		contentPane.add(testSlider, griddyCon);
-	    
-		griddyCon.ipady = 200;
-		griddyCon.weighty = 0.20;
-		griddyCon.weightx = 1.0/3.0;
-		griddyCon.gridwidth = 1;
-		griddyCon.gridx = 0;
-		griddyCon.gridy = 4;
-		contentPane.add(xAccelPanel, griddyCon);
-		
-		griddyCon.gridx = 1;
-		griddyCon.gridy = 4;
-		contentPane.add(yAccelPanel, griddyCon);
+		JSlider timeSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 0);
+		timeSlider.setBackground(Color.WHITE);
+		timeSlider.setPaintTicks(true);
+		timeSlider.setPaintLabels(true);
+		timeSlider.setMinorTickSpacing(25);
+		timeSlider.setMajorTickSpacing(250);
+		getContentPane().add(timeSlider, gridCon);
+	}
+	
+	
+	private void addLatAccelPanel() {
+		gridCon.ipady = 200;
+		gridCon.weighty = 0.20;
+		gridCon.weightx = 1.0/3.0;
+		gridCon.gridwidth = 1;
+		gridCon.gridx = 0;
+		gridCon.gridy = 2;
+		getContentPane().add(new AccelPanel(AccelFeed.X_AXIS), gridCon);
+	}
+	
+	
+	private void addLonAccelPanel() {
+		gridCon.gridx = 1;
+		gridCon.gridy = 2;
+		getContentPane().add(new AccelPanel(AccelFeed.Y_AXIS), gridCon);
+	}
+	
+	
+	private void addTractionCirclePanel() {
+		gridCon.gridx = 2;
+		gridCon.gridy = 2;
+		getContentPane().add(new TractionCirclePanel(), gridCon);
 	}
 	
 	

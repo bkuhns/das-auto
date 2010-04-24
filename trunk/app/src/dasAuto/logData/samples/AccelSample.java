@@ -9,31 +9,31 @@ public class AccelSample extends LogSample {
 
 	
 	/* xValue */
-	public int getxValue() {
+	public int getXValue() {
 		return xValue;
 	}
 
-	public void setxValue(int xValue) {
+	public void setXValue(int xValue) {
 		this.xValue = xValue;
 	}
 	
 
 	/* yValue */
-	public int getyValue() {
+	public int getYValue() {
 		return yValue;
 	}
 
-	public void setyValue(int yValue) {
+	public void setYValue(int yValue) {
 		this.yValue = yValue;
 	}
 	
 
 	/* zValue */
-	public int getzValue() {
+	public int getZValue() {
 		return zValue;
 	}
 
-	public void setzValue(int zValue) {
+	public void setZValue(int zValue) {
 		this.zValue = zValue;
 	}
 
