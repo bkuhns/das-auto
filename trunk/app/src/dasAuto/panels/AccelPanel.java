@@ -8,6 +8,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.*;
 
+import dasAuto.logData.feeds.AccelFeed;
+
 
 public class AccelPanel extends DataPanel {
 	private static final long serialVersionUID = 7994490881238648787L;
@@ -18,7 +20,11 @@ public class AccelPanel extends DataPanel {
 	 */
 	public AccelPanel(int axis) throws IllegalArgumentException {
 		XYSeriesCollection accelSeriesCollection = new XYSeriesCollection();
-		XYSeries accelSeries = accelFeed.getXySeries(axis);
+		
+		AccelFeed filteredAccelFeed = accelFeed.getFilteredFeed(50);
+		XYSeries accelSeries = filteredAccelFeed.getXySeries(axis);
+		//XYSeries accelSeries = accelFeed.getXySeries(axis);
+		
 		accelSeriesCollection.addSeries(accelSeries);
 		JFreeChart accelChart = ChartFactory.createXYLineChart(null, null, null, (XYDataset)accelSeriesCollection, PlotOrientation.VERTICAL, false, false, false);
 		
