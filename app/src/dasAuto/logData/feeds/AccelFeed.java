@@ -11,6 +11,9 @@ import dasAuto.logData.samples.AccelSample;
 public class AccelFeed extends ArrayList<AccelSample> {
 	private static final long serialVersionUID = -3210947898740405829L;
 	
+	private AccelFeed filteredFeed;
+	private int lastFilterResolution = -1;
+	
 	public static final int X_AXIS = 0;
 	public static final int Y_AXIS = 1;
 	public static final int Z_AXIS = 2;
@@ -29,6 +32,47 @@ public class AccelFeed extends ArrayList<AccelSample> {
 		super();
 		
 		resetMinMaxValues();
+	}
+	
+	
+	public AccelFeed getFilteredFeed(int filterResolution) {
+		if(filterResolution != lastFilterResolution) {
+			AccelFeed tmpFilteredFeed = new AccelFeed();
+			
+			ListIterator<AccelSample> it = listIterator();
+			while(it.hasNext()) {
+				int xSum = 0;
+				int ySum = 0;
+				int zSum = 0;
+				long timestamp = 0;
+				
+				for(int i = 0; i < filterResolution; i++) {
+					if(!it.hasNext()) {
+						break;
+					}
+					
+					AccelSample currentSample = it.next();
+					if(i == 0) {
+						timestamp = currentSample.getTimestamp();
+					}
+					
+					xSum += currentSample.getXValue();
+					ySum += currentSample.getYValue();
+					zSum += currentSample.getZValue();
+				}
+				
+				AccelSample averagedSample = new AccelSample();
+				averagedSample.setTimestamp(timestamp);
+				averagedSample.setXValue(xSum / filterResolution);
+				averagedSample.setYValue(ySum / filterResolution);
+				averagedSample.setZValue(zSum / filterResolution);
+				tmpFilteredFeed.add(averagedSample);
+			}
+			
+			filteredFeed = tmpFilteredFeed;
+		}
+		
+		return filteredFeed;
 	}
 	
 	
