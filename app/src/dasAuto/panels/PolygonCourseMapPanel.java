@@ -8,9 +8,11 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import dasAuto.graphics.CourseMapPolygon;
+import dasAuto.graphics.PolygonList;
 import dasAuto.logData.samples.GpsSample;
 
 
@@ -20,16 +22,18 @@ public class PolygonCourseMapPanel extends DataPanel {
 	private static final long serialVersionUID = 3413521493798935318L;
 
 	BufferedImage courseMapImage = new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB);
+	PolygonList coursePolygonList = new PolygonList();
 	Graphics2D courseMapGraphic;
 	Rectangle area;
 
 	
 	public PolygonCourseMapPanel() {
 		super();
+		instantiatePolygonList();
 		setBackground(Color.WHITE);
 	}
-	
-	
+
+
 	public void update(Graphics g) {
 		paint(g);
 	}
@@ -42,11 +46,6 @@ public class PolygonCourseMapPanel extends DataPanel {
 	
 	public void paintCourseGraphic(Graphics2D g) {
 		super.paint(g);
-		
-		GpsSample previousGpsSample = null;
-		GpsSample currentGpsSample = null;
-		Point oldPointHigh = new Point();
-		Point oldPointLow = new Point();
 		
 		boolean firstPolygonDrawn = false;
 
@@ -62,6 +61,20 @@ public class PolygonCourseMapPanel extends DataPanel {
 		courseMapGraphic.setColor(Color.WHITE);
 		courseMapGraphic.fill(getVisibleRect());
 		
+		for(int k=0; k < coursePolygonList.size(); k++ ) {
+			
+		}
+		
+		g.drawImage(courseMapImage, 0, 0, this);
+	}
+
+	private void instantiatePolygonList() {
+		
+		GpsSample previousGpsSample = null;
+		GpsSample currentGpsSample = null;
+		Point2D oldPointHigh = new Point2D.Double();
+		Point2D oldPointLow = new Point2D.Double();
+		
 		//create local values for maximums
 		double minLat = gpsFeed.getMinLatitude();
 		double maxLat = gpsFeed.getMaxLatitude();
@@ -71,6 +84,7 @@ public class PolygonCourseMapPanel extends DataPanel {
 		int minAccel = accelFeed.getMinYValue();
 		int previousAccel = 0;
 		int currentAccel = 0;
+		boolean firstPolygon = false;
 		
 		//iterate through our GPS data to draw polygons.
 		//Need to include some method for finding the acceleration data previous to the GPS point.
@@ -90,62 +104,24 @@ public class PolygonCourseMapPanel extends DataPanel {
 			} else {
 				
 				CourseMapPolygon racePolygon;
-				//TODO: Find the distance from the previous GPS point to the new GPS point,
-				//		or instantiate & pass values to CourseMapPolygon
 				
-				/*  If we're in this else, we're at least on the second GPS feed, with a current & previous GpsSample.
-				 *  However, no points have been created. The very first time we go through, need to make a specialized
-				 *  'first polygon' which creates 4 points for a polygon. Thereafter, only need to generate 2 new points
-				 *  for a polygon.
-				 */
-				if(!firstPolygonDrawn) {
+				if(!firstPolygon) {
 					racePolygon = new CourseMapPolygon(currentGpsSample, previousGpsSample, previousAccel, currentAccel);
 					racePolygon.setMaxAndMins(minLat, maxLat, minLon, maxLon, maxAccel, minAccel);
-					
-					
-					
-					firstPolygonDrawn = true;
+					firstPolygon = true;
 				} else {
-					racePolygon = new CourseMapPolygon(currentGpsSample, oldPointHigh, oldPointLow, currentAccel);
+					racePolygon = new CourseMapPolygon(currentGpsSample, previousGpsSample, oldPointHigh, oldPointLow, currentAccel);
 					racePolygon.setMaxAndMins(minLat, maxLat, minLon, maxLon, maxAccel, minAccel);
-					
-					
 				}
 				
+				coursePolygonList.add(racePolygon);
 				oldPointHigh = racePolygon.getNewPolyPointHigh();
 				oldPointLow = racePolygon.getNewPolyPointLow();
 				previousAccel = currentAccel;
+				previousGpsSample = currentGpsSample;
 			}
-			
-			
-			
-			
-			
-			
-			
-			//Old method of determining an Oval to draw a point at, to be changed to polygon objects.
-			
-			//double currentLat = gpsFeed.get(i).getLatitude();
-			//double currentLon = gpsFeed.get(i).getLongitude();
-			
-			//TODO: Instead of 10% fixed padding, adjust padding to maintain a square set of GPS coordinates.
-			/*int currentX = (int)Math.round((((maxLon - currentLon) * (double) (panelWidth * 0.9)) / (maxLon - minLon)) + panelWidth * 0.05);
-			int currentY = (int)Math.round((((maxLat - currentLat) * (double) (panelHeight * 0.9)) / (maxLat - minLat)) + panelHeight * 0.05);
-
-			courseMapG.setStroke(new BasicStroke(2.0f));
-			courseMapG.drawOval(currentX, currentY, 1, 1);
-
-			if (previousPoint == null) {
-				previousPoint = new Point();
-			} else {
-				courseMapG.setStroke(new BasicStroke(1.0f));
-				courseMapG.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				courseMapG.drawLine(previousPoint.x, previousPoint.y, currentX, currentY);
-			}
-			previousPoint.setLocation(currentX, currentY);*/
 		}
-		g.drawImage(courseMapImage, 0, 0, this);
 	}
-
+	
 	
 }
