@@ -35,6 +35,7 @@ public class GpsFeed extends ArrayList<GpsSample> {
 	/**
 	 * Compute the min/max values for all GPS coordinates.
 	 */
+	//TODO: Ask Bret about this function, I'm not sure it written the way it should be.
 	private void computeMinMaxCoordinates() {
 		ListIterator<GpsSample> it = listIterator();
 		while(it.hasNext()) {
