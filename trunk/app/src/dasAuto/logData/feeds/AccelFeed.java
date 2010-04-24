@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import dasAuto.logData.samples.AccelSample;
-import dasAuto.logData.samples.GpsSample;
-
 
 
 public class AccelFeed extends ArrayList<AccelSample> {
