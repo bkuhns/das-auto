@@ -44,9 +44,10 @@ public class AccelFeed extends ArrayList<AccelSample> {
 				int xSum = 0;
 				int ySum = 0;
 				int zSum = 0;
+				int i = 0;
 				long timestamp = 0;
 				
-				for(int i = 0; i < filterResolution; i++) {
+				for(i = 0; i < filterResolution; i++) {
 					if(!it.hasNext()) {
 						break;
 					}
@@ -63,9 +64,9 @@ public class AccelFeed extends ArrayList<AccelSample> {
 				
 				AccelSample averagedSample = new AccelSample();
 				averagedSample.setTimestamp(timestamp);
-				averagedSample.setXValue(xSum / filterResolution);
-				averagedSample.setYValue(ySum / filterResolution);
-				averagedSample.setZValue(zSum / filterResolution);
+				averagedSample.setXValue(xSum / i);
+				averagedSample.setYValue(ySum / i);
+				averagedSample.setZValue(zSum / i);
 				tmpFilteredFeed.add(averagedSample);
 			}
 			

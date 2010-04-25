@@ -3,8 +3,7 @@ package dasAuto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -12,16 +11,16 @@ import dasAuto.logData.feeds.AccelFeed;
 import dasAuto.panels.AccelPanel;
 import dasAuto.panels.CourseMapPanel;
 import dasAuto.panels.PolygonCourseMapPanel;
+import dasAuto.panels.SpeedPanel;
 import dasAuto.panels.TractionCirclePanel;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 2269971701250845501L;
-	GridBagConstraints gridCon;
 	
 	
 	public MainFrame() {
@@ -45,84 +44,53 @@ public class MainFrame extends JFrame {
 		setMinimumSize(new Dimension(800, 600));
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH); // TODO: Why the hell doesn't this work in Linux? Does it work in Windows? 
 		getContentPane().setLayout(new BorderLayout());
-		
-		getContentPane().setLayout(new GridBagLayout());
-		gridCon = new GridBagConstraints();
 	}
 	
 	
 	private void addPanels() {
-		addCourseMapPanel();
-		addDataTablePanel();
-		addSliderPanel();
-		addLatAccelPanel();
-		addLonAccelPanel();
-		addTractionCirclePanel();
+		addCenterPanel();
+		addSidePanel();
+		addBottomPanel();
 	}
 	
 	
-	private void addCourseMapPanel() {
-		gridCon.fill = GridBagConstraints.BOTH;
-		gridCon.ipady = 500;
-		gridCon.weightx = 0.75;
-		gridCon.weighty = 0.70;
-		gridCon.gridwidth = 2;
-		gridCon.gridx = 0;
-		gridCon.gridy = 0;
-		getContentPane().add(new PolygonCourseMapPanel(), gridCon);
-	}
-	
-	
-	private void addDataTablePanel() {
-		gridCon.weightx = 0.25;
-		gridCon.gridwidth = 1;
-		gridCon.gridheight = 2;
-		gridCon.gridx = 2;
-		gridCon.gridy = 0;
-		getContentPane().add(new JButton("Data Table"), gridCon);
-	}
-	
-	
-	private void addSliderPanel() {
-		gridCon.ipady = 25;
-		gridCon.weighty = 0.1;
-		gridCon.gridwidth = 2;
-		gridCon.gridheight = 1;
-		gridCon.gridx = 0;
-		gridCon.gridy = 1;
+	private void addCenterPanel() {
+		JPanel centerPanel = new JPanel(new BorderLayout());
+		centerPanel.add(new CourseMapPanel(), BorderLayout.CENTER);
 		
 		JSlider timeSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 0);
+		timeSlider.setPaintTrack(false);
 		timeSlider.setBackground(Color.WHITE);
 		timeSlider.setPaintTicks(true);
-		timeSlider.setPaintLabels(true);
+		timeSlider.setPaintLabels(false);
 		timeSlider.setMinorTickSpacing(25);
 		timeSlider.setMajorTickSpacing(250);
-		getContentPane().add(timeSlider, gridCon);
+		centerPanel.add(timeSlider, BorderLayout.SOUTH);
+		
+		getContentPane().add(centerPanel);
 	}
 	
 	
-	private void addLatAccelPanel() {
-		gridCon.ipady = 200;
-		gridCon.weighty = 0.20;
-		gridCon.weightx = 1.0/3.0;
-		gridCon.gridwidth = 1;
-		gridCon.gridx = 0;
-		gridCon.gridy = 2;
-		getContentPane().add(new AccelPanel(AccelFeed.X_AXIS), gridCon);
+	private void addSidePanel() {
+		JPanel sidePanel = new JPanel(new GridLayout(2, 1));
+		sidePanel.setPreferredSize(new Dimension((int)(getWidth() * 0.35), getHeight()));
+		
+		sidePanel.add(new JPanel());
+		sidePanel.add(new TractionCirclePanel());
+		
+		getContentPane().add(sidePanel, BorderLayout.EAST);
 	}
 	
 	
-	private void addLonAccelPanel() {
-		gridCon.gridx = 1;
-		gridCon.gridy = 2;
-		getContentPane().add(new AccelPanel(AccelFeed.Y_AXIS), gridCon);
-	}
-	
-	
-	private void addTractionCirclePanel() {
-		gridCon.gridx = 2;
-		gridCon.gridy = 2;
-		getContentPane().add(new TractionCirclePanel(), gridCon);
+	private void addBottomPanel() {
+		JPanel bottomPanel = new JPanel(new GridLayout(1, 3));
+		bottomPanel.setPreferredSize(new Dimension(getWidth(), (int)(getHeight() * 0.35)));
+		
+		bottomPanel.add(new AccelPanel(AccelFeed.X_AXIS));
+		bottomPanel.add(new AccelPanel(AccelFeed.Y_AXIS));
+		bottomPanel.add(new SpeedPanel());
+		
+		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 	}
 	
 	

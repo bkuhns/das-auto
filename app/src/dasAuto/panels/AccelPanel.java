@@ -21,7 +21,7 @@ public class AccelPanel extends DataPanel {
 	public AccelPanel(int axis) throws IllegalArgumentException {
 		XYSeriesCollection accelSeriesCollection = new XYSeriesCollection();
 		
-		AccelFeed filteredAccelFeed = accelFeed.getFilteredFeed(50);
+		AccelFeed filteredAccelFeed = accelFeed.getFilteredFeed(100);
 		XYSeries accelSeries = filteredAccelFeed.getXySeries(axis);
 		//XYSeries accelSeries = accelFeed.getXySeries(axis);
 		
