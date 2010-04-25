@@ -56,7 +56,7 @@ public class MainFrame extends JFrame {
 	
 	private void addCenterPanel() {
 		JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(new CourseMapPanel(), BorderLayout.CENTER);
+		centerPanel.add(new PolygonCourseMapPanel(), BorderLayout.CENTER);
 		
 		JSlider timeSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 0);
 		timeSlider.setPaintTrack(false);

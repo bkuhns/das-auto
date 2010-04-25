@@ -69,9 +69,10 @@ public class PolygonCourseMapPanel extends DataPanel {
 		
 		courseMapGraphic.setColor(Color.BLACK);
 		courseMapGraphic.setStroke(new BasicStroke(1.0f));
+		courseMapGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		
-		for(int k=0; k < coursePolygonList.size(); k++ ) {
+		for(int k=0; k < coursePolygonList.size(); k++) {
 			
 			CourseMapPolygon currentPolygon = coursePolygonList.get(k);
 			
@@ -100,19 +101,21 @@ public class PolygonCourseMapPanel extends DataPanel {
 			System.out.println("Point3(x,y): (" + point3X + "," + point3Y + ")");
 			System.out.println("Point4(x,y): (" + point4X + "," + point4Y + ")");
 			System.out.println();
+			*/
 			
 			Polygon testPolygon = new Polygon();
-			testPolygon.addPoint(point1X, point1Y);
+			
 			testPolygon.addPoint(point4X, point4Y);
+			testPolygon.addPoint(point1X, point1Y);
 			testPolygon.addPoint(point2X, point2Y);
 			testPolygon.addPoint(point3X, point3Y);
 			
 			courseMapGraphic.drawPolygon(testPolygon);
-			courseMapGraphic.drawOval( point1X, point1Y, 1, 1);
-			courseMapGraphic.drawOval( point2X, point2Y, 1, 1);
-			courseMapGraphic.drawOval( point3X, point3Y, 1, 1);
-			courseMapGraphic.drawOval( point4X, point4Y, 1, 1);
-           */
+			//courseMapGraphic.drawOval( point1X, point1Y, 1, 1);
+			//courseMapGraphic.drawOval( point2X, point2Y, 1, 1);
+			//courseMapGraphic.drawOval( point3X, point3Y, 1, 1);
+			//courseMapGraphic.drawOval( point4X, point4Y, 1, 1);
+           
 			
 		}
 		
@@ -144,7 +147,7 @@ public class PolygonCourseMapPanel extends DataPanel {
 			currentGpsSample = gpsFeed.get(i);
 			
 			//TODO: Create method for finding closest acceleration value
-			currentAccel = 400;
+			currentAccel = 150;
 			//Need to find the acceleration immediately after the current gpsFeed value.
 			//For now, use a fixed length for the side width
 			

@@ -28,7 +28,6 @@ public class CourseMapPanel extends DataPanel {
 
 		int panelWidth = getSize().width;
 		int panelHeight = getSize().height;
-		//TODO: Need to compute course polygon min/max widths as a percentage of the panel height and width.
 		BufferedImage courseMapImage = (BufferedImage)createImage(panelWidth, panelHeight);
 
 		Graphics2D courseMapG = courseMapImage.createGraphics();

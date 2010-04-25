@@ -117,8 +117,8 @@ public class CourseMapPolygon extends Polygon {
 		
 		perpendicularAngle = angleBetweenGpsCoord + 90.0;
 		
-		distanceToGpsPointLon = distanceToNewPoint * Math.cos(perpendicularAngle);
-		distanceToGpsPointLat = distanceToNewPoint * Math.sin(perpendicularAngle);
+		distanceToGpsPointLon = distanceToNewPoint * Math.cos(perpendicularAngle * (Math.PI / 180));
+		distanceToGpsPointLat = distanceToNewPoint * Math.sin(perpendicularAngle * (Math.PI / 180));
 		
 		gpsPointLat = fromSample.getLatitude() + distanceToGpsPointLat;
 		gpsPointLon = fromSample.getLongitude() + distanceToGpsPointLon;
