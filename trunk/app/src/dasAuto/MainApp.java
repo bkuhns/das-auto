@@ -1,5 +1,7 @@
 package dasAuto;
 
+import javax.swing.UIManager;
+
 
 public class MainApp {
 	
@@ -10,6 +12,12 @@ public class MainApp {
 	
 	
 	private void initializeGui() {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch(Exception ex) {
+			System.err.println(ex.getMessage());
+		}
+		
 		MainFrame mainFrame = new MainFrame();
 		mainFrame.setVisible(true);
 	}

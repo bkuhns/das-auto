@@ -3,6 +3,8 @@ package dasAuto.logData.feeds;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import org.jfree.data.xy.XYSeries;
+
 import dasAuto.logData.samples.GpsSample;
 
 
@@ -15,11 +17,33 @@ public class GpsFeed extends ArrayList<GpsSample> {
 	private double minLongitude;
 	private double maxLongitude;
 	
+	private double minSpeed;
+	private double maxSpeed;
+	
 	
 	public GpsFeed() {
 		super();
 		
 		resetMinMaxValues();
+	}
+	
+	
+	public XYSeries getXySpeedSeries() {
+		XYSeries xySeries = new XYSeries("GPS speed series");
+		long initialTimestamp = 0;
+		
+		for(int i = 0; i < size(); i++) {
+			GpsSample currentSample = get(i);
+			double currentValue = currentSample.getSpeed();
+			
+			// Pull the initial Timestamp from the first sample. Normalizes times to '0' at start.
+			if(i == 0) {
+				initialTimestamp = currentSample.getTimestamp();
+			}
+			xySeries.add(currentSample.getTimestamp() - initialTimestamp, currentValue);
+		}
+		
+		return xySeries;
 	}
 	
 	
@@ -29,6 +53,9 @@ public class GpsFeed extends ArrayList<GpsSample> {
 		
 		minLongitude = Double.MAX_VALUE;
 		maxLongitude = Double.MIN_VALUE;
+		
+		minSpeed = Double.MAX_VALUE;
+		maxSpeed = Double.MIN_VALUE;
 	}
 	
 	
@@ -36,12 +63,12 @@ public class GpsFeed extends ArrayList<GpsSample> {
 	 * Compute the min/max values for all GPS coordinates.
 	 */
 	//TODO: Ask Bret about this function, I'm not sure it written the way it should be.
-	private void computeMinMaxCoordinates() {
+	private void computeMinMaxValues() {
 		resetMinMaxValues();
 		
 		ListIterator<GpsSample> it = listIterator();
 		while(it.hasNext()) {
-			checkMinMaxCoordinates(it.next());
+			checkMinMaxValues(it.next());
 		}
 	}
 	
@@ -51,7 +78,7 @@ public class GpsFeed extends ArrayList<GpsSample> {
 	 * 
 	 * @param gpsSample
 	 */
-	private void checkMinMaxCoordinates(GpsSample gpsSample) {
+	private void checkMinMaxValues(GpsSample gpsSample) {
 		if(gpsSample.getLatitude() < minLatitude) {
 			minLatitude = gpsSample.getLatitude();
 		}
@@ -65,12 +92,19 @@ public class GpsFeed extends ArrayList<GpsSample> {
 		if(gpsSample.getLongitude() > maxLongitude) {
 			maxLongitude = gpsSample.getLongitude();
 		}
+		
+		if(gpsSample.getSpeed() < minSpeed) {
+			minSpeed = gpsSample.getSpeed();
+		}
+		if(gpsSample.getSpeed() > maxSpeed) {
+			maxSpeed = gpsSample.getSpeed();
+		}
 	}
 	
 	
 	@Override
 	public boolean add(GpsSample gpsSample) {
-		checkMinMaxCoordinates(gpsSample);
+		checkMinMaxValues(gpsSample);
 		
 		return super.add(gpsSample);
 	}
@@ -78,7 +112,7 @@ public class GpsFeed extends ArrayList<GpsSample> {
 	
 	@Override
 	public void add(int index, GpsSample gpsSample) {
-		checkMinMaxCoordinates(gpsSample);
+		checkMinMaxValues(gpsSample);
 		
 		super.add(index, gpsSample);
 	}
@@ -89,7 +123,7 @@ public class GpsFeed extends ArrayList<GpsSample> {
 		boolean result = super.remove(o);
 		
 		resetMinMaxValues();
-		computeMinMaxCoordinates();
+		computeMinMaxValues();
 		
 		return result;
 	}
@@ -100,7 +134,7 @@ public class GpsFeed extends ArrayList<GpsSample> {
 		super.removeRange(fromIndex, toIndex);
 		
 		resetMinMaxValues();
-		computeMinMaxCoordinates();
+		computeMinMaxValues();
 	}
 
 
@@ -108,7 +142,6 @@ public class GpsFeed extends ArrayList<GpsSample> {
 		return minLatitude;
 	}
 
-	
 	public double getMaxLatitude() {
 		return maxLatitude;
 	}
@@ -118,9 +151,17 @@ public class GpsFeed extends ArrayList<GpsSample> {
 		return minLongitude;
 	}
 	
-	
 	public double getMaxLongitude() {
 		return maxLongitude;
+	}
+	
+	
+	public double getMinSpeed() {
+		return minSpeed;
+	}
+	
+	public double getMaxSpeed() {
+		return maxSpeed;
 	}
 	
 	

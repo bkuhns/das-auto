@@ -85,7 +85,7 @@ public class LogFileReader {
 	private void addAccelLine(String[] sensorData) {
 		AccelSample loadingAccel = new AccelSample();
 		loadingAccel.setTimestamp(lastTimestamp + Long.parseLong(sensorData[0]));
-		loadingAccel.setXValue(Integer.parseInt(sensorData[1]));
+		loadingAccel.setXValue(Integer.parseInt(sensorData[1]) * -1);
 		loadingAccel.setYValue(Integer.parseInt(sensorData[2]));
 		loadingAccel.setZValue(Integer.parseInt(sensorData[3]));
 		

@@ -20,7 +20,6 @@ public class DataFeed {
 	
 	
 	public void loadData() {
-		
 		LogFileReader log = new LogFileReader(getFileFromUser());
 		accelFeed = log.getAccelFeed();
 		gpsFeed = log.getGpsFeed();
@@ -50,8 +49,8 @@ public class DataFeed {
 	public GpsFeed getGpsFeed() {
 		return gpsFeed;
 	}
-
-
+	
+	
 	public AccelFeed getAccelFeed() {
 		return accelFeed;
 	}
