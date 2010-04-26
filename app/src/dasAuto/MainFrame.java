@@ -7,16 +7,16 @@ import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import dasAuto.logData.feeds.AccelFeed;
-import dasAuto.panels.AccelPanel;
-import dasAuto.panels.CourseMapPanel;
-import dasAuto.panels.PolygonCourseMapPanel;
-import dasAuto.panels.SpeedPanel;
-import dasAuto.panels.TractionCirclePanel;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+
+import dasAuto.logData.feeds.AccelFeed;
+import dasAuto.panels.AccelPanel;
+import dasAuto.panels.KeyPointsPanel;
+import dasAuto.panels.PolygonCourseMapPanel;
+import dasAuto.panels.SpeedPanel;
+import dasAuto.panels.TractionCirclePanel;
 
 
 public class MainFrame extends JFrame {
@@ -74,8 +74,9 @@ public class MainFrame extends JFrame {
 	private void addSidePanel() {
 		JPanel sidePanel = new JPanel(new GridLayout(2, 1));
 		sidePanel.setPreferredSize(new Dimension((int)(getWidth() * 0.35), getHeight()));
-		
-		sidePanel.add(new JPanel());
+
+		//-- AJG Key Points Panel
+		sidePanel.add(new KeyPointsPanel());
 		sidePanel.add(new TractionCirclePanel());
 		
 		getContentPane().add(sidePanel, BorderLayout.EAST);
@@ -92,6 +93,4 @@ public class MainFrame extends JFrame {
 		
 		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 	}
-	
-	
 }
