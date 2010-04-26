@@ -137,8 +137,9 @@ public class PolygonCourseMapPanel extends DataPanel {
 		
 		int maxAccel = accelFeed.getMaxYValue();
 		int minAccel = accelFeed.getMinYValue();
+		
 		int previousAccel = 0;
-		int currentAccel = 0;
+		int currentAccel = 250;
 		boolean firstPolygon = false;
 		
 		//iterate through our GPS data to draw polygons.
@@ -147,7 +148,7 @@ public class PolygonCourseMapPanel extends DataPanel {
 			currentGpsSample = gpsFeed.get(i);
 			
 			//TODO: Create method for finding closest acceleration value
-			currentAccel = 150;
+			
 			//Need to find the acceleration immediately after the current gpsFeed value.
 			//For now, use a fixed length for the side width
 			
@@ -162,12 +163,12 @@ public class PolygonCourseMapPanel extends DataPanel {
 				
 				if(!firstPolygon) {
 					racePolygon = new CourseMapPolygon(currentGpsSample, previousGpsSample, previousAccel, currentAccel);
-					racePolygon.setMaxAndMins(minLat, maxLat, minLon, maxLon, maxAccel, minAccel);
+					racePolygon.setMaxAndMins(minLat, maxLat, minLon, maxLon, minAccel, maxAccel);
 					racePolygon.instantiateFirstPolygon();
 					firstPolygon = true;
 				} else {
 					racePolygon = new CourseMapPolygon(currentGpsSample, previousGpsSample, oldPointHigh, oldPointLow, currentAccel);
-					racePolygon.setMaxAndMins(minLat, maxLat, minLon, maxLon, maxAccel, minAccel);
+					racePolygon.setMaxAndMins(minLat, maxLat, minLon, maxLon, minAccel, maxAccel);
 					racePolygon.instantiatePolygon();
 				}
 				

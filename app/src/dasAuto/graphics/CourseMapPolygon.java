@@ -71,7 +71,7 @@ public class CourseMapPolygon extends Polygon {
 		double currentAccelWidth = 0;
 		double minAccelGpsWidth = 0;
 		double maxAccelGpsWidth = 0;
-		double currentWidthProportion = (double)(accel - minAccel) / (double)(maxAccel - minAccel);
+		double currentWidthProportion = ( (double)(accel - minAccel) ) / ( (double)(maxAccel - minAccel) );
 		
 		double latDelta = maxLat - minLat;
 		double lonDelta = maxLon - minLon;
@@ -89,6 +89,18 @@ public class CourseMapPolygon extends Polygon {
 			currentAccelWidth = minAccelGpsWidth;
 		else
 			currentAccelWidth = minAccelGpsWidth + (currentWidthProportion * (maxAccelGpsWidth - minAccelGpsWidth));
+		
+/*		System.out.println();
+		System.out.println("Accel: " + accel);
+		System.out.println("Max Accel: " + maxAccel);
+		System.out.println("Min Accel: " + minAccel);
+		System.out.println("Lat Delta: " + latDelta);
+		System.out.println("Lon Delta: " + lonDelta);
+		System.out.println("Min Accel Width: " + minAccelGpsWidth);
+		System.out.println("Max Accel Width: " + maxAccelGpsWidth);
+		System.out.println("currentAccelWidth: " + currentAccelWidth);
+		System.out.println("currentWidth proportion: " + currentWidthProportion);
+		System.out.println();*/
 		
 		return currentAccelWidth;
 	}
@@ -109,16 +121,15 @@ public class CourseMapPolygon extends Polygon {
 		double gpsPointLon = 0.0;
 		
 		if(changeInLongitude == 0.0) {
-			angleBetweenGpsCoord = 0.0;
+			perpendicularAngle = 0.0;
 		}
 		else {
-			angleBetweenGpsCoord = (180/Math.PI) * Math.atan( changeInLatitude / changeInLongitude);
+			angleBetweenGpsCoord = Math.atan( changeInLatitude / changeInLongitude);
+			perpendicularAngle = angleBetweenGpsCoord + (Math.PI/2);
 		}
 		
-		perpendicularAngle = angleBetweenGpsCoord + 90.0;
-		
-		distanceToGpsPointLon = distanceToNewPoint * Math.cos(perpendicularAngle * (Math.PI / 180));
-		distanceToGpsPointLat = distanceToNewPoint * Math.sin(perpendicularAngle * (Math.PI / 180));
+		distanceToGpsPointLon = distanceToNewPoint * Math.cos(perpendicularAngle);
+		distanceToGpsPointLat = distanceToNewPoint * Math.sin(perpendicularAngle);
 		
 		gpsPointLat = fromSample.getLatitude() + distanceToGpsPointLat;
 		gpsPointLon = fromSample.getLongitude() + distanceToGpsPointLon;
