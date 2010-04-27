@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 
 import dasAuto.logData.feeds.AccelFeed;
 import dasAuto.logData.samples.AccelSample;
+import dasAuto.logData.samples.GpsSample;
 
 /**
  * Panel designed to pull the Key points of the load log file. This includes local minimums for
@@ -111,11 +112,12 @@ public class KeyPointsPanel extends DataPanel implements Observer
 				if(t_millis > 0)
 				{
 					final AccelSample accelsample =  accelFeed.getFilteredFeed(ACCEL_FILTER_RESOLUTION).getNearestSample(t_millis);
-					// TODO Where the F is this code! Cannot find GPS nearest()
-					//final GpsSample gpsSample = gpsFeed.g
-					//			this.speedCurr;
-					//			this.latCurr;
-					//			this.longCurr;
+					final GpsSample gpsSample = gpsFeed.getNearestSample(t_millis);
+					
+					this.speedCurr.setText(SPEED_FMT.format(gpsSample.getSpeed()));
+
+					this.latCurr.setText(GPS_FMT.format(gpsSample.getLatitude()));
+					this.longCurr.setText(GPS_FMT.format(gpsSample.getLongitude()));
 
 					this.xAccelCurr.setText(ACCEL_FMT.format(accelsample.getXValueInG()));
 					this.yAccelCurr.setText(ACCEL_FMT.format(accelsample.getYValueInG()));

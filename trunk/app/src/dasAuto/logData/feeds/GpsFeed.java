@@ -1,6 +1,5 @@
 package dasAuto.logData.feeds;
 
-import java.util.ArrayList;
 import java.util.ListIterator;
 
 import org.jfree.data.xy.XYSeries;
@@ -8,7 +7,7 @@ import org.jfree.data.xy.XYSeries;
 import dasAuto.logData.samples.GpsSample;
 
 
-public class GpsFeed extends ArrayList<GpsSample> {
+public class GpsFeed extends DataFeed<GpsSample> {
 	private static final long serialVersionUID = 5579977194924931720L;
 	
 	private double minLatitude;
