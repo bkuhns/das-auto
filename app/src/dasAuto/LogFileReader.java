@@ -76,7 +76,7 @@ public class LogFileReader {
 		gpsSample.setTimestamp(lastTimestamp);
 		gpsSample.setLatitude(Double.valueOf(sensorData[1]));
 		gpsSample.setLongitude(Double.valueOf(sensorData[3]));
-		gpsSample.setSpeed(Double.valueOf(sensorData[5]));
+		gpsSample.setSpeed(Double.valueOf(sensorData[5]) * 1.15077945);
 		gpsSample.setHeading(Double.valueOf(sensorData[6]));
 		
 		gpsFeed.add(gpsSample);
@@ -85,7 +85,7 @@ public class LogFileReader {
 	private void addAccelLine(String[] sensorData) {
 		AccelSample loadingAccel = new AccelSample();
 		loadingAccel.setTimestamp(lastTimestamp + Long.parseLong(sensorData[0]));
-		loadingAccel.setXValue(Integer.parseInt(sensorData[1]) * -1);
+		loadingAccel.setXValue(1024 - Integer.parseInt(sensorData[1]));
 		loadingAccel.setYValue(Integer.parseInt(sensorData[2]));
 		loadingAccel.setZValue(Integer.parseInt(sensorData[3]));
 		

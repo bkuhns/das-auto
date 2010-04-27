@@ -9,6 +9,8 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
+import dasAuto.logData.feeds.AccelFeed;
+
 /**
  * Panel designed to pull the Key points of the load log file. This includes local minimums for
  * vert and lat acceleration as well as speed.
@@ -46,40 +48,44 @@ public class KeyPointsPanel extends DataPanel implements Observer
 	
 	public KeyPointsPanel()
 	{
-		super.setToolTipText(TOOL_TIP_TEXT);
-		super.setLayout(new GridLayout(0,3));
-		super.setBackground(Color.WHITE);
-		super.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+		super();
+		
+		setToolTipText(TOOL_TIP_TEXT);
+		setLayout(new GridLayout(0,3));
+		setBackground(Color.WHITE);
+		setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
 
 		/* Headers */
-		super.add(headerLabelFactory("Data Item"));
-		super.add(headerLabelFactory("Max"));
-		super.add(headerLabelFactory("Min"));
+		add(headerLabelFactory("Data Item"));
+		add(headerLabelFactory("Min"));
+		add(headerLabelFactory("Max"));
 
 		/* Data*/
-		super.add(bodyLabelFactory("Speed"));
-		super.add(bodyLabelFactory(String.valueOf(super.gpsFeed.getMaxSpeed())));
-		super.add(bodyLabelFactory(String.valueOf(super.gpsFeed.getMinSpeed())));
+		add(bodyLabelFactory("Speed"));
+		add(bodyLabelFactory(String.valueOf(Math.round(100.0 * gpsFeed.getMinSpeed()) / 100.0) + "mph"));
+		add(bodyLabelFactory(String.valueOf(Math.round(100.0 * gpsFeed.getMaxSpeed()) / 100.0) + "mph"));
 
-		super.add(bodyLabelFactory("Latitude"));
-		super.add(bodyLabelFactory(String.valueOf(super.gpsFeed.getMaxLatitude())));
-		super.add(bodyLabelFactory(String.valueOf(super.gpsFeed.getMinLatitude())));
+		add(bodyLabelFactory("Latitude"));
+		add(bodyLabelFactory(String.valueOf(gpsFeed.getMinLatitude())));
+		add(bodyLabelFactory(String.valueOf(gpsFeed.getMaxLatitude())));
 
-		super.add(bodyLabelFactory("Longitude"));
-		super.add(bodyLabelFactory(String.valueOf(super.gpsFeed.getMaxLongitude())));
-		super.add(bodyLabelFactory(String.valueOf(super.gpsFeed.getMinLongitude())));
+		add(bodyLabelFactory("Longitude"));
+		add(bodyLabelFactory(String.valueOf(gpsFeed.getMinLongitude())));
+		add(bodyLabelFactory(String.valueOf(gpsFeed.getMaxLongitude())));
+		
+		AccelFeed filteredAccelFeed = accelFeed.getFilteredFeed(75);
 
-		super.add(bodyLabelFactory("X Acceleration"));
-		super.add(bodyLabelFactory(String.valueOf(super.accelFeed.getMaxXValue())));
-		super.add(bodyLabelFactory(String.valueOf(super.accelFeed.getMinXValue())));
+		add(bodyLabelFactory("X Acceleration"));
+		add(bodyLabelFactory(String.valueOf(Math.round(100.0 * filteredAccelFeed.getMinXValueInG()) / 100.0) + "g"));
+		add(bodyLabelFactory(String.valueOf(Math.round(100.0 * filteredAccelFeed.getMaxXValueInG()) / 100.0) + "g"));
 
-		super.add(bodyLabelFactory("Y Acceleration"));
-		super.add(bodyLabelFactory(String.valueOf(super.accelFeed.getMaxYValue())));
-		super.add(bodyLabelFactory(String.valueOf(super.accelFeed.getMinYValue())));
+		add(bodyLabelFactory("Y Acceleration"));
+		add(bodyLabelFactory(String.valueOf(Math.round(100.0 * filteredAccelFeed.getMinYValueInG()) / 100.0) + "g"));
+		add(bodyLabelFactory(String.valueOf(Math.round(100.0 * filteredAccelFeed.getMaxYValueInG()) / 100.0) + "g"));
 
-		super.add(bodyLabelFactory("Z Acceleration"));
-		super.add(bodyLabelFactory(String.valueOf(super.accelFeed.getMaxZValue())));
-		super.add(bodyLabelFactory(String.valueOf(super.accelFeed.getMinZValue())));
+		add(bodyLabelFactory("Z Acceleration"));
+		add(bodyLabelFactory(String.valueOf(Math.round(100.0 * filteredAccelFeed.getMinZValueInG()) / 100.0) + "g"));
+		add(bodyLabelFactory(String.valueOf(Math.round(100.0 * filteredAccelFeed.getMaxZValueInG()) / 100.0) + "g"));
 
 		/*
 		 * TODO Need a scope local to the point chosen on the slider... this will put some

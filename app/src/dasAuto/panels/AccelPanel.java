@@ -1,6 +1,9 @@
 package dasAuto.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -21,7 +24,7 @@ public class AccelPanel extends DataPanel {
 	public AccelPanel(int axis) throws IllegalArgumentException {
 		XYSeriesCollection accelSeriesCollection = new XYSeriesCollection();
 		
-		AccelFeed filteredAccelFeed = accelFeed.getFilteredFeed(100);
+		AccelFeed filteredAccelFeed = accelFeed.getFilteredFeed(75);
 		XYSeries accelSeries = filteredAccelFeed.getXySeries(axis);
 		//XYSeries accelSeries = accelFeed.getXySeries(axis);
 		
@@ -36,6 +39,7 @@ public class AccelPanel extends DataPanel {
 		ChartPanel accelChartPanel = new ChartPanel(accelChart);
 		this.setLayout(new BorderLayout());
 		this.add(accelChartPanel, BorderLayout.CENTER);
+		setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0 ,Color.black));
 	}
 	
 	

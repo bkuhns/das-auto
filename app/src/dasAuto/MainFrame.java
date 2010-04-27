@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -16,6 +17,7 @@ import dasAuto.panels.AccelPanel;
 import dasAuto.panels.KeyPointsPanel;
 import dasAuto.panels.PolygonCourseMapPanel;
 import dasAuto.panels.SpeedPanel;
+import dasAuto.panels.TimePanel;
 import dasAuto.panels.TractionCirclePanel;
 
 
@@ -37,7 +39,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		setTitle("DAS Auto");
+		setTitle("Data Acquisition System for Automobiles");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setPreferredSize(new Dimension(800, 600));
@@ -56,16 +58,9 @@ public class MainFrame extends JFrame {
 	
 	private void addCenterPanel() {
 		JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(new PolygonCourseMapPanel(), BorderLayout.CENTER);
 		
-		JSlider timeSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 0);
-		timeSlider.setPaintTrack(false);
-		timeSlider.setBackground(Color.WHITE);
-		timeSlider.setPaintTicks(true);
-		timeSlider.setPaintLabels(false);
-		timeSlider.setMinorTickSpacing(25);
-		timeSlider.setMajorTickSpacing(250);
-		centerPanel.add(timeSlider, BorderLayout.SOUTH);
+		centerPanel.add(new PolygonCourseMapPanel(), BorderLayout.CENTER);
+		centerPanel.add(new TimePanel(), BorderLayout.SOUTH);
 		
 		getContentPane().add(centerPanel);
 	}
@@ -73,7 +68,8 @@ public class MainFrame extends JFrame {
 	
 	private void addSidePanel() {
 		JPanel sidePanel = new JPanel(new GridLayout(2, 1));
-		sidePanel.setPreferredSize(new Dimension((int)(getWidth() * 0.35), getHeight()));
+		sidePanel.setPreferredSize(new Dimension((int)(getHeight() * 0.70), (int)(getHeight() * 0.65)));
+		sidePanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0 ,Color.black));
 
 		//-- AJG Key Points Panel
 		sidePanel.add(new KeyPointsPanel());
@@ -93,4 +89,6 @@ public class MainFrame extends JFrame {
 		
 		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 	}
+	
+	
 }

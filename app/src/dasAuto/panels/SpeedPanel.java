@@ -1,6 +1,9 @@
 package dasAuto.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -12,10 +15,7 @@ import org.jfree.data.xy.*;
 public class SpeedPanel extends DataPanel {
 	private static final long serialVersionUID = 7994490881238648787L;
 	
-
-	/**
-	 * @param axis	Determines if the plot is of the x,y, or z axis.
-	 */
+	
 	public SpeedPanel() {
 		XYSeriesCollection speedSeriesCollection = new XYSeriesCollection();
 		
@@ -32,6 +32,7 @@ public class SpeedPanel extends DataPanel {
 		ChartPanel accelChartPanel = new ChartPanel(accelChart);
 		this.setLayout(new BorderLayout());
 		this.add(accelChartPanel, BorderLayout.CENTER);
+		setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0 ,Color.black));
 	}
 	
 	
