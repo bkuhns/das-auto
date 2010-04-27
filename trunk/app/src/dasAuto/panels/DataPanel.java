@@ -3,7 +3,7 @@ package dasAuto.panels;
 import javax.swing.JPanel;
 
 import dasAuto.logData.feeds.AccelFeed;
-import dasAuto.logData.feeds.DataFeed;
+import dasAuto.logData.feeds.LogFeed;
 import dasAuto.logData.feeds.GpsFeed;
 
 
@@ -15,7 +15,7 @@ public abstract class DataPanel extends JPanel {
 	
 	
 	public DataPanel() {
-		DataFeed dataFeed = DataFeed.getInstance();
+		LogFeed dataFeed = LogFeed.getInstance();
 		
 		accelFeed = dataFeed.getAccelFeed();
 		gpsFeed = dataFeed.getGpsFeed();

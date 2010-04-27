@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import javax.swing.BorderFactory;
+
 
 public class TractionCirclePanel extends DataPanel {
 	private static final long serialVersionUID = -600064128610900053L;
@@ -18,6 +20,7 @@ public class TractionCirclePanel extends DataPanel {
 		super();
 		
 		setBackground(Color.WHITE);
+		setBorder(BorderFactory.createLineBorder(Color.black, 1));
 	}
 	
 	

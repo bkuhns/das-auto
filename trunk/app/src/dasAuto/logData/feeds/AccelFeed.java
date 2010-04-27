@@ -1,6 +1,5 @@
 package dasAuto.logData.feeds;
 
-import java.util.ArrayList;
 import java.util.ListIterator;
 
 import org.jfree.data.xy.*;
@@ -8,7 +7,8 @@ import org.jfree.data.xy.*;
 import dasAuto.logData.samples.AccelSample;
 
 
-public class AccelFeed extends ArrayList<AccelSample> {
+
+public class AccelFeed extends DataFeed<AccelSample> {
 	private static final long serialVersionUID = -3210947898740405829L;
 	
 	private AccelFeed filteredFeed;
@@ -33,6 +33,26 @@ public class AccelFeed extends ArrayList<AccelSample> {
 		
 		resetMinMaxValues();
 	}
+	
+	
+	/*public AccelFeed getFilteredFeed(int filterResolution) {
+		if(filterResolution != lastFilterResolution) {
+			AccelFeed tmpFilteredFeed = new AccelFeed();
+			
+			ListIterator<AccelSample> it = listIterator();
+			while(it.hasNext()) {
+				int N = Integer.parseInt(args[0]);
+		        double[] a = new double[N];
+		        double sum = 0.0;
+		        for (int i = 1; !StdIn.isEmpty(); i++) {
+		            sum -= a[i % N];
+		            a[i % N] = StdIn.readDouble();
+		            sum += a[i % N];
+		            if (i >= N) StdOut.print(sum/N + " ");
+		        }
+			}
+		}
+	}*/
 	
 	
 	public AccelFeed getFilteredFeed(int filterResolution) {
@@ -67,6 +87,7 @@ public class AccelFeed extends ArrayList<AccelSample> {
 				averagedSample.setXValue(xSum / i);
 				averagedSample.setYValue(ySum / i);
 				averagedSample.setZValue(zSum / i);
+				
 				tmpFilteredFeed.add(averagedSample);
 			}
 			
@@ -76,6 +97,42 @@ public class AccelFeed extends ArrayList<AccelSample> {
 		return filteredFeed;
 	}
 	
+	
+	/**
+	 * @param	axis	Determines if the returned XYSeries represents the x,y, or z axis.
+	 */
+	public XYSeries getXySeries(int axis) throws IllegalArgumentException {
+		XYSeries xySeries = new XYSeries("accel series");
+		long initialTimestamp = 0;
+		
+		for(int i = 0; i < size(); i++) {
+			AccelSample currentSample = get(i);
+			double currentValue;
+			
+			switch(axis) {
+				case X_AXIS:
+					currentValue = currentSample.getXValueInG();
+					break;
+				case Y_AXIS:
+					currentValue = currentSample.getYValueInG();
+					break;
+				case Z_AXIS:
+					currentValue = currentSample.getZValueInG();
+					break;
+				default:
+					throw new IllegalArgumentException("AccelPanel must be of type X,Y, or Z");
+			}
+			
+			// Pull the initial Timestamp from the first sample. Normalizes times to '0' at start.
+			if(i == 0) {
+				initialTimestamp = currentSample.getTimestamp();
+			}
+			xySeries.add((currentSample.getTimestamp() - initialTimestamp) / 1000.0, currentValue);
+		}
+		
+		return xySeries;
+	}
+		
 	
 	private void resetMinMaxValues() {
 		minXValue = Integer.MAX_VALUE;
@@ -90,7 +147,7 @@ public class AccelFeed extends ArrayList<AccelSample> {
 	
 	
 	/**
-	 * Compute the min/max values for all GPS coordinates.
+	 * Compute the min/max acceleration values.
 	 */
 	private void computeMinMaxValues() {
 		resetMinMaxValues();
@@ -103,7 +160,7 @@ public class AccelFeed extends ArrayList<AccelSample> {
 	
 	
 	/**
-	 * Check if the provided sample contains a min/max coordinate of the feed.
+	 * Check if the provided sample contains a min/max value of the feed.
 	 * 
 	 * @param sample
 	 */
@@ -167,42 +224,7 @@ public class AccelFeed extends ArrayList<AccelSample> {
 	}
 	
 	
-	/**
-	 * @param	axis	Determines if the returned XYSeries represents the x,y, or z axis.
-	 */
-	public XYSeries getXySeries(int axis) throws IllegalArgumentException {
-		XYSeries xySeries = new XYSeries("accel series");
-		long initialTimestamp = 0;
-		
-		for(int i = 0; i < size(); i++) {
-			AccelSample currentSample = get(i);
-			int currentValue;
-			
-			switch(axis) {
-				case X_AXIS:
-					currentValue = currentSample.getXValue();
-					break;
-				case Y_AXIS:
-					currentValue = currentSample.getYValue();
-					break;
-				case Z_AXIS:
-					currentValue = currentSample.getZValue();
-					break;
-				default:
-					throw new IllegalArgumentException("AccelPanel must be of type X,Y, or Z");
-			}
-			
-			// Pull the initial Timestamp from the first sample. Normalizes times to '0' at start.
-			if(i == 0) {
-				initialTimestamp = currentSample.getTimestamp();
-			}
-			xySeries.add(currentSample.getTimestamp() - initialTimestamp, currentValue);
-		}
-		
-		return xySeries;
-	}
-	
-	
+	/* min/max X values */
 	public int getMinXValue() {
 		return minXValue;
 	}
@@ -210,7 +232,17 @@ public class AccelFeed extends ArrayList<AccelSample> {
 	public int getMaxXValue() {
 		return maxXValue;
 	}
+	
+	public double getMinXValueInG() {
+		return AccelSample.convertCountToG(minXValue);
+	}
+	
+	public double getMaxXValueInG() {
+		return AccelSample.convertCountToG(maxXValue);
+	}
+	
 
+	/* min/max Y values */
 	public int getMinYValue() {
 		return minYValue;
 	}
@@ -218,13 +250,31 @@ public class AccelFeed extends ArrayList<AccelSample> {
 	public int getMaxYValue() {
 		return maxYValue;
 	}
+	
+	public double getMinYValueInG() {
+		return AccelSample.convertCountToG(minYValue);
+	}
+	
+	public double getMaxYValueInG() {
+		return AccelSample.convertCountToG(maxYValue);
+	}
+	
 
+	/* min/max Z values */
 	public int getMinZValue() {
 		return minZValue;
 	}
 
 	public int getMaxZValue() {
 		return maxZValue;
+	}
+	
+	public double getMinZValueInG() {
+		return AccelSample.convertCountToG(minZValue);
+	}
+	
+	public double getMaxZValueInG() {
+		return AccelSample.convertCountToG(maxZValue);
 	}
 	
 

@@ -40,7 +40,7 @@ public class GpsFeed extends ArrayList<GpsSample> {
 			if(i == 0) {
 				initialTimestamp = currentSample.getTimestamp();
 			}
-			xySeries.add(currentSample.getTimestamp() - initialTimestamp, currentValue);
+			xySeries.add((currentSample.getTimestamp() - initialTimestamp) / 1000.0, currentValue);
 		}
 		
 		return xySeries;
