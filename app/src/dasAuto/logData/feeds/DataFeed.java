@@ -34,7 +34,7 @@ public class DataFeed<Sample extends DataSample> extends ArrayList<Sample> {
 	 * @return
 	 */
 	public int getNearestSampleIndex(long timestamp) {
-		double indexRatio = (timestamp - minTimestamp) / (maxTimestamp - minTimestamp);	// Locational ratio of timestamp in the range of min->max timestamps.
+		double indexRatio = (double)(timestamp - minTimestamp) / (double)(maxTimestamp - minTimestamp);	// Locational ratio of timestamp in the range of min->max timestamps.
 		int startingIndex = (int)Math.round(indexRatio * size()) - 1;
 		int returnIndex = -1;
 		
@@ -43,7 +43,8 @@ public class DataFeed<Sample extends DataSample> extends ArrayList<Sample> {
 			// The next adjacent item is smaller, so we need to find larger values => iterate forward.
 			while(it.hasNext()) {
 				returnIndex = it.nextIndex();
-				if(it.next().getTimestamp() > timestamp) {
+				Sample current = it.next();
+				if(current.getTimestamp() >= timestamp) {
 					// Found it!
 					break;
 				}
@@ -54,7 +55,7 @@ public class DataFeed<Sample extends DataSample> extends ArrayList<Sample> {
 			if(it.hasPrevious() && it.previous().getTimestamp() > timestamp) {
 				while(it.hasPrevious()) {
 					returnIndex = it.previousIndex();
-					if(it.previous().getTimestamp() < timestamp) {
+					if(it.previous().getTimestamp() <= timestamp) {
 						// Found it!
 						break;
 					}

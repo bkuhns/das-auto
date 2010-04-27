@@ -8,9 +8,11 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 
 import java.awt.image.BufferedImage;
+import java.util.Observable;
+import java.util.Observer;
 
 
-public class CourseMapPanel extends DataPanel {
+public class CourseMapPanel extends DataPanel implements Observer {
 	private static final long serialVersionUID = 3413521493798935318L;
 	
 	
@@ -69,6 +71,12 @@ public class CourseMapPanel extends DataPanel {
 	
 	public void update(Graphics g) {
 		paint(g);
+	}
+
+
+	@Override
+	public void update(Observable slider, Object timestamp) {
+		
 	}
 	
 	

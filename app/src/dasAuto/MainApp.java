@@ -2,7 +2,6 @@ package dasAuto;
 
 import javax.swing.UIManager;
 
-import dasAuto.logData.samples.AccelSample;
 
 
 public class MainApp {
