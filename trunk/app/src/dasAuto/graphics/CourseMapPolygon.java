@@ -9,6 +9,7 @@ import dasAuto.logData.samples.GpsSample;
 
 public class CourseMapPolygon extends Polygon {
 
+	private static final long serialVersionUID = -3787779528072837425L;
 	private Point2D oldLocationHigh;
 	private Point2D oldLocationLow;
 	private Point2D newLocationHigh;
@@ -55,8 +56,8 @@ public class CourseMapPolygon extends Polygon {
 		oldSpeed = previousSpeed;
 		newSpeed = currentSpeed;
 	}
-	
-	
+
+
 	public void instantiatePolygon() {
 		newLocationHigh = findPoint2D(newSample, oldSample, newAccel, 1);
 		newLocationLow = findPoint2D(newSample, oldSample, newAccel, -1);
@@ -109,6 +110,26 @@ public class CourseMapPolygon extends Polygon {
 		return roundedPolygon;
 	}
 	
+	public Point getOldSamplePoint(int panelWidth, int panelHeight)
+	{
+		Point oldPoint;
+		int X = (int)Math.round( (((maxLon - oldSample.getLongitude()) *(double)(panelWidth) * 0.9) / (maxLon - minLon)) + (double)(panelWidth) * 0.05 );
+		int Y = (int)Math.round( (((maxLat - oldSample.getLatitude()) *(double)(panelHeight) * 0.9) / (maxLat - minLat)) + (double)(panelHeight) * 0.05 );
+		oldPoint = new Point(X,Y);
+		return oldPoint;
+	}
+	
+	
+	public Point getNewSamplePoint(int panelWidth, int panelHeight)
+	{
+		Point newPoint;
+		int X = (int)Math.round( (((maxLon - newSample.getLongitude()) *(double)(panelWidth) * 0.9) / (maxLon - minLon)) + (double)(panelWidth) * 0.05 );
+		int Y = (int)Math.round( (((maxLat - newSample.getLatitude()) *(double)(panelHeight) * 0.9) / (maxLat - minLat)) + (double)(panelHeight) * 0.05 );
+		newPoint = new Point(X,Y);
+		return newPoint;
+	}
+	
+	
 	public void setMaxAndMins(double minimumLat, double maximumLat, double minimumLon,
 	            double maximumLon, int minimumAccel, int maximumAccel) 
 	{
@@ -125,6 +146,8 @@ public class CourseMapPolygon extends Polygon {
 	public void addPoint(Point p) {
 		addPoint(p.x, p.y);
 	}
+	
+	
 	
 	
 	public Point2D getOldLocationHigh() {
@@ -176,6 +199,15 @@ public class CourseMapPolygon extends Polygon {
 		this.maxAccel = maxAccel;
 	}
 	
+	
+	public double getOldSpeed() {
+		return oldSpeed;
+	}
+
+
+	public double getNewSpeed() {
+		return newSpeed;
+	}
 	
 	
 	

@@ -3,6 +3,7 @@ package dasAuto.panels;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -52,6 +53,9 @@ public class PolygonCourseMapPanel extends DataPanel {
 		int panelWidth = getSize().width;
 		int panelHeight = getSize().height;
 		
+		//Speeds for determining colors
+		double maxSpeed = gpsFeed.getMaxSpeed();
+		
 		//Sets up a buffered image to draw the graphics into
 		courseMapImage = (BufferedImage)createImage(panelWidth, panelHeight);
 		courseMapGraphic = courseMapImage.createGraphics();
@@ -60,20 +64,47 @@ public class PolygonCourseMapPanel extends DataPanel {
 		courseMapGraphic.setColor(Color.WHITE);
 		courseMapGraphic.fill(getVisibleRect());
 		
-		courseMapGraphic.setColor(Color.BLACK);
+		courseMapGraphic.setColor(Color.WHITE);
 		courseMapGraphic.setStroke(new BasicStroke(1.0f));
 		courseMapGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		
 		for(int k=0; k < coursePolygonList.size(); k++) {
 			CourseMapPolygon currentPolygon = coursePolygonList.get(k);
+			
+			//Draw in the Polygon
 			Polygon drawingPolygon = currentPolygon.getCourseMapPolygon(panelWidth, panelHeight);
 			courseMapGraphic.drawPolygon(drawingPolygon);
+			
+			//Color in the Polygon 
+			int oldBluePortion =  (int)Math.round( (1 - currentPolygon.getOldSpeed() / maxSpeed) * 255 );
+			int oldRedPortion = (int)Math.round( ((currentPolygon.getOldSpeed() / maxSpeed) ) * 255 );
+			int oldOrangePortion = (int)Math.round( ((currentPolygon.getOldSpeed() / maxSpeed) ) * 140 );
+			
+			Color oldColor = new Color(oldRedPortion, oldOrangePortion, oldBluePortion);
+			
+			int newBluePortion =  (int)Math.round( (1 - currentPolygon.getNewSpeed() / maxSpeed) * 255 );
+			int newRedPortion = (int)Math.round( ((currentPolygon.getNewSpeed() / maxSpeed) ) * 255 );
+			int newOrangePortion = (int)Math.round( ((currentPolygon.getOldSpeed() / maxSpeed) ) * 140 );
+			
+			Color newColor = new Color(newRedPortion, newOrangePortion, newBluePortion);
+			
+			Point oldPoint = currentPolygon.getOldSamplePoint(panelWidth, panelHeight);
+			Point newPoint = currentPolygon.getNewSamplePoint(panelWidth, panelHeight);
+			
+			GradientPaint gradient = new GradientPaint(oldPoint.x, oldPoint.y, oldColor, newPoint.x, newPoint.y, newColor);
+			
+			courseMapGraphic.setPaint(gradient);
+			courseMapGraphic.fillPolygon(drawingPolygon);
+			
+			//courseMapGraphic.setPaint(Color.BLACK);
+			//courseMapGraphic.drawLine(oldPoint.x, oldPoint.y, newPoint.x, newPoint.y);
 		}
 		
 		g.drawImage(courseMapImage, 0, 0, this);
 	}
 
+	
 	private void instantiatePolygonList() {
 		
 		GpsSample previousGpsSample = null;
@@ -90,7 +121,7 @@ public class PolygonCourseMapPanel extends DataPanel {
 		int minAccel = accelFeed.getMinYValue();
 		
 		int previousAccel = 0;
-		int currentAccel = 250;
+		int currentAccel = 500;
 		boolean firstPolygonCreated = false;
 		
 		//iterate through our GPS data to draw polygons.
