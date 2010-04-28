@@ -5,7 +5,7 @@ package dasAuto.logData.samples;
 public class GpsSample extends DataSample {
 	private double latitude;	// dddmm.mmmm
 	private double longitude;	// dddmm.mmmm
-	private double speed;	// 000.0-999.9 (knots)
+	private double speed;		// 000.0-999.9 (mph)
 	private double heading;		// 000.0-359.9 (degrees)
 	
 	private char nsIndicator;	// N/S

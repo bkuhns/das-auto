@@ -158,8 +158,8 @@ public class PolygonCourseMapPanel extends DataPanel {
 		for(int i = 0; i < gpsFeed.size(); i++) {
 			currentGpsSample = gpsFeed.get(i);
 			//TODO: Create method for finding closest acceleration value
-			int currentAccelValue = accelFeed.getFilteredFeed(15).getNearestSampleIndex(currentGpsSample.getTimestamp());
-			currentAccel = accelFeed.getFilteredFeed(15).get(currentAccelValue).getYValue();
+			int currentAccelValue = accelFeed.getFilteredFeed(30).getNearestSampleIndex(currentGpsSample.getTimestamp());
+			currentAccel = accelFeed.getFilteredFeed(30).get(currentAccelValue).getYValue();
 			
 			//Need to find the acceleration immediately after the current gpsFeed value.
 			//For now, use a fixed length for the side width

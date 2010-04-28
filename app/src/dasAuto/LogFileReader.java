@@ -78,14 +78,14 @@ public class LogFileReader {
 				previousTimestamp = currentDateTime.getTime() - firstTimestamp;
 			}
 		} catch(Exception ex) {
-			System.err.println("Fuck");
+			return;
 		}
 		
 		GpsSample gpsSample = new GpsSample();
 		gpsSample.setTimestamp(previousTimestamp);
 		gpsSample.setLatitude(Double.valueOf(sensorData[1]));
 		gpsSample.setLongitude(Double.valueOf(sensorData[3]));
-		gpsSample.setSpeed(Double.valueOf(sensorData[5]) * 1.15077945);
+		gpsSample.setSpeed(Double.valueOf(sensorData[5]) * 1.15077945); // Convert knots to mph.
 		gpsSample.setHeading(Double.valueOf(sensorData[6]));
 		
 		gpsFeed.add(gpsSample);
@@ -130,4 +130,6 @@ public class LogFileReader {
 	public GpsFeed getGpsFeed() {
 		return gpsFeed;
 	}
+	
+	
 }

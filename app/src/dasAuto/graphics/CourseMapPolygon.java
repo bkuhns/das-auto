@@ -58,13 +58,16 @@ public class CourseMapPolygon extends Polygon {
 
 	public void instantiatePolygon() {
 		
-		if(newAccel >= 512) {
+		/*if(newAccel >= 650) {
 			newLocationHigh = findPoint2D(newSample, oldSample, newAccel, 1);
 			newLocationLow = findPoint2D(newSample, oldSample, minAccel, -1);
 		} else {
 			newLocationHigh = findPoint2D(newSample, oldSample, minAccel, 1);
 			newLocationLow = findPoint2D(newSample, oldSample, newAccel, -1);
-		}
+		}*/
+		
+		newLocationHigh = findPoint2D(newSample, oldSample, newAccel, 1);
+		newLocationLow = findPoint2D(newSample, oldSample, newAccel, -1);
 	}
 	
 	
@@ -255,11 +258,11 @@ public class CourseMapPolygon extends Polygon {
 		
 		if(latDelta > lonDelta) {
 			minAccelGpsWidth = 0.01 * lonDelta;
-			maxAccelGpsWidth = 0.05 * lonDelta;
+			maxAccelGpsWidth = 0.04 * lonDelta;
 		} 
 		else {
 			minAccelGpsWidth = 0.01 * latDelta;
-			maxAccelGpsWidth = 0.05 * latDelta;
+			maxAccelGpsWidth = 0.04 * latDelta;
 		}
 		
 		if(currentWidthProportion == 0.0)
