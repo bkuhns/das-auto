@@ -2,8 +2,6 @@ package dasAuto.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;

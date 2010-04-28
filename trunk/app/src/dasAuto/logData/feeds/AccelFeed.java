@@ -11,12 +11,14 @@ import dasAuto.logData.samples.AccelSample;
 public class AccelFeed extends DataFeed<AccelSample> {
 	private static final long serialVersionUID = -3210947898740405829L;
 	
-	private AccelFeed filteredFeed;
-	private int lastFilterResolution = -1;
-	
 	public static final int X_AXIS = 0;
 	public static final int Y_AXIS = 1;
 	public static final int Z_AXIS = 2;
+	
+	public static final int DEFAULT_FILTER_RESOLUTION = 75;
+	
+	private AccelFeed filteredFeed;
+	private int lastFilterResolution = -1;
 	
 	private int minXValue;
 	private int maxXValue;
@@ -95,6 +97,11 @@ public class AccelFeed extends DataFeed<AccelSample> {
 		}
 		
 		return filteredFeed;
+	}
+	
+	
+	public AccelFeed getFilteredFeed() {
+		return getFilteredFeed(DEFAULT_FILTER_RESOLUTION);
 	}
 	
 	
