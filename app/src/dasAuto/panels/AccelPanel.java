@@ -30,7 +30,7 @@ public class AccelPanel extends DataPanel {
 		switch(axis) {
 			case AccelFeed.X_AXIS:
 				yLabel = "Longitudinal Acceleration";
-				accelChartColor = Color.GREEN;
+				accelChartColor = new Color(0,155,0);
 				break;
 			case AccelFeed.Y_AXIS:
 				yLabel = "Lateral Acceleration";
