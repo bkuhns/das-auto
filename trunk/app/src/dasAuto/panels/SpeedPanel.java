@@ -9,6 +9,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.*;
 
 
@@ -27,6 +28,9 @@ public class SpeedPanel extends DataPanel {
 		accelChart.getXYPlot().getRangeAxis().setLowerBound(0);
 		accelChart.getXYPlot().getRangeAxis().setUpperBound(speedSeries.getMaxY() * 1.005);
 		accelChart.getXYPlot().getDomainAxis().setUpperBound(speedSeries.getMaxX() * 1.005);
+		
+		XYItemRenderer renderer = accelChart.getXYPlot().getRenderer();
+		renderer.setSeriesPaint(0, Color.MAGENTA);
 				
 		ChartPanel accelChartPanel = new ChartPanel(accelChart);
 		this.setLayout(new BorderLayout());

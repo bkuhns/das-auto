@@ -102,9 +102,6 @@ public class PolygonCourseMapPanel extends DataPanel {
 				
 				courseMapGraphic.setPaint(gradient);
 				courseMapGraphic.fillPolygon(drawingPolygon);
-				
-				
-				courseMapGraphic.setPaint(gradient);
 			}
 			
 		}

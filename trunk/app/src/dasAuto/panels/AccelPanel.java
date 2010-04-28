@@ -2,6 +2,7 @@ package dasAuto.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.RenderingHints;
 
 import javax.swing.BorderFactory;
 
@@ -9,6 +10,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.*;
 
 import dasAuto.logData.feeds.AccelFeed;
@@ -23,14 +26,17 @@ public class AccelPanel extends DataPanel {
 	 */
 	public AccelPanel(int axis) throws IllegalArgumentException {
 		XYSeriesCollection accelSeriesCollection = new XYSeriesCollection();
+		Color accelChartColor = Color.BLACK;
 		
 		String yLabel = "";
 		switch(axis) {
 			case AccelFeed.X_AXIS:
 				yLabel = "Longitudinal Acceleration";
+				accelChartColor = Color.GREEN;
 				break;
 			case AccelFeed.Y_AXIS:
 				yLabel = "Lateral Acceleration";
+				accelChartColor = Color.BLUE;
 				break;
 			case AccelFeed.Z_AXIS:
 				yLabel = "Vertical Acceleration";
@@ -48,7 +54,10 @@ public class AccelPanel extends DataPanel {
 		accelChart.getXYPlot().getRangeAxis().setLowerBound(accelSeries.getMinY() / 1.005);
 		accelChart.getXYPlot().getRangeAxis().setUpperBound(accelSeries.getMaxY() * 1.005);
 		accelChart.getXYPlot().getDomainAxis().setUpperBound(accelSeries.getMaxX() * 1.005);
-				
+		
+		XYItemRenderer renderer = accelChart.getXYPlot().getRenderer();
+		renderer.setSeriesPaint(0, accelChartColor);
+		
 		ChartPanel accelChartPanel = new ChartPanel(accelChart);
 		this.setLayout(new BorderLayout());
 		this.add(accelChartPanel, BorderLayout.CENTER);
