@@ -30,7 +30,7 @@ public class SpeedPanel extends DataPanel {
 		accelChart.getXYPlot().getDomainAxis().setUpperBound(speedSeries.getMaxX() * 1.005);
 		
 		XYItemRenderer renderer = accelChart.getXYPlot().getRenderer();
-		renderer.setSeriesPaint(0, Color.MAGENTA);
+		renderer.setSeriesPaint(0, new Color(200,0,0));
 				
 		ChartPanel accelChartPanel = new ChartPanel(accelChart);
 		this.setLayout(new BorderLayout());
