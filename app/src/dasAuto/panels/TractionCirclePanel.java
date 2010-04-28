@@ -15,8 +15,8 @@ import dasAuto.logData.feeds.AccelFeed;
 public class TractionCirclePanel extends DataPanel {
 	private static final long serialVersionUID = -600064128610900053L;
 
-	private static final int MAX_CIRCLE_VAL_X = 5;
-	private static final int MAX_CIRCLE_VAL_Y = 5; 
+	private final double MAX_CIRCLE_VAL_X;
+	private final double MAX_CIRCLE_VAL_Y; 
 	
 	private int panelWidth;
 	private int panelHeight;
@@ -24,6 +24,9 @@ public class TractionCirclePanel extends DataPanel {
 	
 	public TractionCirclePanel() {
 		super();
+		
+		MAX_CIRCLE_VAL_X = accelFeed.getMaxXValueInG() + 0.25;
+		MAX_CIRCLE_VAL_Y = accelFeed.getMaxYValueInG() + 0.25;
 		
 		setBackground(Color.WHITE);
 		setBorder(BorderFactory.createLineBorder(Color.black, 1));
@@ -35,8 +38,8 @@ public class TractionCirclePanel extends DataPanel {
 		
 		Graphics2D g2d = (Graphics2D)g;
 		
-		panelWidth = getSize().width;
-		panelHeight = getSize().height;
+		panelWidth = getWidth();
+		panelHeight = getHeight();
 		
 		BufferedImage tracCircleImage = (BufferedImage)createImage(panelWidth, panelHeight);
 
@@ -64,7 +67,7 @@ public class TractionCirclePanel extends DataPanel {
 	private void drawMaxCircle(Graphics2D g)
 	{
 		Point origin = this.getOrigin();
-		final AccelFeed accelFeed = this.accelFeed.getFilteredFeed(75);
+		final AccelFeed accelFeed = this.accelFeed.getFilteredFeed();
 
 		//-- Draw Points first
 		this.drawPoint(origin.x + scaleX(accelFeed.getMinYValueInG()), origin.y, g); // Left
@@ -87,6 +90,9 @@ public class TractionCirclePanel extends DataPanel {
 	
 	public void update(Graphics g) {
 		paint(g);
+		
+		panelWidth = getWidth();
+		panelHeight = getHeight();
 	}
 
 	/*

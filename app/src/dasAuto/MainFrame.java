@@ -10,7 +10,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 
 import dasAuto.logData.feeds.AccelFeed;
 import dasAuto.panels.AccelPanel;

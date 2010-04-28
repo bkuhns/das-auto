@@ -24,12 +24,25 @@ public class AccelPanel extends DataPanel {
 	public AccelPanel(int axis) throws IllegalArgumentException {
 		XYSeriesCollection accelSeriesCollection = new XYSeriesCollection();
 		
+		String yLabel = "";
+		switch(axis) {
+			case AccelFeed.X_AXIS:
+				yLabel = "Longitudinal Acceleration";
+				break;
+			case AccelFeed.Y_AXIS:
+				yLabel = "Lateral Acceleration";
+				break;
+			case AccelFeed.Z_AXIS:
+				yLabel = "Vertical Acceleration";
+				break;
+		}
+		
 		AccelFeed filteredAccelFeed = accelFeed.getFilteredFeed(75);
 		XYSeries accelSeries = filteredAccelFeed.getXySeries(axis);
 		//XYSeries accelSeries = accelFeed.getXySeries(axis);
 		
 		accelSeriesCollection.addSeries(accelSeries);
-		JFreeChart accelChart = ChartFactory.createXYLineChart(null, null, null, (XYDataset)accelSeriesCollection, PlotOrientation.VERTICAL, false, false, false);
+		JFreeChart accelChart = ChartFactory.createXYLineChart(null, null, yLabel, (XYDataset)accelSeriesCollection, PlotOrientation.VERTICAL, false, false, false);
 		
 		// Chart cropping: Fits the data into the chart with fewer empty chart values and minor padding.
 		accelChart.getXYPlot().getRangeAxis().setLowerBound(accelSeries.getMinY() / 1.005);

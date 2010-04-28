@@ -18,11 +18,10 @@ public class SpeedPanel extends DataPanel {
 	
 	public SpeedPanel() {
 		XYSeriesCollection speedSeriesCollection = new XYSeriesCollection();
-		
 		XYSeries speedSeries = gpsFeed.getXySpeedSeries();
 		
 		speedSeriesCollection.addSeries(speedSeries);
-		JFreeChart accelChart = ChartFactory.createXYLineChart(null, null, null, (XYDataset)speedSeriesCollection, PlotOrientation.VERTICAL, false, false, false);
+		JFreeChart accelChart = ChartFactory.createXYLineChart(null, null, "Vehicle Speed", (XYDataset)speedSeriesCollection, PlotOrientation.VERTICAL, false, false, false);
 		
 		// Chart cropping: Fits the data into the chart with fewer empty chart values and minor padding.
 		accelChart.getXYPlot().getRangeAxis().setLowerBound(0);
