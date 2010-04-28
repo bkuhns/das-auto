@@ -76,29 +76,58 @@ public class PolygonCourseMapPanel extends DataPanel {
 			Polygon drawingPolygon = currentPolygon.getCourseMapPolygon(panelWidth, panelHeight);
 			courseMapGraphic.drawPolygon(drawingPolygon);
 			
-			//Color in the Polygon 
-			int oldBluePortion =  (int)Math.round( (1 - currentPolygon.getOldSpeed() / maxSpeed) * 255 );
-			int oldRedPortion = (int)Math.round( ((currentPolygon.getOldSpeed() / maxSpeed) ) * 255 );
-			int oldOrangePortion = (int)Math.round( ((currentPolygon.getOldSpeed() / maxSpeed) ) * 140 );
+			if(currentPolygon.getCurrentGpsSample().equals(gpsFeed.getNearestSample(currentPolygon.getCurrentGpsSample().getTimestamp()))) {
+				courseMapGraphic.setPaint(new Color(255,0,0));
+				courseMapGraphic.fillPolygon(drawingPolygon);
+			}
 			
-			Color oldColor = new Color(oldRedPortion, oldOrangePortion, oldBluePortion);
+			else {
+				//Color in the Polygon 
+				int oldBluePortion =  (int)Math.round( (1 - currentPolygon.getOldSpeed() / maxSpeed) * 255 );
+				int oldRedPortion = (int)Math.round( ((currentPolygon.getOldSpeed() / maxSpeed) ) * 255 );
+				int oldOrangePortion = (int)Math.round( ((currentPolygon.getOldSpeed() / maxSpeed) ) * 140 );
+				
+				Color oldColor = new Color(oldRedPortion, oldOrangePortion, oldBluePortion);
+				
+				int newBluePortion =  (int)Math.round( (1 - currentPolygon.getNewSpeed() / maxSpeed) * 255 );
+				int newRedPortion = (int)Math.round( ((currentPolygon.getNewSpeed() / maxSpeed) ) * 255 );
+				int newOrangePortion = (int)Math.round( ((currentPolygon.getOldSpeed() / maxSpeed) ) * 140 );
+				
+				Color newColor = new Color(newRedPortion, newOrangePortion, newBluePortion);
+				
+				Point oldPoint = currentPolygon.getOldSamplePoint(panelWidth, panelHeight);
+				Point newPoint = currentPolygon.getNewSamplePoint(panelWidth, panelHeight);
+				
+				GradientPaint gradient = new GradientPaint(oldPoint.x, oldPoint.y, oldColor, newPoint.x, newPoint.y, newColor);
+				
+				courseMapGraphic.setPaint(gradient);
+				courseMapGraphic.fillPolygon(drawingPolygon);
+				
+				
+				courseMapGraphic.setPaint(gradient);
+			}
 			
-			int newBluePortion =  (int)Math.round( (1 - currentPolygon.getNewSpeed() / maxSpeed) * 255 );
-			int newRedPortion = (int)Math.round( ((currentPolygon.getNewSpeed() / maxSpeed) ) * 255 );
-			int newOrangePortion = (int)Math.round( ((currentPolygon.getOldSpeed() / maxSpeed) ) * 140 );
+		}
+		
+		courseMapGraphic.setPaint(Color.WHITE);
+		
+		for(int k=0; k < coursePolygonList.size(); k++) {
 			
-			Color newColor = new Color(newRedPortion, newOrangePortion, newBluePortion);
+			CourseMapPolygon currentPolygon = coursePolygonList.get(k);
 			
-			Point oldPoint = currentPolygon.getOldSamplePoint(panelWidth, panelHeight);
-			Point newPoint = currentPolygon.getNewSamplePoint(panelWidth, panelHeight);
-			
-			GradientPaint gradient = new GradientPaint(oldPoint.x, oldPoint.y, oldColor, newPoint.x, newPoint.y, newColor);
-			
-			courseMapGraphic.setPaint(gradient);
-			courseMapGraphic.fillPolygon(drawingPolygon);
-			
-			//courseMapGraphic.setPaint(Color.BLACK);
-			//courseMapGraphic.drawLine(oldPoint.x, oldPoint.y, newPoint.x, newPoint.y);
+			if(currentPolygon.getCurrentGpsSample().equals(gpsFeed.getNearestSample(currentPolygon.getCurrentGpsSample().getTimestamp()))) {
+				//Don't draw the line
+			}
+			else {
+				if(k == coursePolygonList.size() - 1)
+					break;
+				
+				//Drawing line in the middle of the course.
+				Point oldPoint = currentPolygon.getOldSamplePoint(panelWidth, panelHeight);
+				Point newPoint = currentPolygon.getNewSamplePoint(panelWidth, panelHeight);
+				
+				courseMapGraphic.drawLine(oldPoint.x, oldPoint.y, newPoint.x, newPoint.y);
+			}
 		}
 		
 		g.drawImage(courseMapImage, 0, 0, this);
@@ -117,19 +146,20 @@ public class PolygonCourseMapPanel extends DataPanel {
 		double maxLat = gpsFeed.getMaxLatitude();
 		double minLon = gpsFeed.getMinLongitude();
 		double maxLon = gpsFeed.getMaxLongitude();
-		int maxAccel = accelFeed.getMaxYValue();
-		int minAccel = accelFeed.getMinYValue();
+		int maxAccel = accelFeed.getFilteredFeed(15).getMaxYValue();
+		int minAccel = accelFeed.getFilteredFeed(15).getMinYValue();
 		
 		int previousAccel = 0;
-		int currentAccel = 500;
+		int currentAccel = minAccel;
 		boolean firstPolygonCreated = false;
 		
 		//iterate through our GPS data to draw polygons.
 		//Need to include some method for finding the acceleration data previous to the GPS point.
 		for(int i = 0; i < gpsFeed.size(); i++) {
 			currentGpsSample = gpsFeed.get(i);
-			
 			//TODO: Create method for finding closest acceleration value
+			int currentAccelValue = accelFeed.getFilteredFeed(15).getNearestSampleIndex(currentGpsSample.getTimestamp());
+			currentAccel = accelFeed.getFilteredFeed(15).get(currentAccelValue).getYValue();
 			
 			//Need to find the acceleration immediately after the current gpsFeed value.
 			//For now, use a fixed length for the side width
