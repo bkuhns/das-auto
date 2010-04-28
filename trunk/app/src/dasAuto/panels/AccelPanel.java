@@ -2,7 +2,6 @@ package dasAuto.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.RenderingHints;
 
 import javax.swing.BorderFactory;
 
@@ -10,7 +9,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.*;
 
@@ -61,6 +59,7 @@ public class AccelPanel extends DataPanel {
 		ChartPanel accelChartPanel = new ChartPanel(accelChart);
 		this.setLayout(new BorderLayout());
 		this.add(accelChartPanel, BorderLayout.CENTER);
+		accelChartPanel.setHorizontalAxisTrace(true);
 		setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0 ,Color.black));
 	}
 	

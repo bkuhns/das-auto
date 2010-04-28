@@ -1,6 +1,5 @@
 package dasAuto.panels;
 
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -20,10 +19,9 @@ import dasAuto.logData.samples.GpsSample;
 
 
 public class PolygonCourseMapPanel extends DataPanel {
-
 	private static final long serialVersionUID = 3413521493798935318L;
 
-	BufferedImage courseMapImage = new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB);
+	BufferedImage courseMapImage;
 	PolygonList coursePolygonList = new PolygonList();
 	Graphics2D courseMapGraphic;
 	Rectangle area;
@@ -31,30 +29,17 @@ public class PolygonCourseMapPanel extends DataPanel {
 	
 	public PolygonCourseMapPanel() {
 		super();
-		instantiatePolygonList();
+		buildPolygonList();
 		setBackground(Color.WHITE);
 	}
+	
+	
+	public void paintCourseGraphic(Graphics g) {
+		//super.paint(g);
 
-
-	public void update(Graphics g) {
-		paint(g);
-	}
-	
-	
-	public void paint(Graphics g) {
-		paintCourseGraphic((Graphics2D)g);
-	}
-	
-	
-	public void paintCourseGraphic(Graphics2D g) {
-		super.paint(g);
-
-		//Determines the width and height of the panel in pixels
-		int panelWidth = getSize().width;
-		int panelHeight = getSize().height;
-		
-		//Speeds for determining colors
-		double maxSpeed = gpsFeed.getMaxSpeed();
+		int panelWidth = getWidth();
+		int panelHeight = getHeight();
+		double maxSpeed = gpsFeed.getMaxSpeed(); //Speeds for determining colors
 		
 		//Sets up a buffered image to draw the graphics into
 		courseMapImage = (BufferedImage)createImage(panelWidth, panelHeight);
@@ -66,8 +51,8 @@ public class PolygonCourseMapPanel extends DataPanel {
 		
 		courseMapGraphic.setColor(Color.WHITE);
 		courseMapGraphic.setStroke(new BasicStroke(1.0f));
-		courseMapGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
+		courseMapGraphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		for(int k=0; k < coursePolygonList.size(); k++) {
 			CourseMapPolygon currentPolygon = coursePolygonList.get(k);
@@ -76,12 +61,11 @@ public class PolygonCourseMapPanel extends DataPanel {
 			Polygon drawingPolygon = currentPolygon.getCourseMapPolygon(panelWidth, panelHeight);
 			courseMapGraphic.drawPolygon(drawingPolygon);
 			
-			if(currentPolygon.getCurrentGpsSample().equals(gpsFeed.getNearestSample(currentPolygon.getCurrentGpsSample().getTimestamp()))) {
+			if(currentTimestamp - currentPolygon.getCurrentGpsSample().getTimestamp() > -100 && 
+					currentTimestamp - currentPolygon.getCurrentGpsSample().getTimestamp() < 100) {
 				courseMapGraphic.setPaint(new Color(255,0,0));
 				courseMapGraphic.fillPolygon(drawingPolygon);
-			}
-			
-			else {
+			} else {
 				//Color in the Polygon 
 				int oldBluePortion =  (int)Math.round( (1 - currentPolygon.getOldSpeed() / maxSpeed) * 255 );
 				int oldRedPortion = (int)Math.round( ((currentPolygon.getOldSpeed() / maxSpeed) ) * 255 );
@@ -107,15 +91,10 @@ public class PolygonCourseMapPanel extends DataPanel {
 		}
 		
 		courseMapGraphic.setPaint(Color.WHITE);
-		
 		for(int k=0; k < coursePolygonList.size(); k++) {
-			
 			CourseMapPolygon currentPolygon = coursePolygonList.get(k);
 			
-			if(currentPolygon.getCurrentGpsSample().equals(gpsFeed.getNearestSample(currentPolygon.getCurrentGpsSample().getTimestamp()))) {
-				//Don't draw the line
-			}
-			else {
+			if(!currentPolygon.getCurrentGpsSample().equals(gpsFeed.getNearestSample(currentPolygon.getCurrentGpsSample().getTimestamp()))) {
 				if(k == coursePolygonList.size() - 1)
 					break;
 				
@@ -127,12 +106,11 @@ public class PolygonCourseMapPanel extends DataPanel {
 			}
 		}
 		
-		g.drawImage(courseMapImage, 0, 0, this);
+		((Graphics2D)g).drawImage(courseMapImage, 0, 0, this);
 	}
 
 	
-	private void instantiatePolygonList() {
-		
+	private void buildPolygonList() {
 		GpsSample previousGpsSample = null;
 		GpsSample currentGpsSample = null;
 		Point2D oldPointHigh = new Point2D.Double();
@@ -167,7 +145,6 @@ public class PolygonCourseMapPanel extends DataPanel {
 				previousGpsSample = currentGpsSample;
 				previousAccel = currentAccel;
 			} else {
-				
 				CourseMapPolygon racePolygon;
 				
 				if(!firstPolygonCreated) {
@@ -192,6 +169,24 @@ public class PolygonCourseMapPanel extends DataPanel {
 				previousGpsSample = currentGpsSample;
 			}
 		}
+	}
+	
+	
+	@Override
+	public void update(long timestamp) {
+		super.update(timestamp);
+		
+		paintCourseGraphic(getGraphics());
+	}
+	
+	
+	public void update(Graphics g) {
+		paint(g);
+	}
+	
+	
+	public void paint(Graphics g) {
+		paintCourseGraphic((Graphics2D)g);
 	}
 	
 	

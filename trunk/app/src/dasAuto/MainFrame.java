@@ -81,7 +81,7 @@ public class MainFrame extends JFrame {
 	private void addSidePanel() {
 		sidePanel = new JPanel(new GridLayout(2, 1));
 		sidePanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0 ,Color.black));
-		sidePanel.setPreferredSize(new Dimension((int)(getHeight() * 0.55), (int)(getHeight() * 0.65)));
+		sidePanel.setPreferredSize(new Dimension((int)(getHeight() * 0.60), (int)(getHeight() * 0.65)));
 
 		//-- AJG Key Points Panel
 		sidePanel.add(keyPointsPanel = new KeyPointsPanel());
