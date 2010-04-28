@@ -10,7 +10,7 @@ import dasAuto.logData.feeds.GpsFeed;
 public abstract class DataPanel extends JPanel {
 	private static final long serialVersionUID = 4385467239459710925L;
 	
-	private long currentTimestamp = -1;
+	protected long currentTimestamp = -1;
 	
 	public AccelFeed accelFeed;
 	public GpsFeed gpsFeed;
@@ -26,7 +26,7 @@ public abstract class DataPanel extends JPanel {
 	
 	public void update(long timestamp) {
 		currentTimestamp = timestamp;
-		System.out.println("UPDATE: " + this.getClass() + " - " + timestamp); 
+		//System.out.println("UPDATE: " + this.getClass() + " - " + timestamp); 
 	}
 	
 	
