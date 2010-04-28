@@ -34,8 +34,7 @@ public class DataFeed<Sample extends DataSample> extends ArrayList<Sample> {
 	 * @return
 	 */
 	public int getNearestSampleIndex(long timestamp) {
-		
-		if(timestamp == 0) {
+		if(timestamp <= 0) {
             return 0;
 		} else if(timestamp == maxTimestamp) {
             return size() -1;

@@ -20,8 +20,21 @@ import dasAuto.panels.TimePanel;
 import dasAuto.panels.TractionCirclePanel;
 
 
+
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 2269971701250845501L;
+	
+	private JPanel centerPanel;
+	private JPanel sidePanel;
+	private JPanel bottomPanel;
+	
+	private AccelPanel latAccelPanel;
+	private AccelPanel lonAccelPanel;
+	private SpeedPanel speedPanel;
+	private PolygonCourseMapPanel courseMapPanel;
+	private TimePanel timePanel;
+	private KeyPointsPanel keyPointsPanel;
+	private TractionCirclePanel tractionCirclePanel;
 	
 	
 	public MainFrame() {
@@ -41,7 +54,7 @@ public class MainFrame extends JFrame {
 		setTitle("Data Acquisition System for Automobiles");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setPreferredSize(new Dimension(800, 600));
+		setPreferredSize(new Dimension(1000, 700));
 		setMinimumSize(new Dimension(800, 600));
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH); // TODO: Why the hell doesn't this work in Linux? Does it work in Windows? 
 		getContentPane().setLayout(new BorderLayout());
@@ -56,37 +69,48 @@ public class MainFrame extends JFrame {
 	
 	
 	private void addCenterPanel() {
-		JPanel centerPanel = new JPanel(new BorderLayout());
+		centerPanel = new JPanel(new BorderLayout());
 		
-		centerPanel.add(new PolygonCourseMapPanel(), BorderLayout.CENTER);
-		centerPanel.add(new TimePanel(), BorderLayout.SOUTH);
+		centerPanel.add(courseMapPanel = new PolygonCourseMapPanel(), BorderLayout.CENTER);
+		centerPanel.add(timePanel = new TimePanel(this), BorderLayout.SOUTH);
 		
 		getContentPane().add(centerPanel);
 	}
 	
 	
 	private void addSidePanel() {
-		JPanel sidePanel = new JPanel(new GridLayout(2, 1));
-		sidePanel.setPreferredSize(new Dimension((int)(getHeight() * 0.70), (int)(getHeight() * 0.65)));
+		sidePanel = new JPanel(new GridLayout(2, 1));
 		sidePanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0 ,Color.black));
+		sidePanel.setPreferredSize(new Dimension((int)(getHeight() * 0.55), (int)(getHeight() * 0.65)));
 
 		//-- AJG Key Points Panel
-		sidePanel.add(new KeyPointsPanel());
-		sidePanel.add(new TractionCirclePanel());
+		sidePanel.add(keyPointsPanel = new KeyPointsPanel());
+		sidePanel.add(tractionCirclePanel = new TractionCirclePanel());
 		
 		getContentPane().add(sidePanel, BorderLayout.EAST);
 	}
 	
 	
 	private void addBottomPanel() {
-		JPanel bottomPanel = new JPanel(new GridLayout(1, 3));
+		bottomPanel = new JPanel(new GridLayout(1, 3));
 		bottomPanel.setPreferredSize(new Dimension(getWidth(), (int)(getHeight() * 0.35)));
 		
-		bottomPanel.add(new AccelPanel(AccelFeed.X_AXIS));
-		bottomPanel.add(new AccelPanel(AccelFeed.Y_AXIS));
-		bottomPanel.add(new SpeedPanel());
+		bottomPanel.add(lonAccelPanel = new AccelPanel(AccelFeed.X_AXIS));
+		bottomPanel.add(latAccelPanel = new AccelPanel(AccelFeed.Y_AXIS));
+		bottomPanel.add(speedPanel = new SpeedPanel());
 		
 		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+	}
+	
+	
+	public void updatePanels(long timestamp) {
+		latAccelPanel.update(timestamp);
+		lonAccelPanel.update(timestamp);
+		speedPanel.update(timestamp);
+		courseMapPanel.update(timestamp);
+		timePanel.update(timestamp);
+		keyPointsPanel.update(timestamp);
+		tractionCirclePanel.update(timestamp);
 	}
 	
 	
