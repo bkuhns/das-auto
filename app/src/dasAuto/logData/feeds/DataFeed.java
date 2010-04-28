@@ -34,39 +34,46 @@ public class DataFeed<Sample extends DataSample> extends ArrayList<Sample> {
 	 * @return
 	 */
 	public int getNearestSampleIndex(long timestamp) {
-		double indexRatio = (double)(timestamp - minTimestamp) / (double)(maxTimestamp - minTimestamp);	// Locational ratio of timestamp in the range of min->max timestamps.
-		int startingIndex = (int)Math.round(indexRatio * size()) - 1;
-		int returnIndex = -1;
 		
-		ListIterator<Sample> it = listIterator(startingIndex);
-		if(it.hasNext() && it.next().getTimestamp() < timestamp) {
-			// The next adjacent item is smaller, so we need to find larger values => iterate forward.
-			while(it.hasNext()) {
-				returnIndex = it.nextIndex();
-				Sample current = it.next();
-				if(current.getTimestamp() >= timestamp) {
-					// Found it!
-					break;
-				}
-			}
+		if(timestamp == 0) {
+            return 0;
+		} else if(timestamp == maxTimestamp) {
+            return size() -1;
 		} else {
-			// Looks like we need to iterator backwards. First check to make sure, 
-			// otherwise we've already found the right index.
-			if(it.hasPrevious() && it.previous().getTimestamp() > timestamp) {
-				while(it.hasPrevious()) {
-					returnIndex = it.previousIndex();
-					if(it.previous().getTimestamp() <= timestamp) {
+			double indexRatio = (double)(timestamp - minTimestamp) / (double)(maxTimestamp - minTimestamp);	// Locational ratio of timestamp in the range of min->max timestamps.
+			int startingIndex = (int)Math.round(indexRatio * size()) - 1;
+			int returnIndex = -1;
+			
+			ListIterator<Sample> it = listIterator(startingIndex);
+			if(it.hasNext() && it.next().getTimestamp() < timestamp) {
+				// The next adjacent item is smaller, so we need to find larger values => iterate forward.
+				while(it.hasNext()) {
+					returnIndex = it.nextIndex();
+					Sample current = it.next();
+					if(current.getTimestamp() >= timestamp) {
 						// Found it!
 						break;
 					}
 				}
 			} else {
-				// Holy crap, we found it on the first try!
-				returnIndex = startingIndex;
+				// Looks like we need to iterator backwards. First check to make sure, 
+				// otherwise we've already found the right index.
+				if(it.hasPrevious() && it.previous().getTimestamp() > timestamp) {
+					while(it.hasPrevious()) {
+						returnIndex = it.previousIndex();
+						if(it.previous().getTimestamp() <= timestamp) {
+							// Found it!
+							break;
+						}
+					}
+				} else {
+					// Holy crap, we found it on the first try!
+					returnIndex = startingIndex;
+				}
 			}
+			
+			return returnIndex;
 		}
-		
-		return returnIndex;
 	}
 	
 	

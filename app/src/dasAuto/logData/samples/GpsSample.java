@@ -12,6 +12,16 @@ public class GpsSample extends DataSample {
 	private char ewIndicator;	// E/W
 	
 	
+	public boolean equals(GpsSample sample) {
+		
+		return (sample.getLatitude() != latitude || 
+		   sample.getLongitude() != longitude ||
+		   sample.getSpeed() != speed ||
+		   sample.getHeading() != heading ||
+		   sample.getNsIndicator() != nsIndicator ||
+		   sample.getEwIndicator() != ewIndicator);
+	}
+	
 	/* Latitude */
 	public double getLatitude() {
 		return latitude;

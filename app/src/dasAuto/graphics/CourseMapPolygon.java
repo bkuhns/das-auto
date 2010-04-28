@@ -20,8 +20,8 @@ public class CourseMapPolygon extends Polygon {
 	private double maxLat;
 	private double minLon;
 	private double maxLon;
-	private double minAccel;
-	private double maxAccel;
+	private int minAccel;
+	private int maxAccel;
 	private int oldAccel;
 	private int newAccel;
 	private double oldSpeed;
@@ -32,7 +32,6 @@ public class CourseMapPolygon extends Polygon {
 	public CourseMapPolygon(GpsSample currentSample, GpsSample previousSample, 
 						    Point2D previousLocationLow, Point2D previousLocationHigh, 
 						    int currentAccel, double previousSpeed, double currentSpeed){
-		
 		newSample = currentSample;
 		oldSample = previousSample;
 		newAccel = currentAccel;
@@ -48,7 +47,6 @@ public class CourseMapPolygon extends Polygon {
 	public CourseMapPolygon(GpsSample currentSample, GpsSample previousSample, 
 							int currentAccel,  int previousAccel, 
 							double previousSpeed, double currentSpeed) {
-		
 		newSample = currentSample;
 		oldSample = previousSample;
 		oldAccel = previousAccel;
@@ -59,16 +57,33 @@ public class CourseMapPolygon extends Polygon {
 
 
 	public void instantiatePolygon() {
-		newLocationHigh = findPoint2D(newSample, oldSample, newAccel, 1);
-		newLocationLow = findPoint2D(newSample, oldSample, newAccel, -1);
+		
+		if(newAccel >= 512) {
+			newLocationHigh = findPoint2D(newSample, oldSample, newAccel, 1);
+			newLocationLow = findPoint2D(newSample, oldSample, minAccel, -1);
+		} else {
+			newLocationHigh = findPoint2D(newSample, oldSample, minAccel, 1);
+			newLocationLow = findPoint2D(newSample, oldSample, newAccel, -1);
+		}
 	}
 	
 	
 	public void instantiateFirstPolygon() {
-		oldLocationHigh = findPoint2D(oldSample, newSample, oldAccel, 1);
-		oldLocationLow = findPoint2D(oldSample, newSample, oldAccel, -1);
-		newLocationHigh = findPoint2D(newSample, oldSample, newAccel, 1);
-		newLocationLow = findPoint2D(newSample, oldSample, newAccel, -1);
+		if(oldAccel >= 512) {
+			oldLocationHigh = findPoint2D(oldSample, newSample, oldAccel, 1);
+			oldLocationLow = findPoint2D(oldSample, newSample, minAccel, -1);
+		} else {
+			oldLocationHigh = findPoint2D(oldSample, newSample, minAccel, 1);
+			oldLocationLow = findPoint2D(oldSample, newSample, oldAccel, -1);
+		}
+		
+		if(newAccel >= 512) {
+			newLocationHigh = findPoint2D(newSample, oldSample, newAccel, 1);
+			newLocationLow = findPoint2D(newSample, oldSample, minAccel, -1);
+		} else {
+			newLocationHigh = findPoint2D(newSample, oldSample, minAccel, 1);
+			newLocationLow = findPoint2D(newSample, oldSample, newAccel, -1);
+		}
 	}
 	
 	
@@ -190,12 +205,12 @@ public class CourseMapPolygon extends Polygon {
 	}
 
 	
-	public void setMinAccel(double minAccel) {
+	public void setMinAccel(int minAccel) {
 		this.minAccel = minAccel;
 	}
 
 	
-	public void setMaxAccel(double maxAccel) {
+	public void setMaxAccel(int maxAccel) {
 		this.maxAccel = maxAccel;
 	}
 	
@@ -207,6 +222,11 @@ public class CourseMapPolygon extends Polygon {
 
 	public double getNewSpeed() {
 		return newSpeed;
+	}
+	
+	
+	public GpsSample getCurrentGpsSample() {
+		return newSample;
 	}
 	
 	
@@ -235,11 +255,11 @@ public class CourseMapPolygon extends Polygon {
 		
 		if(latDelta > lonDelta) {
 			minAccelGpsWidth = 0.01 * lonDelta;
-			maxAccelGpsWidth = 0.02 * lonDelta;
+			maxAccelGpsWidth = 0.05 * lonDelta;
 		} 
 		else {
 			minAccelGpsWidth = 0.01 * latDelta;
-			maxAccelGpsWidth = 0.02 * latDelta;
+			maxAccelGpsWidth = 0.05 * latDelta;
 		}
 		
 		if(currentWidthProportion == 0.0)
