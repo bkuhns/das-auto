@@ -28,7 +28,7 @@ public class DataFeed<Sample extends DataSample> extends ArrayList<Sample> {
 	 * searching. From there, just linear search in either forward of backward
 	 * directions until we find the right sample and return it's index.
 	 * 
-	 * TODO We may want to consider a binary search.
+	 * TODO: We may want to consider a binary search.
 	 * 
 	 * @param timestamp
 	 * @return

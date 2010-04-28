@@ -28,13 +28,13 @@ public class LogFeed {
 	
 	private File getFileFromUser() {
 		JFileChooser dataFileChooser = new JFileChooser();
-	    dataFileChooser.setName("jFileChooser1"); // NOI18N
+	    dataFileChooser.setName("jFileChooser1");
 	    //dataFileChooser.setBounds(0, 0, 582, 397);
 	    File dataFile = null;
 	
-	   //Attempt to Close the frame if the User Closes the File Browser
-	   //TODO:  Adding functionality to either close program or show blank frame if user does not select a file.
-	   //   	If no file is selected, dataFile will be null at upon return.
+	   // Attempt to Close the frame if the User Closes the File Browser
+	   // TODO: Add functionality to either close program or show blank frame if user does not select a file.
+	   // If no file is selected, dataFile will be null at upon return.
 	   int fileBrowserResult = dataFileChooser.showOpenDialog(null);
 	   if(fileBrowserResult == JFileChooser.APPROVE_OPTION){
 	        dataFile = dataFileChooser.getSelectedFile();
