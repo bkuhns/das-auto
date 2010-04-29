@@ -7,14 +7,18 @@ public class AccelSample extends DataSample {
 	private int yValue;	// 0-1024 (+-3Gs)
 	private int zValue;	// 0-1024 (+-3Gs)
 	
+	public static final double X_OFFSET = -0.01;
+	public static final double Y_OFFSET = 0.16;
+	public static final double Z_OFFSET = 0;
+	
 	
 	/**
 	 * Convert a 10-bit count integer (0-1024) to a decimal G-force value.
 	 * 
 	 * @param count
 	 */
-	public static double convertCountToG(int count) {
-		return count * 3.0/512.0 - 3.0;
+	public static double convertCountToG(int count, double offset) {
+		return count * 5/512.0 - 5 + offset;
 	}
 
 	
@@ -24,7 +28,7 @@ public class AccelSample extends DataSample {
 	}
 	
 	public double getXValueInG() {
-		return convertCountToG(xValue);
+		return convertCountToG(xValue, X_OFFSET);
 	}
 
 	public void setXValue(int xValue) {
@@ -38,7 +42,7 @@ public class AccelSample extends DataSample {
 	}
 	
 	public double getYValueInG() {
-		return convertCountToG(yValue);
+		return convertCountToG(yValue, Y_OFFSET);
 	}
 
 	public void setYValue(int yValue) {
@@ -52,7 +56,7 @@ public class AccelSample extends DataSample {
 	}
 	
 	public double getZValueInG() {
-		return convertCountToG(zValue);
+		return convertCountToG(zValue, Z_OFFSET);
 	}
 
 	public void setZValue(int zValue) {
