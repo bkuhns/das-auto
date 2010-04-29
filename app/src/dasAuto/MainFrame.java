@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import dasAuto.logData.feeds.AccelFeed;
+import dasAuto.logData.feeds.LogFeed;
 import dasAuto.panels.AccelPanel;
 import dasAuto.panels.KeyPointsPanel;
 import dasAuto.panels.PolygonCourseMapPanel;
@@ -51,7 +52,8 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		setTitle("Data Acquisition System for Automobiles");
+		LogFeed logFeed = LogFeed.getInstance();
+		setTitle("- " + logFeed.getLogFilename());
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setPreferredSize(new Dimension(1000, 700));
@@ -111,6 +113,12 @@ public class MainFrame extends JFrame {
 		timePanel.update(timestamp);
 		keyPointsPanel.update(timestamp);
 		tractionCirclePanel.update(timestamp);
+	}
+	
+	
+	@Override
+	public void setTitle(String str) {
+		super.setTitle(Messages.getString("mainFrame.title") + " " + str);
 	}
 	
 	

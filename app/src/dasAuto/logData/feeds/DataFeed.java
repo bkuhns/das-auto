@@ -28,7 +28,9 @@ public class DataFeed<Sample extends DataSample> extends ArrayList<Sample> {
 	 * searching. From there, just linear search in either forward of backward
 	 * directions until we find the right sample and return it's index.
 	 * 
-	 * TODO: We may want to consider a binary search.
+	 * TODO: May want to consider a binary search.
+	 * TODO: Should probably throw an exception to indicate a sample could not be
+	 * 	found.
 	 * 
 	 * @param timestamp
 	 * @return
@@ -41,7 +43,13 @@ public class DataFeed<Sample extends DataSample> extends ArrayList<Sample> {
 		} else {
 			double indexRatio = (double)(timestamp - minTimestamp) / (double)(maxTimestamp - minTimestamp);	// Locational ratio of timestamp in the range of min->max timestamps.
 			int startingIndex = (int)Math.round(indexRatio * size()) - 1;
-			int returnIndex = -1;
+			int returnIndex = 0;
+			
+			if(startingIndex < 0) {
+				startingIndex = 0;
+			} else if(startingIndex > size()) {
+				startingIndex = size();
+			}
 			
 			ListIterator<Sample> it = listIterator(startingIndex);
 			if(it.hasNext() && it.next().getTimestamp() < timestamp) {
