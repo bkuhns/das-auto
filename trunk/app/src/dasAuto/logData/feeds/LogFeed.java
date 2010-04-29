@@ -12,6 +12,8 @@ public class LogFeed {
 	
 	private AccelFeed accelFeed;
 	private GpsFeed gpsFeed;
+	
+	private String logFilename;
 
 	
 	private LogFeed() {
@@ -30,19 +32,20 @@ public class LogFeed {
 		JFileChooser dataFileChooser = new JFileChooser();
 	    dataFileChooser.setName("jFileChooser1");
 	    //dataFileChooser.setBounds(0, 0, 582, 397);
-	    File dataFile = null;
+	    File logFile = null;
 	
 	   // Attempt to Close the frame if the User Closes the File Browser
 	   // TODO: Add functionality to either close program or show blank frame if user does not select a file.
 	   // If no file is selected, dataFile will be null at upon return.
 	   int fileBrowserResult = dataFileChooser.showOpenDialog(null);
 	   if(fileBrowserResult == JFileChooser.APPROVE_OPTION){
-	        dataFile = dataFileChooser.getSelectedFile();
+	        logFile = dataFileChooser.getSelectedFile();
+	        logFilename = logFile.getName();
 	   }
 	   else if(fileBrowserResult == JFileChooser.CANCEL_OPTION){
 	       System.out.println("Dialog was Canceled.");
 	   }
-	   return dataFile;
+	   return logFile;
 	}
 	
 	
@@ -53,6 +56,11 @@ public class LogFeed {
 	
 	public AccelFeed getAccelFeed() {
 		return accelFeed;
+	}
+	
+	
+	public String getLogFilename() {
+		return logFilename;
 	}
 	
 	

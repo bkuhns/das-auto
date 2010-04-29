@@ -52,7 +52,7 @@ public class TimePanel extends DataPanel implements ActionListener {
 	
 	private void addPlayButton() {
 		playButton = new JButton(Messages.getString("timePanel.playButton.play")); 
-		playButton.setPreferredSize(new Dimension(50, getHeight()));
+		playButton.setPreferredSize(new Dimension(65, getHeight()));
 		playButton.addActionListener(new PlayButtonListener());
 		
 		add(playButton, BorderLayout.WEST);

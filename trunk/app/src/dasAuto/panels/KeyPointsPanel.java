@@ -10,6 +10,7 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
+import dasAuto.Messages;
 import dasAuto.logData.feeds.AccelFeed;
 import dasAuto.logData.samples.AccelSample;
 import dasAuto.logData.samples.GpsSample;
@@ -21,7 +22,7 @@ import dasAuto.logData.samples.GpsSample;
  * @author Tony Greer
  * @since 4/25/2010 7:44P
  */
-public class KeyPointsPanel extends DataPanel implements Observer
+public class KeyPointsPanel extends DataPanel
 {
 	private static final long serialVersionUID = -3258092186335482905L;
 
@@ -52,87 +53,78 @@ public class KeyPointsPanel extends DataPanel implements Observer
 		super();
 		final AccelFeed filteredAccelFeed = accelFeed.getFilteredFeed(ACCEL_FILTER_RESOLUTION);
 
-		super.setToolTipText(TOOL_TIP_TEXT);
-		super.setLayout(new GridLayout(0,4));
-		super.setBackground(Color.WHITE);
-		super.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+		setToolTipText(TOOL_TIP_TEXT);
+		setLayout(new GridLayout(0,4));
+		setBackground(Color.WHITE);
+		setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
 
 		/* Headers */
-		super.add(headerLabelFactory("Data Item"));
-		super.add(headerLabelFactory("Curr"));
-		super.add(headerLabelFactory("Min"));
-		super.add(headerLabelFactory("Max"));
+		add(headerLabelFactory(Messages.getString("keyPointsPanel.dataItem")));
+		add(headerLabelFactory(Messages.getString("keyPointsPanel.currItem")));
+		add(headerLabelFactory(Messages.getString("keyPointsPanel.minItem")));
+		add(headerLabelFactory(Messages.getString("keyPointsPanel.maxItem")));
 
 		/* Data*/
-		super.add(bodyLabelFactory("Speed"));
-		super.add(this.speedCurr = bodyLabelFactory(SPEED_FMT.format(gpsFeed.get(0).getSpeed())));
-		super.add(this.speedMin = bodyLabelFactory(SPEED_FMT.format(gpsFeed.getMinSpeed())));
-		super.add(this.speedMax = bodyLabelFactory(SPEED_FMT.format(gpsFeed.getMaxSpeed())));
+		add(bodyLabelFactory(Messages.getString("keyPointsPanel.speed")));
+		add(this.speedCurr = bodyLabelFactory(SPEED_FMT.format(gpsFeed.get(0).getSpeed())));
+		add(this.speedMin = bodyLabelFactory(SPEED_FMT.format(gpsFeed.getMinSpeed())));
+		add(this.speedMax = bodyLabelFactory(SPEED_FMT.format(gpsFeed.getMaxSpeed())));
 
-		super.add(bodyLabelFactory("Latitude"));
-		super.add(this.latCurr = bodyLabelFactory(GPS_FMT.format(gpsFeed.get(0).getLatitude())));
-		super.add(this.latMin = bodyLabelFactory(GPS_FMT.format(gpsFeed.getMinLatitude())));
-		super.add(this.latMax = bodyLabelFactory(GPS_FMT.format(gpsFeed.getMaxLatitude())));
+		add(bodyLabelFactory(Messages.getString("keyPointsPanel.latGps")));
+		add(this.latCurr = bodyLabelFactory(GPS_FMT.format(gpsFeed.get(0).getLatitude())));
+		add(this.latMin = bodyLabelFactory(GPS_FMT.format(gpsFeed.getMinLatitude())));
+		add(this.latMax = bodyLabelFactory(GPS_FMT.format(gpsFeed.getMaxLatitude())));
 
-		super.add(bodyLabelFactory("Longitude"));
-		super.add(this.longCurr = bodyLabelFactory(GPS_FMT.format(gpsFeed.get(0).getLongitude())));
-		super.add(this.longMin = bodyLabelFactory(GPS_FMT.format(gpsFeed.getMinLongitude())));
-		super.add(this.longMax = bodyLabelFactory(GPS_FMT.format(gpsFeed.getMaxLongitude())));
+		add(bodyLabelFactory(Messages.getString("keyPointsPanel.lonGps")));
+		add(this.longCurr = bodyLabelFactory(GPS_FMT.format(gpsFeed.get(0).getLongitude())));
+		add(this.longMin = bodyLabelFactory(GPS_FMT.format(gpsFeed.getMinLongitude())));
+		add(this.longMax = bodyLabelFactory(GPS_FMT.format(gpsFeed.getMaxLongitude())));
 
-		super.add(bodyLabelFactory("X Acceleration"));
-		super.add(this.xAccelCurr = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.get(0).getXValueInG())));
-		super.add(this.xAccelMin = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMinXValueInG())));
-		super.add(this.xAccelMax = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMaxXValueInG())));
+		add(bodyLabelFactory(Messages.getString("keyPointsPanel.lonAccel")));
+		add(this.xAccelCurr = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.get(0).getXValueInG())));
+		add(this.xAccelMin = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMinXValueInG())));
+		add(this.xAccelMax = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMaxXValueInG())));
 
-		super.add(bodyLabelFactory("Y Acceleration"));
-		super.add(this.yAccelCurr = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.get(0).getYValueInG())));
-		super.add(this.yAccelMin = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMinYValueInG())));
-		super.add(this.yAccelMax = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMaxYValueInG())));
+		add(bodyLabelFactory(Messages.getString("keyPointsPanel.latAccel")));
+		add(this.yAccelCurr = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.get(0).getYValueInG())));
+		add(this.yAccelMin = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMinYValueInG())));
+		add(this.yAccelMax = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMaxYValueInG())));
 
-		super.add(bodyLabelFactory("Z Acceleration"));
-		super.add(this.zAccelCurr = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.get(0).getZValueInG())));
-		super.add(this.zAccelMin = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMinZValueInG())));
-		super.add(this.zAccelMax = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMaxZValueInG())));
+		add(bodyLabelFactory(Messages.getString("keyPointsPanel.vertAccel")));
+		add(this.zAccelCurr = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.get(0).getZValueInG())));
+		add(this.zAccelMin = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMinZValueInG())));
+		add(this.zAccelMax = bodyLabelFactory(ACCEL_FMT.format(filteredAccelFeed.getMaxZValueInG())));
 	}
 
 	@Override
-	public void update(Observable arg0, Object arg1)
+	public void update(long timestamp)
 	{
 		try
 		{
 			/*
-			 * Expecting type Long for updates from observable.
-			 * This will redraw the the "Current" values whilest leaving
+			 * This will redraw the the "Current" values whilst leaving
 			 * the max values alone.
 			 */
-			if(arg1 instanceof Long)
+			if(timestamp > 0)
 			{
-				final long t_millis = ((Long)arg1).longValue();
+				final AccelSample accelsample =  accelFeed.getFilteredFeed(ACCEL_FILTER_RESOLUTION).getNearestSample(timestamp);
+				final GpsSample gpsSample = gpsFeed.getNearestSample(timestamp);
+				
+				this.speedCurr.setText(SPEED_FMT.format(gpsSample.getSpeed()));
 
-				if(t_millis > 0)
-				{
-					final AccelSample accelsample =  accelFeed.getFilteredFeed(ACCEL_FILTER_RESOLUTION).getNearestSample(t_millis);
-					final GpsSample gpsSample = gpsFeed.getNearestSample(t_millis);
-					
-					this.speedCurr.setText(SPEED_FMT.format(gpsSample.getSpeed()));
+				this.latCurr.setText(GPS_FMT.format(gpsSample.getLatitude()));
+				this.longCurr.setText(GPS_FMT.format(gpsSample.getLongitude()));
 
-					this.latCurr.setText(GPS_FMT.format(gpsSample.getLatitude()));
-					this.longCurr.setText(GPS_FMT.format(gpsSample.getLongitude()));
-
-					this.xAccelCurr.setText(ACCEL_FMT.format(accelsample.getXValueInG()));
-					this.yAccelCurr.setText(ACCEL_FMT.format(accelsample.getYValueInG()));
-					this.zAccelCurr.setText(ACCEL_FMT.format(accelsample.getZValueInG()));
-				}else
-				{
-
-				}
-
-				//-- Don't forget to force a repaint since the UI is lazy.
-				super.repaint();
+				this.xAccelCurr.setText(ACCEL_FMT.format(accelsample.getXValueInG()));
+				this.yAccelCurr.setText(ACCEL_FMT.format(accelsample.getYValueInG()));
+				this.zAccelCurr.setText(ACCEL_FMT.format(accelsample.getZValueInG()));
 			}else
 			{
-				throw new Exception("What are you sending me? I only take type Long.");
+
 			}
+
+			//-- Don't forget to force a repaint since the UI is lazy.
+			super.repaint();
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -155,7 +147,7 @@ public class KeyPointsPanel extends DataPanel implements Observer
 	 */
 	private static JLabel bodyLabelFactory(String text)
 	{
-		final JLabel body = new JLabel(text, JLabel.CENTER);		
+		final JLabel body = new JLabel(text, JLabel.RIGHT);		
 		return body;
 	}
 }
