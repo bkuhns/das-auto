@@ -10,10 +10,10 @@ import dasAuto.logData.samples.GpsSample;
 public class CourseMapPolygon extends Polygon {
 
 	private static final long serialVersionUID = -3787779528072837425L;
-	private Point2D oldLocationHigh;
-	private Point2D oldLocationLow;
-	private Point2D newLocationHigh;
-	private Point2D newLocationLow;
+	private Point2D oldLocationRight;
+	private Point2D oldLocationLeft;
+	private Point2D newLocationRight;
+	private Point2D newLocationLeft;
 	
 	private GpsSample oldSample;
 	private GpsSample newSample;
@@ -44,8 +44,8 @@ public class CourseMapPolygon extends Polygon {
 		oldSpeed = previousSpeed;
 		newSpeed = currentSpeed;
 		
-		oldLocationLow = previousLocationLow;
-		oldLocationHigh = previousLocationHigh;
+		oldLocationLeft = previousLocationLow;
+		oldLocationRight = previousLocationHigh;
 	}
 	
 	
@@ -71,23 +71,15 @@ public class CourseMapPolygon extends Polygon {
 			highAccel = (newAccel);
 			lowAccel = -(newAccel);
 		} else if (newAccel < 0.0) {
-			highAccel = -(newAccel);
-			lowAccel = (newAccel);
+			highAccel = (newAccel);
+			lowAccel = -(newAccel);
 		}
-		
-		/*System.out.println(highAccel);
-		System.out.println(oldAccel);
-		System.out.println();*/
-		
-		if(flip) {
-			newLocationHigh = findPoint2D(newSample, oldSample, lowAccel, 1);
-			newLocationLow = findPoint2D(newSample, oldSample, highAccel, -1);
-		} else {
-			newLocationHigh = findPoint2D(newSample, oldSample, Math.abs(newAccel), 1);
-			newLocationLow = findPoint2D(newSample, oldSample, Math.abs(newAccel), -1);
-		}
-		
-		
+
+		newLocationRight = findPoint2D(newSample, oldSample, highAccel, 1);
+		newLocationLeft = findPoint2D(newSample, oldSample, lowAccel, -1);
+
+		//newLocationRight = findPoint2D(newSample, oldSample, Math.abs(newAccel), 1);
+		//newLocationLeft = findPoint2D(newSample, oldSample, Math.abs(newAccel), -1);	
 	}
 	
 	
@@ -100,8 +92,8 @@ public class CourseMapPolygon extends Polygon {
 			 newHighAccel = (newAccel);
 			 newLowAccel = -(newAccel);
 		} else if (newAccel < 0.0) {
-			 newHighAccel = (newAccel);
-			 newLowAccel = -(newAccel);
+			 newHighAccel = -(newAccel);
+			 newLowAccel = (newAccel);
 		}
 
 		double oldHighAccel = oldAccel;
@@ -111,42 +103,30 @@ public class CourseMapPolygon extends Polygon {
 			oldHighAccel = (oldAccel);
 			oldLowAccel = -(oldAccel);
 		} else if (oldAccel < 0.0) {
-			oldHighAccel = (oldAccel);
-			oldLowAccel = -(oldAccel);
+			oldHighAccel = -(oldAccel);
+			oldLowAccel = (oldAccel);
 		}
 		
-		oldLocationHigh = findPoint2D(oldSample, newSample, Math.abs(oldAccel), 1);
-		oldLocationLow = findPoint2D(oldSample, newSample, Math.abs(oldAccel), -1);
+		oldLocationRight = findPoint2D(oldSample, newSample, oldHighAccel, 1);
+		oldLocationLeft = findPoint2D(oldSample, newSample, oldLowAccel, -1);
 		
-		newLocationHigh = findPoint2D(newSample, oldSample, Math.abs(newAccel), 1);
-		newLocationLow = findPoint2D(newSample, oldSample, Math.abs(newAccel), -1);
+		newLocationRight = findPoint2D(newSample, oldSample, newHighAccel, 1);
+		newLocationLeft = findPoint2D(newSample, oldSample, newLowAccel, -1);
 	}
 	
 	
 	public Polygon getCourseMapPolygon(int panelWidth, int panelHeight) {
 		Polygon roundedPolygon = new Polygon();
 		
-		Point point1 = convertGpsPointToScreenPoint(newLocationHigh.getX(), newLocationHigh.getY(), panelWidth, panelHeight);
-		Point point2 = convertGpsPointToScreenPoint(newLocationLow.getX(), newLocationLow.getY(), panelWidth, panelHeight);
-		Point point3 = convertGpsPointToScreenPoint(oldLocationHigh.getX(), oldLocationHigh.getY(), panelWidth, panelHeight);
-		Point point4 = convertGpsPointToScreenPoint(oldLocationLow.getX(), oldLocationLow.getY(), panelWidth, panelHeight);
-		
-		//Need special conditions here before adding points, make sure to add them in the correct order.
-		//Check within the points themselves
-		if(Line2D.linesIntersect(oldLocationLow.getX(), oldLocationLow.getY(), 
-					             newLocationHigh.getX(), newLocationHigh.getY(), 
-					             newLocationLow.getX(), newLocationLow.getY(), 
-					             oldLocationHigh.getX(), oldLocationHigh.getY())) {
-			roundedPolygon.addPoint(point4.x, point4.y);
-			roundedPolygon.addPoint(point2.x, point2.y);
-			roundedPolygon.addPoint(point1.x, point1.y);
-			roundedPolygon.addPoint(point3.x, point3.y);
-		} else {
-			roundedPolygon.addPoint(point4.x, point4.y);
-			roundedPolygon.addPoint(point1.x, point1.y);
-			roundedPolygon.addPoint(point2.x, point2.y);
-			roundedPolygon.addPoint(point3.x, point3.y);
-		}
+		Point point1 = convertGpsPointToScreenPoint(newLocationRight.getX(), newLocationRight.getY(), panelWidth, panelHeight);
+		Point point2 = convertGpsPointToScreenPoint(newLocationLeft.getX(), newLocationLeft.getY(), panelWidth, panelHeight);
+		Point point3 = convertGpsPointToScreenPoint(oldLocationRight.getX(), oldLocationRight.getY(), panelWidth, panelHeight);
+		Point point4 = convertGpsPointToScreenPoint(oldLocationLeft.getX(), oldLocationLeft.getY(), panelWidth, panelHeight);
+			
+		roundedPolygon.addPoint(point4.x, point4.y);
+		roundedPolygon.addPoint(point1.x, point1.y);
+		roundedPolygon.addPoint(point2.x, point2.y);
+		roundedPolygon.addPoint(point3.x, point3.y);
 		
 		return roundedPolygon;
 	}
@@ -203,27 +183,22 @@ public class CourseMapPolygon extends Polygon {
 		double maxAccelGpsWidth = 0;
 		double currentWidthProportion = 0.5;
 		
-		//System.out.println("");
-		//System.out.println("currentAccel: " + currentAccel);
-		
 		if(currentAccel > 0.0) {
-			currentWidthProportion = (currentAccel)*0.5 + 0.5;
+			currentWidthProportion = ( (currentAccel)*0.5 ) + 0.5;
 		}
 		else if(currentAccel < 0.0) {
-			currentWidthProportion = 0.5 - (currentAccel)* -0.5;
+			currentWidthProportion = 0.5 - ( (currentAccel)*-0.5 );
 		}
-		
-		//System.out.println("Current Width Porportion: " + currentWidthProportion);
 		
 		double latDelta = maxLat - minLat;
 		double lonDelta = maxLon - minLon;
 		
 		if(latDelta > lonDelta) {
-			minAccelGpsWidth = 0.00001 * lonDelta;
-			maxAccelGpsWidth = 0.024 * lonDelta;
+			minAccelGpsWidth = 0.01 * lonDelta;
+			maxAccelGpsWidth = 0.05 * lonDelta;
 		} else {
-			minAccelGpsWidth = 0.00001 * latDelta;
-			maxAccelGpsWidth = 0.024 * latDelta;
+			minAccelGpsWidth = 0.01 * latDelta;
+			maxAccelGpsWidth = 0.05 * latDelta;
 		}
 		
 		if(currentWidthProportion == 0.0) {
@@ -231,8 +206,6 @@ public class CourseMapPolygon extends Polygon {
 		} else {
 			currentAccelWidth = minAccelGpsWidth + (currentWidthProportion * (maxAccelGpsWidth - minAccelGpsWidth));
 		}
-		
-		//System.out.println("Current Width: " + currentAccelWidth);
 		
 		return currentAccelWidth;
 	}
@@ -252,11 +225,26 @@ public class CourseMapPolygon extends Polygon {
 		double gpsPointLat = 0.0;
 		double gpsPointLon = 0.0;
 		
-		if(changeInLongitude == 0.0) {
+		if( (changeInLongitude == 0.0) && (changeInLatitude > 0.0) ) {
+			perpendicularAngle = Math.PI;
+		} else if( (changeInLongitude == 0.0) && (changeInLatitude < 0.0) ) {
 			perpendicularAngle = 0.0;
-		} else {
+		} else if( (changeInLongitude < 0.0) && (changeInLatitude == 0.0) ) {
+			perpendicularAngle = (3.0*Math.PI) / 2.0;
+		} else if( (changeInLongitude > 0.0) && (changeInLatitude == 0.0) ) {
+			perpendicularAngle = Math.PI / 2;
+		} else if( (changeInLongitude > 0.0) && (changeInLatitude > 0.0) ) {
 			angleBetweenGpsCoord = Math.atan( changeInLatitude / changeInLongitude);
-			perpendicularAngle = angleBetweenGpsCoord + (Math.PI/2);
+			perpendicularAngle = angleBetweenGpsCoord + Math.PI / 2.0;
+		} else if( (changeInLongitude < 0.0) && (changeInLatitude > 0.0) ) {
+			angleBetweenGpsCoord = Math.atan( changeInLatitude / changeInLongitude);
+			perpendicularAngle = angleBetweenGpsCoord + (3.0*Math.PI) / 2.0;
+		} else if( (changeInLongitude < 0.0) && (changeInLatitude < 0.0) ) {
+			angleBetweenGpsCoord = Math.atan( changeInLatitude / changeInLongitude);
+			perpendicularAngle = angleBetweenGpsCoord +  (3.0*Math.PI) / 2.0;
+		} else if( (changeInLongitude > 0.0) && (changeInLatitude < 0.0) ) {
+			angleBetweenGpsCoord = Math.atan( changeInLatitude / changeInLongitude);
+			perpendicularAngle = angleBetweenGpsCoord + Math.PI / 2.0;
 		}
 		
 		distanceToGpsPointLon = distanceToNewPoint * Math.cos(perpendicularAngle);
@@ -272,22 +260,22 @@ public class CourseMapPolygon extends Polygon {
 	
 	
 	public Point2D getOldLocationHigh() {
-		return oldLocationHigh;
+		return oldLocationRight;
 	}
 
 
 	public Point2D getOldLocationLow() {
-		return oldLocationLow;
+		return oldLocationLeft;
 	}
 
 
 	public Point2D getNewLocationHigh() {
-		return newLocationHigh;
+		return newLocationRight;
 	}
 
 
 	public Point2D getNewLocationLow() {
-		return newLocationLow;
+		return newLocationLeft;
 	}
 	
 	

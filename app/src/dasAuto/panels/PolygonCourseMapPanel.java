@@ -129,26 +129,16 @@ public class PolygonCourseMapPanel extends DataPanel {
 		double currentAccel = minAccel;
 		boolean firstPolygonCreated = false;
 		
-		/*double currentHeading = 0.0;
-		double previousHeading = 0.0;
-		boolean directionChange = false;
-		double currentGpsSampleDirection; 
-		double previousGpsSampleDirection = 0.0;*/
-		
 		// Iterate through our GPS data to draw polygons.
 		for(int i = 0; i < gpsFeed.size(); i++) {
 			currentGpsSample = gpsFeed.get(i);
 			int currentAccelValue = accelFeed.getFilteredFeed(15).getNearestSampleIndex(currentGpsSample.getTimestamp());
 			currentAccel = accelFeed.getFilteredFeed(15).get(currentAccelValue).getYValueInG();
 			
-			//currentGpsSampleDirection = currentGpsSample.getHeading();
-			//System.out.println("Heading: " + currentGpsSampleDirection);
-			
 			//For the first GPS sample of currentGpsSample, fill in to the previousGpsSample, and skip to the next loop.
 			if(previousGpsSample == null) {
 				previousGpsSample = currentGpsSample;
 				previousAccel = currentAccel;
-				//previousGpsSampleDirection = currentGpsSampleDirection;
 			} else {
 				CourseMapPolygon racePolygon;
 				
@@ -158,25 +148,11 @@ public class PolygonCourseMapPanel extends DataPanel {
 					racePolygon.setMaxAndMins(minLat, maxLat, minLon, maxLon, minAccel, maxAccel);
 					racePolygon.buildFirstPolygon();
 					firstPolygonCreated = true;
-					
-					//previousHeading = currentGpsSampleDirection - previousGpsSampleDirection;
-					//previousGpsSampleDirection = currentGpsSampleDirection;
 				} else {
-					
-					/*currentHeading = currentGpsSampleDirection - previousGpsSampleDirection;
-					if( ( (previousHeading > 0 && currentHeading < 0) || (previousHeading < 0 && currentHeading > 0) ) && !directionChange ) {
-						directionChange = true;
-					} else if( ( (previousHeading > 0 && currentHeading < 0) || (previousHeading < 0 && currentHeading > 0) ) && directionChange ) {
-						directionChange = false;
-					}*/
-					
 					racePolygon = new CourseMapPolygon(currentGpsSample, previousGpsSample, oldPointHigh, oldPointLow, currentAccel, 
 													   previousGpsSample.getSpeed(), currentGpsSample.getSpeed());
-					//racePolygon.flip = directionChange;
 					racePolygon.setMaxAndMins(minLat, maxLat, minLon, maxLon, minAccel, maxAccel);
 					racePolygon.buildPolygon();
-					//previousGpsSampleDirection = currentGpsSampleDirection;
-					//previousHeading = currentHeading;
 				}
 				coursePolygonList.add(racePolygon);
 				oldPointHigh = racePolygon.getNewLocationHigh();
