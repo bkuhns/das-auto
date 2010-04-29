@@ -241,11 +241,11 @@ public class AccelFeed extends DataFeed<AccelSample> {
 	}
 	
 	public double getMinXValueInG() {
-		return AccelSample.convertCountToG(minXValue);
+		return AccelSample.convertCountToG(minXValue, AccelSample.X_OFFSET);
 	}
 	
 	public double getMaxXValueInG() {
-		return AccelSample.convertCountToG(maxXValue);
+		return AccelSample.convertCountToG(maxXValue, AccelSample.X_OFFSET);
 	}
 	
 
@@ -259,11 +259,11 @@ public class AccelFeed extends DataFeed<AccelSample> {
 	}
 	
 	public double getMinYValueInG() {
-		return AccelSample.convertCountToG(minYValue);
+		return AccelSample.convertCountToG(minYValue, AccelSample.Y_OFFSET);
 	}
 	
 	public double getMaxYValueInG() {
-		return AccelSample.convertCountToG(maxYValue);
+		return AccelSample.convertCountToG(maxYValue, AccelSample.Y_OFFSET);
 	}
 	
 
@@ -277,11 +277,11 @@ public class AccelFeed extends DataFeed<AccelSample> {
 	}
 	
 	public double getMinZValueInG() {
-		return AccelSample.convertCountToG(minZValue);
+		return AccelSample.convertCountToG(minZValue, AccelSample.Z_OFFSET);
 	}
 	
 	public double getMaxZValueInG() {
-		return AccelSample.convertCountToG(maxZValue);
+		return AccelSample.convertCountToG(maxZValue, AccelSample.Z_OFFSET);
 	}
 	
 

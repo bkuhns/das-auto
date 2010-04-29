@@ -13,7 +13,7 @@ import javax.swing.BorderFactory;
 
 import dasAuto.logData.feeds.AccelFeed;
 import dasAuto.logData.samples.AccelSample;
-import dasAuto.logData.samples.GpsSample;
+
 
 
 public class TractionCirclePanel extends DataPanel {
@@ -40,8 +40,6 @@ public class TractionCirclePanel extends DataPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		
-		Graphics2D g2d = (Graphics2D)g;
-		
 		panelWidth = getWidth();
 		panelHeight = getHeight();
 		
@@ -56,7 +54,7 @@ public class TractionCirclePanel extends DataPanel {
 		drawMaxCircle(tracCircleG);
 		drawAccelPoints(tracCircleG);
 		
-		g2d.drawImage(tracCircleImage, 0, 0, this);
+		((Graphics2D)g).drawImage(tracCircleImage, 0, 0, this);
 	}
 	
 	
@@ -75,8 +73,8 @@ public class TractionCirclePanel extends DataPanel {
 		final AccelFeed accelFeed = this.accelFeed.getFilteredFeed();
 		
 		//Determine largest outer points, reflect
-		double YMin = accelFeed.getMinYValueInG();
-		double YMax = accelFeed.getMaxYValueInG();
+		double YMin = -1 * accelFeed.getMinYValueInG();
+		double YMax = -1 * accelFeed.getMaxYValueInG();
 		double XMin = accelFeed.getMinXValueInG();
 		double XMax = accelFeed.getMaxXValueInG();
 		double mirroredYMax = -YMax;
@@ -87,27 +85,21 @@ public class TractionCirclePanel extends DataPanel {
 		if( Math.abs(XMin) > XMax)
 			mirroredXMax = -XMin;
 		
-		
 		//-- Draw Theoretical Traction circle
 		g.setColor(Color.GRAY);
 		g.draw(new Ellipse2D.Double( origin.x - scaleX(Math.abs(mirroredYMax)), origin.y - scaleY(Math.abs(mirroredXMax)), scaleX(2.0*Math.abs(mirroredYMax)), scaleY(2.0 * Math.abs(mirroredXMax)) ) );
-
-		//-- Draw Points
-		g.setColor(Color.BLACK);
-		this.drawPoint(origin.x + scaleX(accelFeed.getMinYValueInG()), origin.y, g); // Left
-		this.drawPoint(origin.x + scaleX(accelFeed.getMaxYValueInG()), origin.y, g); // Right
-		this.drawPoint(origin.x, origin.y + scaleY(accelFeed.getMaxXValueInG()), g); // Top 		
-		this.drawPoint(origin.x, origin.y + scaleY(accelFeed.getMinXValueInG()), g); // Bottom
+		
+		g.setColor(Color.BLACK); 		
+		this.drawPoint(origin.x, origin.y + scaleY(XMin), g); // Top
+		this.drawPoint(origin.x + scaleX(YMin), origin.y, g); // Left
 		
 		//-- Draw Theoretical Max Points
-		g.setColor(Color.GRAY);
 		this.drawPoint(origin.x + scaleX(mirroredYMax), origin.y, g);
 		this.drawPoint(origin.x, origin.y + scaleY(mirroredXMax), g);
 		
-		
 		//-- Then Arcs
-		g.setColor(Color.BLACK);
-		/g.drawArc(origin.x - scaleX(accelFeed.getMaxYValueInG()),  origin.y - scaleY(accelFeed.getMaxXValueInG()) , scaleX( 2.0 * accelFeed.getMaxYValueInG()), scaleY( 2.0 *accelFeed.getMaxXValueInG()), 270, 90);
+		//g.setColor(Color.BLACK);
+		//g.drawArc(origin.x - scaleX(accelFeed.getMaxYValueInG()),  origin.y - scaleY(accelFeed.getMaxXValueInG()) , scaleX( 2.0 * accelFeed.getMaxYValueInG()), scaleY( 2.0 *accelFeed.getMaxXValueInG()), 270, 90);
 	}
 	
 	private void drawAccelPoints(Graphics2D g)
@@ -117,7 +109,12 @@ public class TractionCirclePanel extends DataPanel {
 		
 		g.setPaint(Color.RED);
 		
-		for(int k=0;k<gpsFeed.size();k++)
+		//Draw the points in
+		currentSample = accelFeed.getFilteredFeed(25).getNearestSample(currentTimestamp);
+		this.drawPoint(origin.x + scaleX(-1 * currentSample.getYValueInG()),
+					   origin.y + scaleY(currentSample.getXValueInG()), g);
+		
+		/*for(int k=0;k<gpsFeed.size();k++)
 		{	
 			if(currentTimestamp - gpsFeed.get(k).getTimestamp() > -100 && 
 					currentTimestamp - gpsFeed.get(k).getTimestamp() < 100)
@@ -128,10 +125,10 @@ public class TractionCirclePanel extends DataPanel {
 				
 				//Draw the points in
 				currentSample = accelFeed.getFilteredFeed().getNearestSample(currentTimestamp);
-				this.drawPoint(origin.x + scaleX(currentSample.getYValueInG()),
+				this.drawPoint(origin.x + scaleX(-1 * currentSample.getYValueInG()),
 							   origin.y + scaleY(currentSample.getXValueInG()), g);
 			}
-		}
+		}*/
 	}
 
 	private void drawPoint(int loc_x, int loc_y, Graphics2D g)
@@ -151,9 +148,6 @@ public class TractionCirclePanel extends DataPanel {
 	
 	public void update(Graphics g) {
 		paint(g);
-		
-		panelWidth = getWidth();
-		panelHeight = getHeight();
 	}
 
 	/*
@@ -161,7 +155,7 @@ public class TractionCirclePanel extends DataPanel {
 	 */
 	private int scaleX(double d)
 	{
-		return (int)Math.round(d * panelWidth / 2 / MAX_CIRCLE_VAL_X);
+		return (int)Math.round(d * panelWidth * 0.6 / MAX_CIRCLE_VAL_X);
 	}
 
 	/*
@@ -169,7 +163,7 @@ public class TractionCirclePanel extends DataPanel {
 	 */
 	private int scaleY(double d)
 	{
-		return (int)Math.round(d * panelHeight / 2 / MAX_CIRCLE_VAL_Y);
+		return (int)Math.round(d * panelHeight * 0.6 / MAX_CIRCLE_VAL_Y);
 	}
 
 	private Point getOrigin()

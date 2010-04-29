@@ -21,7 +21,7 @@ import dasAuto.Messages;
 public class TimePanel extends DataPanel implements ActionListener {
 	private static final long serialVersionUID = 5479583871728381610L;
 	
-	private final int DELAY_MS = 70;
+	private final int DELAY_MS = 100;
 	
 	private JSlider timeSlider;
 	private JButton playButton;
