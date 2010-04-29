@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 
 import dasAuto.logData.feeds.AccelFeed;
+import dasAuto.logData.samples.AccelSample;
 
 
 public class TractionCirclePanel extends DataPanel {
@@ -50,6 +51,7 @@ public class TractionCirclePanel extends DataPanel {
 		
 		drawAxis(tracCircleG);
 		drawMaxCircle(tracCircleG);
+		drawAccelPoints(tracCircleG);
 		
 		g2d.drawImage(tracCircleImage, 0, 0, this);
 	}
@@ -74,10 +76,30 @@ public class TractionCirclePanel extends DataPanel {
 		this.drawPoint(origin.x + scaleX(accelFeed.getMaxYValueInG()), origin.y, g); // Right
 		this.drawPoint(origin.x, origin.y + scaleY(accelFeed.getMaxXValueInG()), g); // Top 		
 		this.drawPoint(origin.x, origin.y + scaleY(accelFeed.getMinXValueInG()), g); // Bottom
+		
 
 		//-- Then Arcs
 		//g.drawArc(origin.x,  origin.y + scaleY(accelFeed.getMaxXValueInG()), scaleX(accelFeed.getMaxYValueInG()), -scaleY(accelFeed.getMaxXValueInG()), 0, 90); // Top -> Right
 		//g.drawArc(0, (int)scaleY(accelFeed.getMaxXValueInG()), (int)scaleX(accelFeed.getMaxYValueInG()), (int)scaleY(accelFeed.getMaxXValueInG()), 90, 90);
+	}
+	
+	private void drawAccelPoints(Graphics2D g)
+	{
+		Point origin = this.getOrigin();
+		AccelSample currentSample = null;
+		
+		g.setPaint(Color.RED);
+		
+		for(int k=0;k<gpsFeed.size();k++)
+		{	
+			if(currentTimestamp - gpsFeed.get(k).getTimestamp() > -100 && 
+					currentTimestamp - gpsFeed.get(k).getTimestamp() < 100)
+			{
+				currentSample = accelFeed.getFilteredFeed().getNearestSample(currentTimestamp);
+				this.drawPoint(origin.x + scaleX(currentSample.getXValueInG()),
+							   origin.y + scaleY(currentSample.getYValueInG()), g);
+			}
+		}
 	}
 
 	private void drawPoint(int loc_x, int loc_y, Graphics2D g)
@@ -85,6 +107,13 @@ public class TractionCirclePanel extends DataPanel {
 		final int pointSize = 6;
 		g.drawOval(loc_x - (pointSize>> 1), loc_y - (pointSize >> 1), pointSize, pointSize);
 		g.fillOval(loc_x - (pointSize >> 1), loc_y - (pointSize >> 1), pointSize, pointSize);;
+	}
+	
+	
+	public void update(long timestamp) {
+		super.update(timestamp);
+		
+		paint(getGraphics());
 	}
 	
 	
