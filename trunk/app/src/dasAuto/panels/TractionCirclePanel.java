@@ -38,7 +38,7 @@ public class TractionCirclePanel extends DataPanel {
 	
 	
 	public void paint(Graphics g) {
-		super.paint(g);
+		//super.paint(g);
 		
 		panelWidth = getWidth();
 		panelHeight = getHeight();
@@ -70,7 +70,7 @@ public class TractionCirclePanel extends DataPanel {
 	private void drawMaxCircle(Graphics2D g)
 	{
 		Point origin = this.getOrigin();
-		final AccelFeed accelFeed = this.accelFeed.getFilteredFeed();
+		final AccelFeed accelFeed = this.accelFeed.getFilteredFeed(25);
 		
 		//Determine largest outer points, reflect
 		double YMin = -1 * accelFeed.getMinYValueInG();
@@ -102,35 +102,39 @@ public class TractionCirclePanel extends DataPanel {
 		//g.drawArc(origin.x - scaleX(accelFeed.getMaxYValueInG()),  origin.y - scaleY(accelFeed.getMaxXValueInG()) , scaleX( 2.0 * accelFeed.getMaxYValueInG()), scaleY( 2.0 *accelFeed.getMaxXValueInG()), 270, 90);
 	}
 	
+	
 	private void drawAccelPoints(Graphics2D g)
 	{
 		Point origin = this.getOrigin();
-		AccelSample currentSample = null;
+		AccelSample currentSample;
+		AccelSample previousSample;
 		
 		g.setPaint(Color.RED);
 		
 		//Draw the points in
 		currentSample = accelFeed.getFilteredFeed(25).getNearestSample(currentTimestamp);
+		long backSampleTime = accelFeed.getFilteredFeed(25).getNearestSample(currentTimestamp).getTimestamp() - 100;
+		int backSampleIter = 1;
+		int alphaValue = 255;
+		
 		this.drawPoint(origin.x + scaleX(-1 * currentSample.getYValueInG()),
 					   origin.y + scaleY(currentSample.getXValueInG()), g);
 		
-		/*for(int k=0;k<gpsFeed.size();k++)
-		{	
-			if(currentTimestamp - gpsFeed.get(k).getTimestamp() > -100 && 
-					currentTimestamp - gpsFeed.get(k).getTimestamp() < 100)
-			{
-				
-				//Find the closest value to timestamp for gps, and previous 4 gps values closest to the found gps
-				ArrayList<AccelSample> nearestGpsPoints = new ArrayList<AccelSample>();
-				
-				//Draw the points in
-				currentSample = accelFeed.getFilteredFeed().getNearestSample(currentTimestamp);
-				this.drawPoint(origin.x + scaleX(-1 * currentSample.getYValueInG()),
-							   origin.y + scaleY(currentSample.getXValueInG()), g);
-			}
-		}*/
+		while(backSampleTime > 0.0 && backSampleIter <= 5)
+		{
+			previousSample = accelFeed.getFilteredFeed(25).getNearestSample(backSampleTime);
+			alphaValue = alphaValue - 50;
+			g.setPaint( new Color(255,0,0,alphaValue));
+			
+			this.drawPoint(origin.x + scaleX(-1 * previousSample.getYValueInG()),
+					   origin.y + scaleY(previousSample.getXValueInG()), g);
+			
+			backSampleTime = accelFeed.getFilteredFeed(25).getNearestSample(backSampleTime).getTimestamp() - 100;
+			backSampleIter = backSampleIter + 1;
+		}
 	}
 
+	
 	private void drawPoint(int loc_x, int loc_y, Graphics2D g)
 	{
 		final int pointSize = 6;
@@ -150,24 +154,24 @@ public class TractionCirclePanel extends DataPanel {
 		paint(g);
 	}
 
+	
 	/*
 	 * Scale the accel coordinates to fit on the axis
 	 */
-	private int scaleX(double d)
-	{
-		return (int)Math.round(d * panelWidth * 0.6 / MAX_CIRCLE_VAL_X);
+	private int scaleX(double d) {
+		return (int)Math.round(d * panelWidth * 0.5 / MAX_CIRCLE_VAL_X);
 	}
 
+	
 	/*
 	 * Scale the accel coordinates to fit on the axis
 	 */
-	private int scaleY(double d)
-	{
+	private int scaleY(double d) {
 		return (int)Math.round(d * panelHeight * 0.6 / MAX_CIRCLE_VAL_Y);
 	}
 
-	private Point getOrigin()
-	{
+	
+	private Point getOrigin() {
 		return new Point(panelWidth / 2 - 1, panelHeight / 2 - 1);
 	}
 }

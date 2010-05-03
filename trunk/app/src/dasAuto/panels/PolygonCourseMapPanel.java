@@ -80,6 +80,8 @@ public class PolygonCourseMapPanel extends DataPanel {
 	
 	private void renderGpsLine(Graphics2D g2) {
 		g2.setPaint(Color.WHITE);
+		g2.setStroke(new BasicStroke(2.0f));
+		
 		for(int k=0; k < coursePolygonList.size(); k++) {
 			CourseMapPolygon currentPolygon = coursePolygonList.get(k);
 			if(k == coursePolygonList.size() - 1)

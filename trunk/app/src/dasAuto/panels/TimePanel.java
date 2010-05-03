@@ -83,7 +83,7 @@ public class TimePanel extends DataPanel implements ActionListener {
 		if(newValue < timeSlider.getMaximum()) {
 			timeSlider.setValue(newValue);
 		} else {
-			timer.stop();
+			//timer.stop();
 			timeSlider.setValue(0);
 			playButton.setText(Messages.getString("timePanel.playButton.play"));
 		}
