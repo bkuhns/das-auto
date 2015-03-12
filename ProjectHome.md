@@ -1,0 +1,1 @@
+This project aims to be the definitive hardware/software solution for amateur data acquisition with motorsport applications such as autocross, road racing, and road rally. Focus for requirements will be based on events ran by the Sports Car Club of America (SCCA).
